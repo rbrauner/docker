@@ -1,0 +1,32 @@
+services:
+    caddy:
+        container_name: reverse-proxy-caddy
+        image: caddy:alpine
+        restart: unless-stopped
+        # user: "${UID:-1000}:${GID:-1000}"
+        ports:
+            - 80:80
+            - 443:443
+            - 2019:2019
+            - 5173:5173
+        networks:
+            main:
+        volumes:
+            - caddy-data:/data
+            - caddy-config:/config
+            - caddy-certificate-authority:/data/caddy/pki/authorities/local
+            - ./Caddyfile:/etc/caddy/Caddyfile
+            - ./config:/etc/caddy/config
+            - ./sites:/etc/caddy/sites
+
+networks:
+    main:
+        external: true
+
+volumes:
+    caddy-data:
+        name: reverse-proxy-caddy-data
+    caddy-config:
+        name: reverse-proxy-caddy-config
+    caddy-certificate-authority:
+        name: reverse-proxy-caddy-certificate-authority

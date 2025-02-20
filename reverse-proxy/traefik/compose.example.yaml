@@ -1,0 +1,36 @@
+services:
+    whoami:
+        container_name: whoami
+        image: traefik/whoami
+        restart: unless-stopped
+        # user: "${UID:-1000}:${GID:-1000}"
+        networks:
+            main:
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.services.whoami.loadbalancer.server.port=80"
+            - "traefik.http.routers.whoami.rule=Host(`${DOMAIN:-whoami.local}`)"
+            - "traefik.http.routers.whoami.entrypoints=http"
+            - "traefik.http.routers.whoami.tls=false"
+            - "traefik.http.routers.whoami.service=whoami"
+            # - "traefik.http.routers.whoami-secure.rule=Host(`${DOMAIN:-whoami.local}`)"
+            # - "traefik.http.routers.whoami-secure.entrypoints=https"
+            # - "traefik.http.routers.whoami-secure.tls=true"
+            # - "traefik.http.routers.whoami-secure.service=whoami"
+            # - "traefik.http.routers.wildcard-whoami.rule=HostRegexp(`.+\\.whoami\\.local`)"
+            # - "traefik.http.routers.wildcard-whoami.entrypoints=http"
+            # - "traefik.http.routers.wildcard-whoami.tls=false"
+            # - "traefik.http.routers.wildcard-whoami.service=whoami"
+            # - "traefik.http.routers.wildcard-whoami-secure.rule=HostRegexp(`.+\\.whoami\\.local`)"
+            # - "traefik.http.routers.wildcard-whoami-secure.entrypoints=https"
+            # - "traefik.http.routers.wildcard-whoami-secure.tls=true"
+            # - "traefik.http.routers.wildcard-whoami-secure.service=whoami"
+            # - "traefik.http.services.whoami-port8080.loadbalancer.server.port=8080"
+            # - "traefik.http.routers.whoami-port8080.rule=Host(`whoami.local`)"
+            # - "traefik.http.routers.whoami-port8080.entrypoints=port8080"
+            # - "traefik.http.routers.whoami-port8080.tls=false"
+            # - "traefik.http.routers.whoami-port8080.service=whoami-port8080"
+
+networks:
+    main:
+        external: true
