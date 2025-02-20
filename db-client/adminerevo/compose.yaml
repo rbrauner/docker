@@ -1,0 +1,27 @@
+services:
+    adminerevo:
+        container_name: adminerevo
+        image: ghcr.io/shyim/adminerevo:latest
+        restart: unless-stopped
+        # user: "${UID:-1000}:${GID:-1000}"
+        environment:
+            ADMINER_PLUGINS: "${ADMINER_PLUGINS:-dump-alter dump-bz2 dump-date dump-json dump-xml dump-zip edit-foreign edit-textarea enum-option enum-types foreign-system frames json-column slugify sql-log struct-comments tables-filter}"
+        # ports:
+        #     - ${ADMINEREVO_PORT:-8080}:8080
+        networks:
+            main:
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.services.adminerevo.loadbalancer.server.port=8080"
+            - "traefik.http.routers.adminerevo.rule=Host(`${DOMAIN:-adminerevo.local}`)"
+            - "traefik.http.routers.adminerevo.entrypoints=http"
+            - "traefik.http.routers.adminerevo.tls=false"
+            - "traefik.http.routers.adminerevo.service=adminerevo"
+            - "traefik.http.routers.adminerevo-secure.rule=Host(`${DOMAIN:-adminerevo.local}`)"
+            - "traefik.http.routers.adminerevo-secure.entrypoints=https"
+            - "traefik.http.routers.adminerevo-secure.tls=true"
+            - "traefik.http.routers.adminerevo-secure.service=adminerevo"
+
+networks:
+    main:
+        external: true

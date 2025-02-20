@@ -1,0 +1,28 @@
+services:
+    backup:
+        container_name: backup
+        image: offen/docker-volume-backup:latest
+        restart: unless-stopped
+        # user: "${UID:-1000}:${GID:-1000}"
+        environment:
+            TZ: "${TIMEZONE:-Europe/Warsaw}"
+            BACKUP_CRON_EXPRESSION: "${BACKUP_CRON_EXPRESSION:-0 9,15 * * *}"
+        networks:
+            main:
+        volumes:
+            # - mysql-data:/backup/mysql-data:ro
+            # - mysql-data-conf:/backup/mysql-data-conf:ro
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+            - ${BACKUP_DIR:-${HOME}/data/backups/docker/backup}:/backup
+
+networks:
+    main:
+        external: true
+
+# volumes:
+#     mysql-data:
+#         name: mysql-data
+#         external: true
+#     mysql-data-conf:
+#         name: mysql-data-conf
+#         external: true

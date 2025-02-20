@@ -1,0 +1,26 @@
+services:
+    traefik:
+        container_name: reverse-proxy-traefik
+        image: traefik:v3.3
+        restart: unless-stopped
+        # user: "${UID:-1000}:${GID:-1000}"
+        ports:
+            - 80:80
+            - 443:443
+            - 5173:5173
+        networks:
+            main:
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+            - ./config/traefik.yaml:/etc/traefik/traefik.yaml:ro
+            - ./config/dynamic.yaml:/etc/traefik/dynamic.yaml:ro
+            - ./certs:/etc/certs:ro
+        labels:
+            - "traefik.enable=true"
+            # reverse-proxy.local
+            - "traefik.http.routers.reverse-proxy.rule=Host(`reverse-proxy.local`)"
+            - "traefik.http.routers.reverse-proxy.service=api@internal"
+
+networks:
+    main:
+        external: true

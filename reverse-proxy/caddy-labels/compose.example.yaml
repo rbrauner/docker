@@ -1,0 +1,15 @@
+services:
+    whoami:
+        container_name: whoami
+        image: traefik/whoami
+        restart: unless-stopped
+        # user: "${UID:-1000}:${GID:-1000}"
+        networks:
+            main:
+        labels:
+            caddy: "whoami.local"
+            caddy.reverse_proxy: "{{upstreams http}}"
+
+networks:
+    main:
+        external: true

@@ -1,0 +1,33 @@
+services:
+    caddy-labels:
+        container_name: reverse-proxy-caddy-labels
+        image: lucaslorentz/caddy-docker-proxy:ci-alpine
+        restart: unless-stopped
+        # user: "${UID:-1000}:${GID:-1000}"
+        environment:
+            - CADDY_INGRESS_NETWORKS=${CADDY_INGRESS_NETWORKS:-main}
+        ports:
+            - 80:80
+            - 443:443
+            - 5173:5173
+            - 2019:2020
+        networks:
+            main:
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            - caddy-labels-data:/data
+            - caddy-labels-config:/config
+        labels:
+            caddy_0.servers.trusted_proxies: "static private_ranges"
+            caddy_1: ":2020"
+            caddy_1.reverse_proxy: "localhost:2019"
+
+networks:
+    main:
+        external: true
+
+volumes:
+    caddy-labels-data:
+        name: reverse-proxy-caddy-labels-data
+    caddy-labels-config:
+        name: reverse-proxy-caddy-labels-config

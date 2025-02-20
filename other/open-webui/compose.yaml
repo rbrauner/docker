@@ -1,0 +1,33 @@
+services:
+    open-webui:
+        container_name: open-webui
+        image: ghcr.io/open-webui/open-webui:latest
+        restart: unless-stopped
+        # user: "${UID:-1000}:${GID:-1000}"
+        environment:
+            OLLAMA_BASE_URL: "${OLLAMA_BASE_URL:-http://ollama:11434}"
+        # ports:
+        #     - ${OPEN_WEBUI_PORT:-3000}:8080
+        networks:
+            main:
+        volumes:
+            - open-webui:/app/backend/data
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.services.open-webui.loadbalancer.server.port=8080"
+            - "traefik.http.routers.open-webui.rule=Host(`${DOMAIN:-open-webui.local}`)"
+            - "traefik.http.routers.open-webui.entrypoints=http"
+            - "traefik.http.routers.open-webui.tls=false"
+            - "traefik.http.routers.open-webui.service=open-webui"
+            - "traefik.http.routers.open-webui-secure.rule=Host(`${DOMAIN:-open-webui.local}`)"
+            - "traefik.http.routers.open-webui-secure.entrypoints=https"
+            - "traefik.http.routers.open-webui-secure.tls=true"
+            - "traefik.http.routers.open-webui-secure.service=open-webui"
+
+networks:
+    main:
+        external: true
+
+volumes:
+    open-webui:
+        name: open-webui
