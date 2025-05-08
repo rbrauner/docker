@@ -15,9 +15,9 @@ services:
             - caddy-data:/data
             - caddy-config:/config
             - caddy-certificate-authority:/data/caddy/pki/authorities/local
-            - ./Caddyfile:/etc/caddy/Caddyfile
-            - ./config:/etc/caddy/config
-            - ./sites:/etc/caddy/sites
+            - ./Caddyfile:/etc/caddy/Caddyfile:ro
+            - ./config:/etc/caddy/config:ro
+            - ./sites:/etc/caddy/sites:ro
 
 networks:
     main:

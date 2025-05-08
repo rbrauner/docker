@@ -1,4 +1,5 @@
 ###> rbrauner/docker ###
 .idea
 .env
+other/homepage/config/logs
 ###< rbrauner/docker ###

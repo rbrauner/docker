@@ -1,7 +1,7 @@
 services:
     backup:
         container_name: backup
-        image: offen/docker-volume-backup:latest
+        image: offen/docker-volume-backup
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         environment:

@@ -1,7 +1,7 @@
 services:
     adminerevo:
         container_name: adminerevo
-        image: ghcr.io/shyim/adminerevo:latest
+        image: ghcr.io/shyim/adminerevo
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
