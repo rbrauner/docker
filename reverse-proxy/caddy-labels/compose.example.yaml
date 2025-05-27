@@ -7,7 +7,7 @@ services:
         networks:
             main:
         labels:
-            caddy: "whoami.local"
+            caddy: "whoami.localhost"
             caddy.reverse_proxy: "{{upstreams http}}"
 
 networks:

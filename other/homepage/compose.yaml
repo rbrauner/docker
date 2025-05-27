@@ -5,7 +5,7 @@ services:
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
-            HOMEPAGE_ALLOWED_HOSTS: "${HOMEPAGE_ALLOWED_HOSTS:-homepage.local}"
+            HOMEPAGE_ALLOWED_HOSTS: "${HOMEPAGE_ALLOWED_HOSTS:-homepage.localhost}"
         # ports:
         #     - ${HOMEPAGE_PORT:-3000}:3000
         networks:
@@ -16,11 +16,11 @@ services:
         labels:
             - "traefik.enable=true"
             - "traefik.http.services.homepage.loadbalancer.server.port=3000"
-            - "traefik.http.routers.homepage.rule=Host(`${DOMAIN:-homepage.local}`)"
+            - "traefik.http.routers.homepage.rule=Host(`${DOMAIN:-homepage.localhost}`)"
             - "traefik.http.routers.homepage.entrypoints=http"
             - "traefik.http.routers.homepage.tls=false"
             - "traefik.http.routers.homepage.service=homepage"
-            - "traefik.http.routers.homepage-secure.rule=Host(`${DOMAIN:-homepage.local}`)"
+            - "traefik.http.routers.homepage-secure.rule=Host(`${DOMAIN:-homepage.localhost}`)"
             - "traefik.http.routers.homepage-secure.entrypoints=https"
             - "traefik.http.routers.homepage-secure.tls=true"
             - "traefik.http.routers.homepage-secure.service=homepage"

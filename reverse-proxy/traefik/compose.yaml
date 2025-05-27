@@ -17,8 +17,8 @@ services:
             - ./certs:/etc/certs:ro
         labels:
             - "traefik.enable=true"
-            # reverse-proxy.local
-            - "traefik.http.routers.reverse-proxy.rule=Host(`reverse-proxy.local`)"
+            # reverse-proxy.localhost
+            - "traefik.http.routers.reverse-proxy.rule=Host(`reverse-proxy.localhost`)"
             - "traefik.http.routers.reverse-proxy.service=api@internal"
 
 networks:

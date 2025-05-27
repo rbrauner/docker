@@ -26,11 +26,13 @@ docker compose up -d
 
 ```bash
 mkcert -cert-file reverse-proxy/traefik/certs/local-cert.pem -key-file reverse-proxy/traefik/certs/local-key.pem \
-    "localhost" "*.localhost" \
-    "localhost.local" "*.localhost.local" \
-    "reverse-proxy.local" "*.reverse-proxy.local" \
-    "adminerevo.local" "*.adminerevo.local" \
-    "example.local" "*.example.local"
+    "reverse-proxy.localhost" "*.reverse-proxy.localhost" \
+    "portainer.localhost" "*.portainer.localhost" \
+    "mailpit.localhost" "*.mailpit.localhost" \
+    "homepage.localhost" "*.homepage.localhost" \
+    "open-webui.localhost" "*.open-webui.localhost" \
+    "adminerevo.localhost" "*.adminerevo.localhost" \
+    "example.localhost" "*.example.localhost"
 mkcert -install
 ```
 

@@ -13,11 +13,11 @@ services:
         labels:
             - "traefik.enable=true"
             - "traefik.http.services.phpmyadmin.loadbalancer.server.port=80"
-            - "traefik.http.routers.phpmyadmin.rule=Host(`${DOMAIN:-phpmyadmin.local}`)"
+            - "traefik.http.routers.phpmyadmin.rule=Host(`${DOMAIN:-phpmyadmin.localhost}`)"
             - "traefik.http.routers.phpmyadmin.entrypoints=http"
             - "traefik.http.routers.phpmyadmin.tls=false"
             - "traefik.http.routers.phpmyadmin.service=phpmyadmin"
-            - "traefik.http.routers.phpmyadmin-secure.rule=Host(`${DOMAIN:-phpmyadmin.local}`)"
+            - "traefik.http.routers.phpmyadmin-secure.rule=Host(`${DOMAIN:-phpmyadmin.localhost}`)"
             - "traefik.http.routers.phpmyadmin-secure.entrypoints=https"
             - "traefik.http.routers.phpmyadmin-secure.tls=true"
             - "traefik.http.routers.phpmyadmin-secure.service=phpmyadmin"
