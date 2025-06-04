@@ -1,0 +1,28 @@
+services:
+    backup:
+        volumes:
+            # ================
+            # = local backup =
+            # ================
+            - ${HOME}/data/directory:/backup/data/directory:ro
+
+            # =================
+            # = volume backup =
+            # =================
+            - mysql-data:/backup/mysql-data:ro
+            - mysql-data-conf:/backup/mysql-data-conf:ro
+
+networks:
+    main:
+        external: true
+
+# =================
+# = volume backup =
+# =================
+volumes:
+    mysql-data:
+        name: mysql-data
+        external: true
+    mysql-data-conf:
+        name: mysql-data-conf
+        external: true

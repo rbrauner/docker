@@ -31,7 +31,9 @@ mkcert -cert-file reverse-proxy/traefik/certs/local-cert.pem -key-file reverse-p
     "mailpit.localhost" "*.mailpit.localhost" \
     "homepage.localhost" "*.homepage.localhost" \
     "open-webui.localhost" "*.open-webui.localhost" \
-    "adminerevo.localhost" "*.adminerevo.localhost" \
+    "adminer.localhost" "*.adminer.localhost" \
+    "pgadmin.localhost" "*.pgadmin.localhost" \
+    "phpmyadmin.localhost" "*.phpmyadmin.localhost" \
     "example.localhost" "*.example.localhost"
 mkcert -install
 ```

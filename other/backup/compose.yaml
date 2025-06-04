@@ -6,23 +6,17 @@ services:
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
             TZ: "${TIMEZONE:-Europe/Warsaw}"
-            BACKUP_CRON_EXPRESSION: "${BACKUP_CRON_EXPRESSION:-0 9,15 * * *}"
+            BACKUP_CRON_EXPRESSION: "${BACKUP_CRON_EXPRESSION:-0 9,15,17,21 * * *}"
+            BACKUP_FILENAME: "${BACKUP_FILENAME:-backup-%Y-%m-%dT%H-%M-%S.tar.gz}"
+            BACKUP_LATEST_SYMLINK: "${BACKUP_LATEST_SYMLINK:-backup-latest.tar.gz}"
+            BACKUP_PRUNING_PREFIX: "${BACKUP_PRUNING_PREFIX:-backup-}"
+            BACKUP_RETENTION_DAYS: "${BACKUP_RETENTION_DAYS:-30}"
         networks:
             main:
         volumes:
-            # - mysql-data:/backup/mysql-data:ro
-            # - mysql-data-conf:/backup/mysql-data-conf:ro
             - /var/run/docker.sock:/var/run/docker.sock:ro
-            - ${BACKUP_DIR:-${HOME}/data/backups/docker/backup}:/backup
+            - ${BACKUP_DIR:-${HOME}/data/backups/docker/backup}:/archive
 
 networks:
     main:
         external: true
-
-# volumes:
-#     mysql-data:
-#         name: mysql-data
-#         external: true
-#     mysql-data-conf:
-#         name: mysql-data-conf
-#         external: true

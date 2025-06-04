@@ -20,7 +20,7 @@ services:
             - ${BACKUP_DIR:-${HOME}/data/backups/docker/mysql}:/backup
         labels:
             deck-chores.mysql.command: "/bin/backup.sh"
-            deck-chores.mysql.cron: "${BACKUP_CRON_EXPRESSION:-9,15 0 0}"
+            deck-chores.mysql.cron: "${BACKUP_CRON_EXPRESSION:-9,15,17,21 0 0}"
 
 networks:
     main:

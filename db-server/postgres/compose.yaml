@@ -18,7 +18,7 @@ services:
             - ${BACKUP_DIR:-${HOME}/data/backups/docker/postgres}:/backup
         labels:
             deck-chores.postgres.command: "/bin/backup.sh"
-            deck-chores.postgres.cron: "${BACKUP_CRON_EXPRESSION:-9,15 0 0}"
+            deck-chores.postgres.cron: "${BACKUP_CRON_EXPRESSION:-9,15,17,21 0 0}"
 
 networks:
     main:
