@@ -5,7 +5,6 @@ services:
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
-            TZ: "${TIMEZONE:-Europe/Warsaw}"
             TIMEZONE: "${TIMEZONE:-Europe/Warsaw}"
         networks:
             main:
