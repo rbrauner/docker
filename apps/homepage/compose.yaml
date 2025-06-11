@@ -9,6 +9,7 @@ services:
             HOMEPAGE_ALLOWED_HOSTS: "${HOMEPAGE_ALLOWED_HOSTS:-homepage.localhost}"
         # ports:
         #     - ${HOMEPAGE_PORT:-3000}:3000
+        hostname: "${DOMAIN:-homepage.localhost}"
         networks:
             main:
         volumes:

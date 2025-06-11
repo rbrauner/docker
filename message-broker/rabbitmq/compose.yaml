@@ -8,9 +8,9 @@ services:
             TZ: "${TIMEZONE:-Europe/Warsaw}"
             RABBITMQ_DEFAULT_USER: "${RABBITMQ_DEFAULT_USER:-default}"
             RABBITMQ_DEFAULT_PASS: "${RABBITMQ_DEFAULT_PASS:-secret}"
-        hostname: "${DOMAIN:-rabbitmq.localhost}"
         # ports:
         #     - ${RABBITMQ_PORT:-8080}:8080
+        hostname: "${DOMAIN:-rabbitmq.localhost}"
         networks:
             main:
         labels:

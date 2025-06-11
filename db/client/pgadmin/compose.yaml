@@ -8,6 +8,7 @@ services:
             TZ: "${TIMEZONE:-Europe/Warsaw}"
         # ports:
         #     - ${PGADMIN_PORT:-8080}:80
+        hostname: "${DOMAIN:-pgadmin.localhost}"
         networks:
             main:
         volumes:

@@ -9,6 +9,7 @@ services:
             ADMINER_PLUGINS: "${ADMINER_PLUGINS:-dump-alter dump-bz2 dump-date dump-json dump-xml dump-zip edit-foreign edit-textarea enum-option foreign-system frames json-column slugify sql-log tables-filter}"
         # ports:
         #     - ${ADMINER_PORT:-8080}:8080
+        hostname: "${DOMAIN:-adminer.localhost}"
         networks:
             main:
         labels:

@@ -16,6 +16,7 @@ services:
             POSTGRES_HOST: "${POSTGRES_HOST:-postgres}"
         # ports:
         #     - ${JOPLIN_PORT:-22300}:22300
+        hostname: "${DOMAIN:-joplin.localhost}"
         networks:
             main:
         labels:

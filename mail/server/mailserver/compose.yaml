@@ -9,12 +9,12 @@ services:
             ENABLE_RSPAMD: "${ENABLE_RSPAMD:-1}"
             ENABLE_CLAMAV: "${ENABLE_CLAMAV:-1}"
             ENABLE_FAIL2BAN: "${ENABLE_FAIL2BAN:-1}"
-        hostname: "${DOMAIN:-mailserver.localhost}"
         # ports:
         #     - "25:25"
         #     - "465:465"
         #     - "587:587"
         #     - "993:993"
+        hostname: "${DOMAIN:-mailserver.localhost}"
         networks:
             main:
         volumes:

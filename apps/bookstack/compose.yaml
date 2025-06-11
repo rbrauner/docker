@@ -15,6 +15,7 @@ services:
             DB_DATABASE: "${DB_DATABASE:-bookstack}"
         # ports:
         #     - ${BOOKSTACK_PORT:-80}:80
+        hostname: "${DOMAIN:-bookstack.localhost}"
         networks:
             main:
         volumes:

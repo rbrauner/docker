@@ -9,6 +9,7 @@ services:
         # ports:
         #     - ${PORTAINER_PORT:-9000}:9000
         #     - ${PORTAINER_SSL_PORT:-9443}:9443
+        hostname: "${DOMAIN:-portainer.localhost}"
         networks:
             main:
         volumes:
