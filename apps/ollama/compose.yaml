@@ -1,17 +1,22 @@
 services:
-    whoami:
-        container_name: whoami
-        image: traefik/whoami
+    ollama:
+        container_name: ollama
+        image: ollama/ollama
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
             TZ: "${TIMEZONE:-Europe/Warsaw}"
+        ports:
+            - ${OLLAMA_PORT:-11434}:11434
         networks:
             main:
-        labels:
-            caddy: "whoami.localhost"
-            caddy.reverse_proxy: "{{upstreams http}}"
+        volumes:
+            - ollama:/root/.ollama
 
 networks:
     main:
         external: true
+
+volumes:
+    ollama:
+        name: ollama

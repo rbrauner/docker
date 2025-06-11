@@ -1,12 +1,5 @@
 # Docker
 
-## Containers
-
-- `reverse-proxy` - reverse proxy containers
-- `db-client` - database client containers
-- `db-server` - database server containers
-- `other` - other containers
-
 ## Make shared network
 
 ```bash
@@ -32,6 +25,8 @@ mkcert -cert-file reverse-proxy/traefik/certs/local-cert.pem -key-file reverse-p
     "homepage.localhost" "*.homepage.localhost" \
     "open-webui.localhost" "*.open-webui.localhost" \
     "adminer.localhost" "*.adminer.localhost" \
+    "bookstack.localhost" "*.bookstack.localhost" \
+    "joplin.localhost" "*.joplin.localhost" \
     "pgadmin.localhost" "*.pgadmin.localhost" \
     "phpmyadmin.localhost" "*.phpmyadmin.localhost" \
     "example.localhost" "*.example.localhost"

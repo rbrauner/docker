@@ -4,6 +4,8 @@ services:
         image: traefik:v3.3
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
+        environment:
+            TZ: "${TIMEZONE:-Europe/Warsaw}"
         ports:
             - 80:80
             - 443:443
@@ -18,7 +20,7 @@ services:
         labels:
             - "traefik.enable=true"
             # reverse-proxy.localhost
-            - "traefik.http.routers.reverse-proxy.rule=Host(`reverse-proxy.localhost`)"
+            - "traefik.http.routers.reverse-proxy.rule=Host(`${DOMAIN:-reverse-proxy.localhost}`)"
             - "traefik.http.routers.reverse-proxy.service=api@internal"
 
 networks:

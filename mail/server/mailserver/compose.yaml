@@ -1,0 +1,60 @@
+services:
+    mailserver:
+        container_name: mailserver
+        image: ghcr.io/docker-mailserver/docker-mailserver
+        restart: unless-stopped
+        # user: "${UID:-1000}:${GID:-1000}"
+        environment:
+            TZ: "${TIMEZONE:-Europe/Warsaw}"
+            ENABLE_RSPAMD: "${ENABLE_RSPAMD:-1}"
+            ENABLE_CLAMAV: "${ENABLE_CLAMAV:-1}"
+            ENABLE_FAIL2BAN: "${ENABLE_FAIL2BAN:-1}"
+        hostname: "${DOMAIN:-mailserver.localhost}"
+        # ports:
+        #     - "25:25"
+        #     - "465:465"
+        #     - "587:587"
+        #     - "993:993"
+        networks:
+            main:
+        volumes:
+            - mailserver-mail-data:/var/mail/
+            - mailserver-mail-state:/var/mail-state/
+            - mailserver-mail-logs:/var/log/mail/
+            - mailserver-config:/tmp/docker-mailserver/
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.services.mailserver-port25.loadbalancer.server.port=25"
+            - "traefik.http.routers.mailserver-port25.rule=Host(`${DOMAIN:-mailserver.localhost}`)"
+            - "traefik.http.routers.mailserver-port25.entrypoints=port25"
+            - "traefik.http.routers.mailserver-port25.tls=false"
+            - "traefik.http.routers.mailserver-port25.service=mailserver-port25"
+            - "traefik.http.services.mailserver-port465.loadbalancer.server.port=465"
+            - "traefik.http.routers.mailserver-port465.rule=Host(`${DOMAIN:-mailserver.localhost}`)"
+            - "traefik.http.routers.mailserver-port465.entrypoints=port465"
+            - "traefik.http.routers.mailserver-port465.tls=false"
+            - "traefik.http.routers.mailserver-port465.service=mailserver-port465"
+            - "traefik.http.services.mailserver-port587.loadbalancer.server.port=587"
+            - "traefik.http.routers.mailserver-port587.rule=Host(`${DOMAIN:-mailserver.localhost}`)"
+            - "traefik.http.routers.mailserver-port587.entrypoints=port587"
+            - "traefik.http.routers.mailserver-port587.tls=false"
+            - "traefik.http.routers.mailserver-port587.service=mailserver-port587"
+            - "traefik.http.services.mailserver-port993.loadbalancer.server.port=993"
+            - "traefik.http.routers.mailserver-port993.rule=Host(`${DOMAIN:-mailserver.localhost}`)"
+            - "traefik.http.routers.mailserver-port993.entrypoints=port993"
+            - "traefik.http.routers.mailserver-port993.tls=false"
+            - "traefik.http.routers.mailserver-port993.service=mailserver-port993"
+
+networks:
+    main:
+        external: true
+
+volumes:
+    mailserver-mail-data:
+        name: mailserver-mail-data
+    mailserver-mail-state:
+        name: mailserver-mail-state
+    mailserver-mail-logs:
+        name: mailserver-mail-logs
+    mailserver-config:
+        name: mailserver-config

@@ -1,0 +1,34 @@
+services:
+    mysql:
+        container_name: mysql
+        image: mariadb
+        restart: unless-stopped
+        # user: "${UID:-1000}:${GID:-1000}"
+        environment:
+            TZ: "${TIMEZONE:-Europe/Warsaw}"
+            MYSQL_USER: "${DB_USER:-default}"
+            MYSQL_PASSWORD: "${DB_PASSWORD:-secret}"
+            MYSQL_DATABASE: "${DB_NAME:-default}"
+            MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD:-zaq1@WSX}"
+        ports:
+            - ${DB_PORT:-3306}:3306
+        networks:
+            main:
+        volumes:
+            - mysql-data:/var/lib/mysql
+            - mysql-conf:/etc/mysql
+            - ./docker/mysql/bin/backup.sh:/bin/backup.sh:ro
+            - ${BACKUP_DIR:-${HOME}/data/backups/docker/mysql}:/backup
+        labels:
+            deck-chores.mysql.command: "/bin/backup.sh"
+            deck-chores.mysql.cron: "${BACKUP_CRON_EXPRESSION:-9,15,17,21 0 0}"
+
+networks:
+    main:
+        external: true
+
+volumes:
+    mysql-data:
+        name: mysql-data
+    mysql-conf:
+        name: mysql-conf

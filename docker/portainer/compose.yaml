@@ -1,0 +1,35 @@
+services:
+    portainer:
+        container_name: portainer
+        image: portainer/portainer-ce:lts
+        restart: unless-stopped
+        # user: "${UID:-1000}:${GID:-1000}"
+        environment:
+            TZ: "${TIMEZONE:-Europe/Warsaw}"
+        # ports:
+        #     - ${PORTAINER_PORT:-9000}:9000
+        #     - ${PORTAINER_SSL_PORT:-9443}:9443
+        networks:
+            main:
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+            - portainer:/data
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.services.portainer.loadbalancer.server.port=9000"
+            - "traefik.http.routers.portainer.rule=Host(`${DOMAIN:-portainer.localhost}`)"
+            - "traefik.http.routers.portainer.entrypoints=http"
+            - "traefik.http.routers.portainer.tls=false"
+            - "traefik.http.routers.portainer.service=portainer"
+            - "traefik.http.routers.portainer-secure.rule=Host(`${DOMAIN:-portainer.localhost}`)"
+            - "traefik.http.routers.portainer-secure.entrypoints=https"
+            - "traefik.http.routers.portainer-secure.tls=true"
+            - "traefik.http.routers.portainer-secure.service=portainer"
+
+networks:
+    main:
+        external: true
+
+volumes:
+    portainer:
+        name: portainer

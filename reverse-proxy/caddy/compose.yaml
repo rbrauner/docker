@@ -4,6 +4,8 @@ services:
         image: caddy:alpine
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
+        environment:
+            TZ: "${TIMEZONE:-Europe/Warsaw}"
         ports:
             - 80:80
             - 443:443

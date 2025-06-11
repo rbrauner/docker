@@ -5,7 +5,8 @@ services:
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
-            - CADDY_INGRESS_NETWORKS=${CADDY_INGRESS_NETWORKS:-main}
+            TZ: "${TIMEZONE:-Europe/Warsaw}"
+            CADDY_INGRESS_NETWORKS: "${CADDY_INGRESS_NETWORKS:-main}"
         ports:
             - 80:80
             - 443:443

@@ -1,0 +1,30 @@
+services:
+    rabbitmq:
+        container_name: rabbitmq
+        image: rabbitmq
+        restart: unless-stopped
+        # user: "${UID:-1000}:${GID:-1000}"
+        environment:
+            TZ: "${TIMEZONE:-Europe/Warsaw}"
+            RABBITMQ_DEFAULT_USER: "${RABBITMQ_DEFAULT_USER:-default}"
+            RABBITMQ_DEFAULT_PASS: "${RABBITMQ_DEFAULT_PASS:-secret}"
+        hostname: "${DOMAIN:-rabbitmq.localhost}"
+        # ports:
+        #     - ${RABBITMQ_PORT:-8080}:8080
+        networks:
+            main:
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.services.rabbitmq.loadbalancer.server.port=8080"
+            - "traefik.http.routers.rabbitmq.rule=Host(`${DOMAIN:-rabbitmq.localhost}`)"
+            - "traefik.http.routers.rabbitmq.entrypoints=http"
+            - "traefik.http.routers.rabbitmq.tls=false"
+            - "traefik.http.routers.rabbitmq.service=rabbitmq"
+            - "traefik.http.routers.rabbitmq-secure.rule=Host(`${DOMAIN:-rabbitmq.localhost}`)"
+            - "traefik.http.routers.rabbitmq-secure.entrypoints=https"
+            - "traefik.http.routers.rabbitmq-secure.tls=true"
+            - "traefik.http.routers.rabbitmq-secure.service=rabbitmq"
+
+networks:
+    main:
+        external: true

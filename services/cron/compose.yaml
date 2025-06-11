@@ -1,16 +1,16 @@
 services:
-    whoami:
-        container_name: whoami
-        image: traefik/whoami
+    cron:
+        container_name: cron
+        image: funkyfuture/deck-chores:1
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
             TZ: "${TIMEZONE:-Europe/Warsaw}"
+            TIMEZONE: "${TIMEZONE:-Europe/Warsaw}"
         networks:
             main:
-        labels:
-            caddy: "whoami.localhost"
-            caddy.reverse_proxy: "{{upstreams http}}"
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock:ro
 
 networks:
     main:

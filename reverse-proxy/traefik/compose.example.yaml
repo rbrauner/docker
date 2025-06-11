@@ -4,6 +4,8 @@ services:
         image: traefik/whoami
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
+        environment:
+            TZ: "${TIMEZONE:-Europe/Warsaw}"
         networks:
             main:
         labels:
@@ -26,7 +28,7 @@ services:
             # - "traefik.http.routers.wildcard-whoami-secure.tls=true"
             # - "traefik.http.routers.wildcard-whoami-secure.service=whoami"
             # - "traefik.http.services.whoami-port8080.loadbalancer.server.port=8080"
-            # - "traefik.http.routers.whoami-port8080.rule=Host(`whoami.localhost`)"
+            # - "traefik.http.routers.whoami-port8080.rule=Host(`${DOMAIN:-whoami.localhost}`)"
             # - "traefik.http.routers.whoami-port8080.entrypoints=port8080"
             # - "traefik.http.routers.whoami-port8080.tls=false"
             # - "traefik.http.routers.whoami-port8080.service=whoami-port8080"
