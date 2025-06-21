@@ -9,20 +9,16 @@ services:
             # =================
             # = volume backup =
             # =================
-            - mysql-data:/backup/mysql-data:ro
-            - mysql-data-conf:/backup/mysql-data-conf:ro
-
-networks:
-    main:
-        external: true
+            - mariadb-data:/backup/mariadb-data:ro
+            - mariadb-data-conf:/backup/mariadb-data-conf:ro
 
 # =================
 # = volume backup =
 # =================
 volumes:
-    mysql-data:
-        name: mysql-data
+    mariadb-data:
+        name: mariadb-data
         external: true
-    mysql-data-conf:
-        name: mysql-data-conf
+    mariadb-data-conf:
+        name: mariadb-data-conf
         external: true

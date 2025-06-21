@@ -6,8 +6,8 @@ services:
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
             TZ: "${TIMEZONE:-Europe/Warsaw}"
-            POSTGRES_USER: "${DB_USER:-default}"
-            POSTGRES_PASSWORD: "${DB_PASSWORD:-secret}"
+            POSTGRES_USER: "${DB_USER:-root}"
+            POSTGRES_PASSWORD: "${DB_PASSWORD:-zaq1@WSX}"
             POSTGRES_DB: "${DB_NAME:-default}"
         ports:
             - ${DB_PORT:-5432}:5432

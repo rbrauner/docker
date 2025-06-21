@@ -1,13 +1,11 @@
 services:
     mysql:
         container_name: mysql
-        image: mariadb
+        image: mysql
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
             TZ: "${TIMEZONE:-Europe/Warsaw}"
-            MYSQL_USER: "${DB_USER:-default}"
-            MYSQL_PASSWORD: "${DB_PASSWORD:-secret}"
             MYSQL_DATABASE: "${DB_NAME:-default}"
             MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD:-zaq1@WSX}"
         ports:

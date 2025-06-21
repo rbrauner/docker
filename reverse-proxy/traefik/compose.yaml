@@ -1,7 +1,7 @@
 services:
     traefik:
-        container_name: reverse-proxy-traefik
-        image: traefik:v3.3
+        container_name: traefik
+        image: traefik:3
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
@@ -10,7 +10,7 @@ services:
             - 80:80
             - 443:443
             - 5173:5173
-        hostname: "${DOMAIN:-reverse-proxy.localhost}"
+        hostname: "${DOMAIN:-traefik.localhost}"
         networks:
             main:
         volumes:
@@ -20,9 +20,9 @@ services:
             - ./certs:/etc/certs:ro
         labels:
             - "traefik.enable=true"
-            # reverse-proxy.localhost
-            - "traefik.http.routers.reverse-proxy.rule=Host(`${DOMAIN:-reverse-proxy.localhost}`)"
-            - "traefik.http.routers.reverse-proxy.service=api@internal"
+            # traefik.localhost
+            - "traefik.http.routers.traefik.rule=Host(`${DOMAIN:-traefik.localhost}`)"
+            - "traefik.http.routers.traefik.service=api@internal"
 
 networks:
     main:

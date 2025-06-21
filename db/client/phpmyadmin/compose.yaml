@@ -1,7 +1,7 @@
 services:
     phpmyadmin:
         container_name: phpmyadmin
-        image: phpmyadmin
+        image: phpmyadmin:fpm-alpine
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         environment:

@@ -1,6 +1,6 @@
 services:
     caddy-labels:
-        container_name: reverse-proxy-caddy-labels
+        container_name: caddy-labels
         image: lucaslorentz/caddy-docker-proxy:ci-alpine
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
@@ -29,6 +29,6 @@ networks:
 
 volumes:
     caddy-labels-data:
-        name: reverse-proxy-caddy-labels-data
+        name: caddy-labels-data
     caddy-labels-config:
-        name: reverse-proxy-caddy-labels-config
+        name: caddy-labels-config

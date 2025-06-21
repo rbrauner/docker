@@ -19,7 +19,7 @@ docker compose up -d
 
 ```bash
 mkcert -cert-file reverse-proxy/traefik/certs/local-cert.pem -key-file reverse-proxy/traefik/certs/local-key.pem \
-    "reverse-proxy.localhost" "*.reverse-proxy.localhost" \
+    "traefik.localhost" "*.traefik.localhost" \
     "portainer.localhost" "*.portainer.localhost" \
     "adminer.localhost" "*.adminer.localhost" \
     "pgadmin.localhost" "*.pgadmin.localhost" \
@@ -27,6 +27,7 @@ mkcert -cert-file reverse-proxy/traefik/certs/local-cert.pem -key-file reverse-p
     "mailserver.localhost" "*.mailserver.localhost" \
     "mailpit.localhost" "*.mailpit.localhost" \
     "rabbitmq.localhost" "*.rabbitmq.localhost" \
+    "affine.localhost" "*.affine.localhost" \
     "bookstack.localhost" "*.bookstack.localhost" \
     "homepage.localhost" "*.homepage.localhost" \
     "joplin.localhost" "*.joplin.localhost" \

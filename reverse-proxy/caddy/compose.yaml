@@ -1,6 +1,6 @@
 services:
     caddy:
-        container_name: reverse-proxy-caddy
+        container_name: caddy
         image: caddy:alpine
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
@@ -27,8 +27,8 @@ networks:
 
 volumes:
     caddy-data:
-        name: reverse-proxy-caddy-data
+        name: caddy-data
     caddy-config:
-        name: reverse-proxy-caddy-config
+        name: caddy-config
     caddy-certificate-authority:
-        name: reverse-proxy-caddy-certificate-authority
+        name: caddy-certificate-authority
