@@ -7,7 +7,7 @@ services:
         environment:
             TZ: "${TIMEZONE:-Europe/Warsaw}"
             MYSQL_DATABASE: "${DB_NAME:-default}"
-            MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD:-zaq1@WSX}"
+            MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD:-secret}"
         ports:
             - ${DB_PORT:-3306}:3306
         networks:

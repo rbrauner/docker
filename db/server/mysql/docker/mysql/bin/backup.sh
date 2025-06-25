@@ -2,7 +2,7 @@
 
 # Konfiguracja
 DB_USER="root"
-DB_PASS="zaq1@WSX"
+DB_PASS="secret"
 BACKUP_DIR="/backup"
 DATE=$(date '+%Y-%m-%d_%H-%M-%S')
 RETENTION_DAYS=7

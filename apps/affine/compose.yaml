@@ -10,7 +10,7 @@ services:
         environment:
             TZ: "${TIMEZONE:-Europe/Warsaw}"
             REDIS_SERVER_HOST: "${REDIS_SERVER_HOST:-valkey}"
-            REDIS_SERVER_PASSWORD: "${REDIS_SERVER_PASSWORD:-zaq1@WSX}"
+            REDIS_SERVER_PASSWORD: "${REDIS_SERVER_PASSWORD:-secret}"
             DATABASE_URL: "${DATABASE_URL:-postgresql://affine:affine@postgres:5432/affine}"
             AFFINE_INDEXER_ENABLED: "${AFFINE_INDEXER_ENABLED:-true}"
             AFFINE_SERVER_HTTPS: "${AFFINE_SERVER_HTTPS:-true}"
@@ -43,7 +43,7 @@ services:
         environment:
             TZ: "${TIMEZONE:-Europe/Warsaw}"
             REDIS_SERVER_HOST: "${REDIS_SERVER_HOST:-valkey}"
-            REDIS_SERVER_PASSWORD: "${REDIS_SERVER_PASSWORD:-zaq1@WSX}"
+            REDIS_SERVER_PASSWORD: "${REDIS_SERVER_PASSWORD:-secret}"
             DATABASE_URL: "${DATABASE_URL:-postgresql://affine:affine@postgres:5432/affine}"
             AFFINE_INDEXER_ENABLED: "${AFFINE_INDEXER_ENABLED:-true}"
             AFFINE_SERVER_HTTPS: "${AFFINE_SERVER_HTTPS:-true}"

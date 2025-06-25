@@ -3,4 +3,4 @@ services:
         environment:
             TZ: "${TIMEZONE:-Europe/Warsaw}"
             PGADMIN_DEFAULT_EMAIL: "${PGADMIN_DEFAULT_EMAIL:-user@domain.com}"
-            PGADMIN_DEFAULT_PASSWORD: "${PGADMIN_DEFAULT_EMAIL:-zaq1@WSX}"
+            PGADMIN_DEFAULT_PASSWORD: "${PGADMIN_DEFAULT_EMAIL:-secret}"
