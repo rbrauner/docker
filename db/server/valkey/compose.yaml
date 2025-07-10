@@ -7,12 +7,19 @@ services:
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
             TZ: "${TIMEZONE:-Europe/Warsaw}"
-        ports:
-            - ${VALKEY_PORT:-6379}:6379
+        # ports:
+        #     - ${VALKEY_PORT:-6379}:6379
         networks:
             main:
         volumes:
             - valkey-data:/data
+        labels:
+            - "traefik.enable=true"
+            - "traefik.tcp.services.valkey.loadbalancer.server.port=6379"
+            - "traefik.tcp.routers.valkey.rule=HostSNI(`${DOMAIN:-valkey.localhost}`)"
+            - "traefik.tcp.routers.valkey.entrypoints=redis"
+            - "traefik.tcp.routers.valkey.tls=true"
+            - "traefik.tcp.routers.valkey.service=valkey"
 
 networks:
     main:

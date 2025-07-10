@@ -1,0 +1,44 @@
+services:
+    macos:
+        container_name: macos
+        image: dockurr/macos
+        restart: unless-stopped
+        # user: "${UID:-1000}:${GID:-1000}"
+        environment:
+            TZ: "${TIMEZONE:-Europe/Warsaw}"
+            VERSION: "${VERSION:-15}"
+            DISK_SIZE: "${DISK_SIZE:-64G}"
+            RAM_SIZE: "${RAM_SIZE:-4G}"
+            CPU_CORES: "${CPU_CORES:-2}"
+        ports:
+            # - ${MACOS_PORT:-8006}:8006
+            - ${MACOS_PORT_TCP_UDP:-5900}:5900/tcp
+            - ${MACOS_PORT_TCP_UDP:-5900}:5900/udp
+        hostname: "${DOMAIN:-macos.localhost}"
+        devices:
+            - /dev/kvm
+            - /dev/net/tun
+        stop_grace_period: 2m
+        networks:
+            main:
+        volumes:
+            - macos:/storage
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.services.macos.loadbalancer.server.port=8006"
+            - "traefik.http.routers.macos.rule=Host(`${DOMAIN:-macos.localhost}`)"
+            - "traefik.http.routers.macos.entrypoints=http"
+            - "traefik.http.routers.macos.tls=false"
+            - "traefik.http.routers.macos.service=macos"
+            - "traefik.http.routers.macos-secure.rule=Host(`${DOMAIN:-macos.localhost}`)"
+            - "traefik.http.routers.macos-secure.entrypoints=https"
+            - "traefik.http.routers.macos-secure.tls=true"
+            - "traefik.http.routers.macos-secure.service=macos"
+
+networks:
+    main:
+        external: true
+
+volumes:
+    macos:
+        name: macos

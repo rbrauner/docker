@@ -21,16 +21,22 @@ docker compose up -d
 mkcert -cert-file reverse-proxy/traefik/certs/local-cert.pem -key-file reverse-proxy/traefik/certs/local-key.pem \
     "traefik.localhost" "*.traefik.localhost" \
     "portainer.localhost" "*.portainer.localhost" \
+    "mariadb.localhost" "*.mariadb.localhost" \
+    "mysql.localhost" "*.mysql.localhost" \
+    "postgres.localhost" "*.postgres.localhost" \
+    "redis.localhost" "*.redis.localhost" \
+    "valkey.localhost" "*.valkey.localhost" \
+    "rabbitmq.localhost" "*.rabbitmq.localhost" \
+    "mailserver.localhost" "*.mailserver.localhost" \
     "adminer.localhost" "*.adminer.localhost" \
     "pgadmin.localhost" "*.pgadmin.localhost" \
     "phpmyadmin.localhost" "*.phpmyadmin.localhost" \
-    "mailserver.localhost" "*.mailserver.localhost" \
     "mailpit.localhost" "*.mailpit.localhost" \
-    "rabbitmq.localhost" "*.rabbitmq.localhost" \
     "affine.localhost" "*.affine.localhost" \
     "bookstack.localhost" "*.bookstack.localhost" \
     "homepage.localhost" "*.homepage.localhost" \
     "joplin.localhost" "*.joplin.localhost" \
+    "ollama.localhost" "*.ollama.localhost" \
     "open-webui.localhost" "*.open-webui.localhost" \
     "example.localhost" "*.example.localhost"
 mkcert -install

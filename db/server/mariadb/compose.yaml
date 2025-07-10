@@ -8,8 +8,8 @@ services:
             TZ: "${TIMEZONE:-Europe/Warsaw}"
             MYSQL_DATABASE: "${DB_NAME:-default}"
             MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD:-secret}"
-        ports:
-            - ${DB_PORT:-3306}:3306
+        # ports:
+        #     - ${DB_PORT:-3306}:3306
         networks:
             main:
         volumes:
@@ -18,8 +18,14 @@ services:
             - ./docker/mariadb/bin/backup.sh:/bin/backup.sh:ro
             - ${BACKUP_DIR:-${HOME}/data/backups/docker/mariadb}:/backup
         labels:
-            deck-chores.mariadb.command: "/bin/backup.sh"
-            deck-chores.mariadb.cron: "${BACKUP_CRON_EXPRESSION:-9,15,17,21 0 0}"
+            - "deck-chores.postgres.command=/bin/backup.sh"
+            - "deck-chores.postgres.cron=${BACKUP_CRON_EXPRESSION:-9,15,17,21 0 0}"
+            - "traefik.enable=true"
+            - "traefik.tcp.services.mariadb.loadbalancer.server.port=3306"
+            - "traefik.tcp.routers.mariadb.rule=HostSNI(`${DOMAIN:-mariadb.localhost}`)"
+            - "traefik.tcp.routers.mariadb.entrypoints=mysql"
+            - "traefik.tcp.routers.mariadb.tls=true"
+            - "traefik.tcp.routers.mariadb.service=mariadb"
 
 networks:
     main:

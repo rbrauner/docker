@@ -30,7 +30,3 @@ services:
 networks:
     main:
         external: true
-
-volumes:
-    homepage:
-        name: homepage

@@ -1,0 +1,15 @@
+services:
+    devbox:
+        container_name: devbox
+        build:
+            context: .
+            dockerfile: Dockerfile
+        restart: unless-stopped
+        user: "${UID:-1000}:${GID:-1000}"
+        tty: true
+        networks:
+            main:
+
+networks:
+    main:
+        external: true

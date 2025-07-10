@@ -8,8 +8,8 @@ services:
             TZ: "${TIMEZONE:-Europe/Warsaw}"
             MYSQL_DATABASE: "${DB_NAME:-default}"
             MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD:-secret}"
-        ports:
-            - ${DB_PORT:-3306}:3306
+        # ports:
+        #     - ${DB_PORT:-3306}:3306
         networks:
             main:
         volumes:
@@ -18,8 +18,14 @@ services:
             - ./docker/mysql/bin/backup.sh:/bin/backup.sh:ro
             - ${BACKUP_DIR:-${HOME}/data/backups/docker/mysql}:/backup
         labels:
-            deck-chores.mysql.command: "/bin/backup.sh"
-            deck-chores.mysql.cron: "${BACKUP_CRON_EXPRESSION:-9,15,17,21 0 0}"
+            - "deck-chores.postgres.command=/bin/backup.sh"
+            - "deck-chores.postgres.cron=${BACKUP_CRON_EXPRESSION:-9,15,17,21 0 0}"
+            - "traefik.enable=true"
+            - "traefik.tcp.services.mysql.loadbalancer.server.port=3306"
+            - "traefik.tcp.routers.mysql.rule=HostSNI(`${DOMAIN:-mysql.localhost}`)"
+            - "traefik.tcp.routers.mysql.entrypoints=mysql"
+            - "traefik.tcp.routers.mysql.tls=true"
+            - "traefik.tcp.routers.mysql.service=mysql"
 
 networks:
     main:
