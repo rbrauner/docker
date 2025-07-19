@@ -36,6 +36,7 @@ mkcert -cert-file reverse-proxy/traefik/certs/local-cert.pem -key-file reverse-p
     "bookstack.localhost" "*.bookstack.localhost" \
     "homepage.localhost" "*.homepage.localhost" \
     "joplin.localhost" "*.joplin.localhost" \
+    "macos.localhost" "*.macos.localhost" \
     "ollama.localhost" "*.ollama.localhost" \
     "open-webui.localhost" "*.open-webui.localhost" \
     "example.localhost" "*.example.localhost"
