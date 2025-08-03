@@ -17,6 +17,7 @@ services:
             - 587:587
             - 993:993
             - 11434:11434
+            - 5173:5173
         hostname: "${DOMAIN:-traefik.localhost}"
         networks:
             main:
