@@ -47,3 +47,5 @@ entryPoints:
         address: ":993"
     ollama:
         address: ":11434"
+    vite:
+        address: ":5173"
