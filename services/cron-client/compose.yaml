@@ -1,0 +1,28 @@
+services:
+    crontab-ui:
+        container_name: crontab-ui
+        image: alseambusher/crontab-ui
+        restart: unless-stopped
+        # user: "${UID:-1000}:${GID:-1000}"
+        environment:
+            TZ: "${TIMEZONE:-Europe/Warsaw}"
+        # ports:
+        #     - ${CRONTAB_UI_PORT:-8000}:8000
+        hostname: "${DOMAIN:-crontab-ui.localhost}"
+        networks:
+            main:
+        labels:
+            traefik.enable: "true"
+            traefik.http.services.crontab-ui.loadbalancer.server.port: "8000"
+            traefik.http.routers.crontab-ui.rule: "Host(`${DOMAIN:-crontab-ui.localhost}`)"
+            traefik.http.routers.crontab-ui.entrypoints: "http"
+            traefik.http.routers.crontab-ui.tls: "false"
+            traefik.http.routers.crontab-ui.service: "crontab-ui"
+            traefik.http.routers.crontab-ui-secure.rule: "Host(`${DOMAIN:-crontab-ui.localhost}`)"
+            traefik.http.routers.crontab-ui-secure.entrypoints: "https"
+            traefik.http.routers.crontab-ui-secure.tls: "true"
+            traefik.http.routers.crontab-ui-secure.service: "crontab-ui"
+
+networks:
+    main:
+        external: true

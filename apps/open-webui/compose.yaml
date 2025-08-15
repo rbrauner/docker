@@ -15,16 +15,16 @@ services:
         volumes:
             - open-webui:/app/backend/data
         labels:
-            - "traefik.enable=true"
-            - "traefik.http.services.open-webui.loadbalancer.server.port=8080"
-            - "traefik.http.routers.open-webui.rule=Host(`${DOMAIN:-open-webui.localhost}`)"
-            - "traefik.http.routers.open-webui.entrypoints=http"
-            - "traefik.http.routers.open-webui.tls=false"
-            - "traefik.http.routers.open-webui.service=open-webui"
-            - "traefik.http.routers.open-webui-secure.rule=Host(`${DOMAIN:-open-webui.localhost}`)"
-            - "traefik.http.routers.open-webui-secure.entrypoints=https"
-            - "traefik.http.routers.open-webui-secure.tls=true"
-            - "traefik.http.routers.open-webui-secure.service=open-webui"
+            traefik.enable: "true"
+            traefik.http.services.open-webui.loadbalancer.server.port: "8080"
+            traefik.http.routers.open-webui.rule: "Host(`${DOMAIN:-open-webui.localhost}`)"
+            traefik.http.routers.open-webui.entrypoints: "http"
+            traefik.http.routers.open-webui.tls: "false"
+            traefik.http.routers.open-webui.service: "open-webui"
+            traefik.http.routers.open-webui-secure.rule: "Host(`${DOMAIN:-open-webui.localhost}`)"
+            traefik.http.routers.open-webui-secure.entrypoints: "https"
+            traefik.http.routers.open-webui-secure.tls: "true"
+            traefik.http.routers.open-webui-secure.service: "open-webui"
 
 networks:
     main:

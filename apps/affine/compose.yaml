@@ -23,16 +23,16 @@ services:
             - affine-storage:/root/.affine/storage
             - affine-conf:/root/.affine/config
         labels:
-            - "traefik.enable=true"
-            - "traefik.http.services.affine.loadbalancer.server.port=3010"
-            - "traefik.http.routers.affine.rule=Host(`${DOMAIN:-affine.localhost}`)"
-            - "traefik.http.routers.affine.entrypoints=http"
-            - "traefik.http.routers.affine.tls=false"
-            - "traefik.http.routers.affine.service=affine"
-            - "traefik.http.routers.affine-secure.rule=Host(`${DOMAIN:-affine.localhost}`)"
-            - "traefik.http.routers.affine-secure.entrypoints=https"
-            - "traefik.http.routers.affine-secure.tls=true"
-            - "traefik.http.routers.affine-secure.service=affine"
+            traefik.enable: "true"
+            traefik.http.services.affine.loadbalancer.server.port: "3010"
+            traefik.http.routers.affine.rule: "Host(`${DOMAIN:-affine.localhost}`)"
+            traefik.http.routers.affine.entrypoints: "http"
+            traefik.http.routers.affine.tls: "false"
+            traefik.http.routers.affine.service: "affine"
+            traefik.http.routers.affine-secure.rule: "Host(`${DOMAIN:-affine.localhost}`)"
+            traefik.http.routers.affine-secure.entrypoints: "https"
+            traefik.http.routers.affine-secure.tls: "true"
+            traefik.http.routers.affine-secure.service: "affine"
 
     affine_migration:
         container_name: affine_migration

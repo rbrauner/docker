@@ -14,16 +14,16 @@ services:
         networks:
             main:
         labels:
-            - "traefik.enable=true"
-            - "traefik.http.services.rabbitmq.loadbalancer.server.port=8080"
-            - "traefik.http.routers.rabbitmq.rule=Host(`${DOMAIN:-rabbitmq.localhost}`)"
-            - "traefik.http.routers.rabbitmq.entrypoints=http"
-            - "traefik.http.routers.rabbitmq.tls=false"
-            - "traefik.http.routers.rabbitmq.service=rabbitmq"
-            - "traefik.http.routers.rabbitmq-secure.rule=Host(`${DOMAIN:-rabbitmq.localhost}`)"
-            - "traefik.http.routers.rabbitmq-secure.entrypoints=https"
-            - "traefik.http.routers.rabbitmq-secure.tls=true"
-            - "traefik.http.routers.rabbitmq-secure.service=rabbitmq"
+            traefik.enable: "true"
+            traefik.http.services.rabbitmq.loadbalancer.server.port: "8080"
+            traefik.http.routers.rabbitmq.rule: "Host(`${DOMAIN:-rabbitmq.localhost}`)"
+            traefik.http.routers.rabbitmq.entrypoints: "http"
+            traefik.http.routers.rabbitmq.tls: "false"
+            traefik.http.routers.rabbitmq.service: "rabbitmq"
+            traefik.http.routers.rabbitmq-secure.rule: "Host(`${DOMAIN:-rabbitmq.localhost}`)"
+            traefik.http.routers.rabbitmq-secure.entrypoints: "https"
+            traefik.http.routers.rabbitmq-secure.tls: "true"
+            traefik.http.routers.rabbitmq-secure.service: "rabbitmq"
 
 networks:
     main:

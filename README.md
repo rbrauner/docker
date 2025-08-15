@@ -23,6 +23,9 @@ mkcert -cert-file reverse-proxy/traefik/certs/local-cert.pem -key-file reverse-p
     "portainer.localhost" "*.portainer.localhost" \
     "mariadb.localhost" "*.mariadb.localhost" \
     "mysql.localhost" "*.mysql.localhost" \
+    "mysql5.localhost" "*.mysql5.localhost" \
+    "percona.localhost" "*.percona.localhost" \
+    "percona5.localhost" "*.percona5.localhost" \
     "postgres.localhost" "*.postgres.localhost" \
     "redis.localhost" "*.redis.localhost" \
     "valkey.localhost" "*.valkey.localhost" \
@@ -32,6 +35,7 @@ mkcert -cert-file reverse-proxy/traefik/certs/local-cert.pem -key-file reverse-p
     "pgadmin.localhost" "*.pgadmin.localhost" \
     "phpmyadmin.localhost" "*.phpmyadmin.localhost" \
     "mailpit.localhost" "*.mailpit.localhost" \
+    "cron-client.localhost" "*.cron-client.localhost" \
     "affine.localhost" "*.affine.localhost" \
     "bookstack.localhost" "*.bookstack.localhost" \
     "homepage.localhost" "*.homepage.localhost" \

@@ -24,16 +24,16 @@ services:
         volumes:
             - macos:/storage
         labels:
-            - "traefik.enable=true"
-            - "traefik.http.services.macos.loadbalancer.server.port=8006"
-            - "traefik.http.routers.macos.rule=Host(`${DOMAIN:-macos.localhost}`)"
-            - "traefik.http.routers.macos.entrypoints=http"
-            - "traefik.http.routers.macos.tls=false"
-            - "traefik.http.routers.macos.service=macos"
-            - "traefik.http.routers.macos-secure.rule=Host(`${DOMAIN:-macos.localhost}`)"
-            - "traefik.http.routers.macos-secure.entrypoints=https"
-            - "traefik.http.routers.macos-secure.tls=true"
-            - "traefik.http.routers.macos-secure.service=macos"
+            traefik.enable: "true"
+            traefik.http.services.macos.loadbalancer.server.port: "8006"
+            traefik.http.routers.macos.rule: "Host(`${DOMAIN:-macos.localhost}`)"
+            traefik.http.routers.macos.entrypoints: "http"
+            traefik.http.routers.macos.tls: "false"
+            traefik.http.routers.macos.service: "macos"
+            traefik.http.routers.macos-secure.rule: "Host(`${DOMAIN:-macos.localhost}`)"
+            traefik.http.routers.macos-secure.entrypoints: "https"
+            traefik.http.routers.macos-secure.tls: "true"
+            traefik.http.routers.macos-secure.service: "macos"
 
 networks:
     main:

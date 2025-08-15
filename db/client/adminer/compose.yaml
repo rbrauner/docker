@@ -13,16 +13,16 @@ services:
         networks:
             main:
         labels:
-            - "traefik.enable=true"
-            - "traefik.http.services.adminer.loadbalancer.server.port=8080"
-            - "traefik.http.routers.adminer.rule=Host(`${DOMAIN:-adminer.localhost}`)"
-            - "traefik.http.routers.adminer.entrypoints=http"
-            - "traefik.http.routers.adminer.tls=false"
-            - "traefik.http.routers.adminer.service=adminer"
-            - "traefik.http.routers.adminer-secure.rule=Host(`${DOMAIN:-adminer.localhost}`)"
-            - "traefik.http.routers.adminer-secure.entrypoints=https"
-            - "traefik.http.routers.adminer-secure.tls=true"
-            - "traefik.http.routers.adminer-secure.service=adminer"
+            traefik.enable: "true"
+            traefik.http.services.adminer.loadbalancer.server.port: "8080"
+            traefik.http.routers.adminer.rule: "Host(`${DOMAIN:-adminer.localhost}`)"
+            traefik.http.routers.adminer.entrypoints: "http"
+            traefik.http.routers.adminer.tls: "false"
+            traefik.http.routers.adminer.service: "adminer"
+            traefik.http.routers.adminer-secure.rule: "Host(`${DOMAIN:-adminer.localhost}`)"
+            traefik.http.routers.adminer-secure.entrypoints: "https"
+            traefik.http.routers.adminer-secure.tls: "true"
+            traefik.http.routers.adminer-secure.service: "adminer"
 
 networks:
     main:

@@ -17,16 +17,16 @@ services:
         volumes:
             - mailpit:/data
         labels:
-            - "traefik.enable=true"
-            - "traefik.http.services.mailpit.loadbalancer.server.port=8025"
-            - "traefik.http.routers.mailpit.rule=Host(`${DOMAIN:-mailpit.localhost}`)"
-            - "traefik.http.routers.mailpit.entrypoints=http"
-            - "traefik.http.routers.mailpit.tls=false"
-            - "traefik.http.routers.mailpit.service=mailpit"
-            - "traefik.http.routers.mailpit-secure.rule=Host(`${DOMAIN:-mailpit.localhost}`)"
-            - "traefik.http.routers.mailpit-secure.entrypoints=https"
-            - "traefik.http.routers.mailpit-secure.tls=true"
-            - "traefik.http.routers.mailpit-secure.service=mailpit"
+            traefik.enable: "true"
+            traefik.http.services.mailpit.loadbalancer.server.port: "8025"
+            traefik.http.routers.mailpit.rule: "Host(`${DOMAIN:-mailpit.localhost}`)"
+            traefik.http.routers.mailpit.entrypoints: "http"
+            traefik.http.routers.mailpit.tls: "false"
+            traefik.http.routers.mailpit.service: "mailpit"
+            traefik.http.routers.mailpit-secure.rule: "Host(`${DOMAIN:-mailpit.localhost}`)"
+            traefik.http.routers.mailpit-secure.entrypoints: "https"
+            traefik.http.routers.mailpit-secure.tls: "true"
+            traefik.http.routers.mailpit-secure.service: "mailpit"
 
 networks:
     main:

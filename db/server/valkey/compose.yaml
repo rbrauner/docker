@@ -14,12 +14,12 @@ services:
         volumes:
             - valkey-data:/data
         labels:
-            - "traefik.enable=true"
-            - "traefik.tcp.services.valkey.loadbalancer.server.port=6379"
-            - "traefik.tcp.routers.valkey.rule=HostSNI(`${DOMAIN:-valkey.localhost}`)"
-            - "traefik.tcp.routers.valkey.entrypoints=redis"
-            - "traefik.tcp.routers.valkey.tls=true"
-            - "traefik.tcp.routers.valkey.service=valkey"
+            traefik.enable: "true"
+            traefik.tcp.services.valkey.loadbalancer.server.port: "6379"
+            traefik.tcp.routers.valkey.rule: "HostSNI(`${DOMAIN:-valkey.localhost}`)"
+            traefik.tcp.routers.valkey.entrypoints: "redis"
+            traefik.tcp.routers.valkey.tls: "true"
+            traefik.tcp.routers.valkey.service: "valkey"
 
 networks:
     main:

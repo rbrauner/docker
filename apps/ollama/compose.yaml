@@ -13,12 +13,12 @@ services:
         volumes:
             - ollama:/root/.ollama
         labels:
-            - "traefik.enable=true"
-            - "traefik.tcp.services.ollama.loadbalancer.server.port=11434"
-            - "traefik.tcp.routers.ollama.rule=HostSNI(`${DOMAIN:-ollama.localhost}`)"
-            - "traefik.tcp.routers.ollama.entrypoints=ollama"
-            - "traefik.tcp.routers.ollama.tls=true"
-            - "traefik.tcp.routers.ollama.service=ollama"
+            traefik.enable: "true"
+            traefik.tcp.services.ollama.loadbalancer.server.port: "11434"
+            traefik.tcp.routers.ollama.rule: "HostSNI(`${DOMAIN:-ollama.localhost}`)"
+            traefik.tcp.routers.ollama.entrypoints: "ollama"
+            traefik.tcp.routers.ollama.tls: "true"
+            traefik.tcp.routers.ollama.service: "ollama"
 
 networks:
     main:

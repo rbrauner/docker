@@ -16,16 +16,16 @@ services:
             - /var/run/docker.sock:/var/run/docker.sock:ro
             - ./config:/app/config
         labels:
-            - "traefik.enable=true"
-            - "traefik.http.services.homepage.loadbalancer.server.port=3000"
-            - "traefik.http.routers.homepage.rule=Host(`${DOMAIN:-homepage.localhost}`)"
-            - "traefik.http.routers.homepage.entrypoints=http"
-            - "traefik.http.routers.homepage.tls=false"
-            - "traefik.http.routers.homepage.service=homepage"
-            - "traefik.http.routers.homepage-secure.rule=Host(`${DOMAIN:-homepage.localhost}`)"
-            - "traefik.http.routers.homepage-secure.entrypoints=https"
-            - "traefik.http.routers.homepage-secure.tls=true"
-            - "traefik.http.routers.homepage-secure.service=homepage"
+            traefik.enable: "true"
+            traefik.http.services.homepage.loadbalancer.server.port: "3000"
+            traefik.http.routers.homepage.rule: "Host(`${DOMAIN:-homepage.localhost}`)"
+            traefik.http.routers.homepage.entrypoints: "http"
+            traefik.http.routers.homepage.tls: "false"
+            traefik.http.routers.homepage.service: "homepage"
+            traefik.http.routers.homepage-secure.rule: "Host(`${DOMAIN:-homepage.localhost}`)"
+            traefik.http.routers.homepage-secure.entrypoints: "https"
+            traefik.http.routers.homepage-secure.tls: "true"
+            traefik.http.routers.homepage-secure.service: "homepage"
 
 networks:
     main:

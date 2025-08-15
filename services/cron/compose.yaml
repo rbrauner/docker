@@ -1,7 +1,8 @@
 services:
     cron:
         container_name: cron
-        image: funkyfuture/deck-chores:1
+        image: mcuadros/ofelia
+        command: daemon --docker
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         environment:

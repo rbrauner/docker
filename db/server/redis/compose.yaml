@@ -14,12 +14,12 @@ services:
         volumes:
             - redis-data:/data
         labels:
-            - "traefik.enable=true"
-            - "traefik.tcp.services.redis.loadbalancer.server.port=6379"
-            - "traefik.tcp.routers.redis.rule=HostSNI(`${DOMAIN:-redis.localhost}`)"
-            - "traefik.tcp.routers.redis.entrypoints=redis"
-            - "traefik.tcp.routers.redis.tls=true"
-            - "traefik.tcp.routers.redis.service=redis"
+            traefik.enable: "true"
+            traefik.tcp.services.redis.loadbalancer.server.port: "6379"
+            traefik.tcp.routers.redis.rule: "HostSNI(`${DOMAIN:-redis.localhost}`)"
+            traefik.tcp.routers.redis.entrypoints: "redis"
+            traefik.tcp.routers.redis.tls: "true"
+            traefik.tcp.routers.redis.service: "redis"
 
 networks:
     main:
