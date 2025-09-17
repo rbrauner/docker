@@ -1,21 +1,24 @@
 services:
     rabbitmq:
         container_name: rabbitmq
-        image: rabbitmq:alpine
+        image: rabbitmq:management-alpine
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
             TZ: "${TIMEZONE:-Europe/Warsaw}"
-            RABBITMQ_DEFAULT_USER: "${RABBITMQ_DEFAULT_USER:-default}"
+            RABBITMQ_DEFAULT_USER: "${RABBITMQ_DEFAULT_USER:-root}"
             RABBITMQ_DEFAULT_PASS: "${RABBITMQ_DEFAULT_PASS:-secret}"
         # ports:
-        #     - ${RABBITMQ_PORT:-8080}:8080
+        #     - ${RABBITMQ_PORT_5672:-5672}:5672
+        #     - ${RABBITMQ_PORT_15672:-15672}:15672
         hostname: "${DOMAIN:-rabbitmq.localhost}"
         networks:
             main:
+        volumes:
+            - rabbitmq-lib:/var/lib/rabbitmq
         labels:
             traefik.enable: "true"
-            traefik.http.services.rabbitmq.loadbalancer.server.port: "8080"
+            traefik.http.services.rabbitmq.loadbalancer.server.port: "15672"
             traefik.http.routers.rabbitmq.rule: "Host(`${DOMAIN:-rabbitmq.localhost}`)"
             traefik.http.routers.rabbitmq.entrypoints: "http"
             traefik.http.routers.rabbitmq.tls: "false"
@@ -28,3 +31,7 @@ services:
 networks:
     main:
         external: true
+
+volumes:
+    rabbitmq-lib:
+        name: rabbitmq-lib
