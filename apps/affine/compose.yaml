@@ -1,7 +1,7 @@
 services:
     affine:
         container_name: affine
-        image: ghcr.io/toeverything/affine-graphql:${AFFINE_REVISION:-stable}
+        image: ghcr.io/toeverything/affine:${AFFINE_REVISION:-stable}
         restart: unless-stopped
         depends_on:
             affine_migration:
@@ -10,7 +10,7 @@ services:
         environment:
             TZ: "${TIMEZONE:-Europe/Warsaw}"
             REDIS_SERVER_HOST: "${REDIS_SERVER_HOST:-valkey}"
-            DATABASE_URL: "${DATABASE_URL:-postgresql://affine:affine@postgres:5432/affine}"
+            DATABASE_URL: "${DATABASE_URL:-postgresql://affine:affine@pgvector:5432/affine}"
             AFFINE_INDEXER_ENABLED: "${AFFINE_INDEXER_ENABLED:-false}"
             AFFINE_SERVER_HTTPS: "${AFFINE_SERVER_HTTPS:-true}"
             AFFINE_SERVER_HOST: "${AFFINE_SERVER_HOST:-affine.localhost}"
@@ -36,13 +36,13 @@ services:
 
     affine_migration:
         container_name: affine_migration
-        image: ghcr.io/toeverything/affine-graphql:${AFFINE_REVISION:-stable}
+        image: ghcr.io/toeverything/affine:${AFFINE_REVISION:-stable}
         command: ['sh', '-c', 'node ./scripts/self-host-predeploy.js']
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
             TZ: "${TIMEZONE:-Europe/Warsaw}"
             REDIS_SERVER_HOST: "${REDIS_SERVER_HOST:-valkey}"
-            DATABASE_URL: "${DATABASE_URL:-postgresql://affine:affine@postgres:5432/affine}"
+            DATABASE_URL: "${DATABASE_URL:-postgresql://affine:affine@pgvector:5432/affine}"
             AFFINE_INDEXER_ENABLED: "${AFFINE_INDEXER_ENABLED:-false}"
             AFFINE_SERVER_HTTPS: "${AFFINE_SERVER_HTTPS:-true}"
             AFFINE_SERVER_HOST: "${AFFINE_SERVER_HOST:-affine.localhost}"
