@@ -13,6 +13,8 @@ services:
         volumes:
             - ollama:/root/.ollama
         labels:
+            # caddy: "${DOMAIN:-ollama.localhost}"
+            # caddy.reverse_proxy: "{{upstreams 11434}}"
             traefik.enable: "true"
             traefik.tcp.services.ollama.loadbalancer.server.port: "11434"
             traefik.tcp.routers.ollama.rule: "HostSNI(`${DOMAIN:-ollama.localhost}`)"

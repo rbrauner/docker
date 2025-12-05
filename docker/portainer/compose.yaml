@@ -16,6 +16,8 @@ services:
             - /var/run/docker.sock:/var/run/docker.sock:ro
             - portainer:/data
         labels:
+            # caddy: "${DOMAIN:-portainer.localhost}"
+            # caddy.reverse_proxy: "{{upstreams 9000}}"
             traefik.enable: "true"
             traefik.http.services.portainer.loadbalancer.server.port: "9000"
             traefik.http.routers.portainer.rule: "Host(`${DOMAIN:-portainer.localhost}`)"

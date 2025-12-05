@@ -12,6 +12,8 @@ services:
         networks:
             main:
         labels:
+            # caddy: "${DOMAIN:-crontab-ui.localhost}"
+            # caddy.reverse_proxy: "{{upstreams 8000}}"
             traefik.enable: "true"
             traefik.http.services.crontab-ui.loadbalancer.server.port: "8000"
             traefik.http.routers.crontab-ui.rule: "Host(`${DOMAIN:-crontab-ui.localhost}`)"

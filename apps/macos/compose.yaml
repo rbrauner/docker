@@ -24,6 +24,8 @@ services:
         volumes:
             - macos:/storage
         labels:
+            # caddy: "${DOMAIN:-macos.localhost}"
+            # caddy.reverse_proxy: "{{upstreams 8006}}"
             traefik.enable: "true"
             traefik.http.services.macos.loadbalancer.server.port: "8006"
             traefik.http.routers.macos.rule: "Host(`${DOMAIN:-macos.localhost}`)"

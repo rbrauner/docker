@@ -21,6 +21,8 @@ services:
             ofelia.enabled: "true"
             ofelia.job-exec.mariadb.command: "/bin/backup.sh"
             ofelia.job-exec.mariadb.schedule: "${BACKUP_CRON_EXPRESSION:-0 9,15,17,21 * * *}"
+            # caddy: "${DOMAIN:-mariadb.localhost}"
+            # caddy.reverse_proxy: "{{upstreams 3306}}"
             traefik.enable: "true"
             traefik.tcp.services.mariadb.loadbalancer.server.port: "3306"
             traefik.tcp.routers.mariadb.rule: "HostSNI(`${DOMAIN:-mariadb.localhost}`)"

@@ -16,6 +16,8 @@ services:
             - /var/run/docker.sock:/var/run/docker.sock:ro
             - ./config:/app/config
         labels:
+            # caddy: "${DOMAIN:-homepage.localhost}"
+            # caddy.reverse_proxy: "{{upstreams 3000}}"
             traefik.enable: "true"
             traefik.http.services.homepage.loadbalancer.server.port: "3000"
             traefik.http.routers.homepage.rule: "Host(`${DOMAIN:-homepage.localhost}`)"

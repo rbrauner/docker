@@ -14,6 +14,8 @@ services:
         volumes:
             - valkey-data:/data
         labels:
+            # caddy: "${DOMAIN:-valkey.localhost}"
+            # caddy.reverse_proxy: "{{upstreams 6379}}"
             traefik.enable: "true"
             traefik.tcp.services.valkey.loadbalancer.server.port: "6379"
             traefik.tcp.routers.valkey.rule: "HostSNI(`${DOMAIN:-valkey.localhost}`)"

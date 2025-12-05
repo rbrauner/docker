@@ -13,6 +13,8 @@ services:
         networks:
             main:
         labels:
+            # caddy: "${DOMAIN:-adminer.localhost}"
+            # caddy.reverse_proxy: "{{upstreams 8080}}"
             traefik.enable: "true"
             traefik.http.services.adminer.loadbalancer.server.port: "8080"
             traefik.http.routers.adminer.rule: "Host(`${DOMAIN:-adminer.localhost}`)"

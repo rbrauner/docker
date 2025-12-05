@@ -17,6 +17,8 @@ services:
         volumes:
             - mailpit:/data
         labels:
+            # caddy: "${DOMAIN:-mailpit.localhost}"
+            # caddy.reverse_proxy: "{{upstreams 8025}}"
             traefik.enable: "true"
             traefik.http.services.mailpit.loadbalancer.server.port: "8025"
             traefik.http.routers.mailpit.rule: "Host(`${DOMAIN:-mailpit.localhost}`)"

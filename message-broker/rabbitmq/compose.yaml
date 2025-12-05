@@ -17,6 +17,8 @@ services:
         volumes:
             - rabbitmq-lib:/var/lib/rabbitmq
         labels:
+            # caddy: "${DOMAIN:-rabbitmq.localhost}"
+            # caddy.reverse_proxy: "{{upstreams 15672}}"
             traefik.enable: "true"
             traefik.http.services.rabbitmq.loadbalancer.server.port: "15672"
             traefik.http.routers.rabbitmq.rule: "Host(`${DOMAIN:-rabbitmq.localhost}`)"

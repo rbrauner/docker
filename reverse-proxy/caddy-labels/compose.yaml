@@ -8,10 +8,18 @@ services:
             TZ: "${TIMEZONE:-Europe/Warsaw}"
             CADDY_INGRESS_NETWORKS: "${CADDY_INGRESS_NETWORKS:-main}"
         ports:
+            - 2019:2019
             - 80:80
             - 443:443
+            - 5432:5432
+            - 3306:3306
+            - 6379:6379
+            # - 25:25
+            - 465:465
+            - 587:587
+            - 993:993
+            - 11434:11434
             - 5173:5173
-            - 2019:2020
         networks:
             main:
         volumes:

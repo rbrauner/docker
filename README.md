@@ -18,14 +18,15 @@ docker compose up -d
 ### Traefik
 
 ```bash
+mkcert -install
 mkcert -cert-file reverse-proxy/traefik/certs/local-cert.pem -key-file reverse-proxy/traefik/certs/local-key.pem \
     "traefik.localhost" "*.traefik.localhost" \
-    "portainer.localhost" "*.portainer.localhost" \
     "mariadb.localhost" "*.mariadb.localhost" \
     "mysql.localhost" "*.mysql.localhost" \
     "mysql5.localhost" "*.mysql5.localhost" \
     "percona.localhost" "*.percona.localhost" \
     "percona5.localhost" "*.percona5.localhost" \
+    "pgvector.localhost" "*.pgvector.localhost" \
     "postgres.localhost" "*.postgres.localhost" \
     "redis.localhost" "*.redis.localhost" \
     "valkey.localhost" "*.valkey.localhost" \
@@ -35,7 +36,8 @@ mkcert -cert-file reverse-proxy/traefik/certs/local-cert.pem -key-file reverse-p
     "pgadmin.localhost" "*.pgadmin.localhost" \
     "phpmyadmin.localhost" "*.phpmyadmin.localhost" \
     "mailpit.localhost" "*.mailpit.localhost" \
-    "cron-client.localhost" "*.cron-client.localhost" \
+    "crontab-ui.localhost" "*.crontab-ui.localhost" \
+    "portainer.localhost" "*.portainer.localhost" \
     "affine.localhost" "*.affine.localhost" \
     "bookstack.localhost" "*.bookstack.localhost" \
     "homepage.localhost" "*.homepage.localhost" \
@@ -44,7 +46,6 @@ mkcert -cert-file reverse-proxy/traefik/certs/local-cert.pem -key-file reverse-p
     "ollama.localhost" "*.ollama.localhost" \
     "open-webui.localhost" "*.open-webui.localhost" \
     "example.localhost" "*.example.localhost"
-mkcert -install
 ```
 
 ### Caddy and caddy labels

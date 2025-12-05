@@ -23,6 +23,8 @@ services:
             - affine-storage:/root/.affine/storage
             - affine-conf:/root/.affine/config
         labels:
+            # caddy: "${DOMAIN:-affine.localhost}"
+            # caddy.reverse_proxy: "{{upstreams 3010}}"
             traefik.enable: "true"
             traefik.http.services.affine.loadbalancer.server.port: "3010"
             traefik.http.routers.affine.rule: "Host(`${DOMAIN:-affine.localhost}`)"

@@ -23,6 +23,8 @@ services:
             - mailserver-mail-logs:/var/log/mail/
             - mailserver-config:/tmp/docker-mailserver/
         labels:
+            # caddy: "${DOMAIN:-mailserver.localhost}"
+            # caddy.reverse_proxy: "{{upstreams 25 465 587 993}}"
             traefik.enable: "true"
             traefik.tcp.services.mailserver-port25.loadbalancer.server.port: "25"
             traefik.tcp.routers.mailserver-port25.rule: "HostSNI(`${DOMAIN:-mailserver.localhost}`)"
