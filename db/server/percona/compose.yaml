@@ -18,9 +18,9 @@ services:
             - ./docker/percona/bin/backup.sh:/bin/backup.sh:ro
             - ${BACKUP_DIR:-${HOME}/data/backups/docker/percona}:/backup
         labels:
-            ofelia.enabled: "true"
-            ofelia.job-exec.percona.command: "/bin/backup.sh"
-            ofelia.job-exec.percona.schedule: "${BACKUP_CRON_EXPRESSION:-0 9,15,17,21 * * *}"
+            # ofelia.enabled: "true"
+            # ofelia.job-exec.percona.command: "/bin/backup.sh"
+            # ofelia.job-exec.percona.schedule: "${BACKUP_CRON_EXPRESSION:-0 9,15,17,21 * * *}"
             # caddy: "${DOMAIN:-percona.localhost}"
             # caddy.reverse_proxy: "{{upstreams 3306}}"
             traefik.enable: "true"
