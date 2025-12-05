@@ -8,7 +8,7 @@ services:
             TZ: "${TIMEZONE:-Europe/Warsaw}"
             CADDY_INGRESS_NETWORKS: "${CADDY_INGRESS_NETWORKS:-main}"
         ports:
-            - 2019:2019
+            - 2019:2020
             - 80:80
             - 443:443
             - 5432:5432
