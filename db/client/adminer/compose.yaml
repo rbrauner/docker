@@ -11,7 +11,9 @@ services:
         #     - ${ADMINER_PORT:-8080}:8080
         hostname: "${DOMAIN:-adminer.localhost}"
         networks:
-            main:
+            shared-network:
+        volumes:
+            - shared-home:/home/${APP_USER:-app}
         labels:
             # caddy: "${DOMAIN:-adminer.localhost}"
             # caddy.reverse_proxy: "{{upstreams 8080}}"
@@ -27,5 +29,11 @@ services:
             traefik.http.routers.adminer-secure.service: "adminer"
 
 networks:
-    main:
+    shared-network:
+        name: ${SHARED_NETWORK_NAME:-shared-network}
+        external: true
+
+volumes:
+    shared-home:
+        name: ${SHARED_HOME_VOLUME:-shared-home}
         external: true

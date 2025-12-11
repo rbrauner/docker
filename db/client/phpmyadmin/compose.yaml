@@ -11,7 +11,9 @@ services:
         #     - ${PHPMYADMIN_PORT:-8080}:80
         hostname: "${DOMAIN:-phpmyadmin.localhost}"
         networks:
-            main:
+            shared-network:
+        volumes:
+            - shared-home:/home/${APP_USER:-app}
         labels:
             # caddy: "${DOMAIN:-phpmyadmin.localhost}"
             # caddy.reverse_proxy: "{{upstreams http}}"
@@ -27,5 +29,11 @@ services:
             traefik.http.routers.phpmyadmin-secure.service: "phpmyadmin"
 
 networks:
-    main:
+    shared-network:
+        name: ${SHARED_NETWORK_NAME:-shared-network}
+        external: true
+
+volumes:
+    shared-home:
+        name: ${SHARED_HOME_VOLUME:-shared-home}
         external: true

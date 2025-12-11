@@ -1,6 +1,6 @@
 ###> rbrauner/docker ###
+.env
 /.idea
 /apps/homepage/config/logs
-.env
 compose.override.yaml
 ###< rbrauner/docker ###

@@ -11,19 +11,12 @@ services:
             - 2019:2020
             - 80:80
             - 443:443
-            - 5432:5432
-            - 3306:3306
-            - 6379:6379
-            # - 25:25
-            - 465:465
-            - 587:587
-            - 993:993
-            - 11434:11434
             - 5173:5173
         networks:
-            main:
+            shared-network:
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock:ro
+            - shared-home:/home/${APP_USER:-app}
             - caddy-labels-data:/data
             - caddy-labels-config:/config
         labels:
@@ -32,10 +25,14 @@ services:
             caddy_1.reverse_proxy: "localhost:2019"
 
 networks:
-    main:
+    shared-network:
+        name: ${SHARED_NETWORK_NAME:-shared-network}
         external: true
 
 volumes:
+    shared-home:
+        name: ${SHARED_HOME_VOLUME:-shared-home}
+        external: true
     caddy-labels-data:
         name: caddy-labels-data
     caddy-labels-config:

@@ -20,8 +20,9 @@ services:
             - /dev/net/tun
         stop_grace_period: 2m
         networks:
-            main:
+            shared-network:
         volumes:
+            - shared-home:/home/${APP_USER:-app}
             - macos:/storage
         labels:
             # caddy: "${DOMAIN:-macos.localhost}"
@@ -38,9 +39,13 @@ services:
             traefik.http.routers.macos-secure.service: "macos"
 
 networks:
-    main:
+    shared-network:
+        name: ${SHARED_NETWORK_NAME:-shared-network}
         external: true
 
 volumes:
+    shared-home:
+        name: ${SHARED_HOME_VOLUME:-shared-home}
+        external: true
     macos:
         name: macos

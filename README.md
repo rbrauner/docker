@@ -3,7 +3,7 @@
 ## Make shared network
 
 ```bash
-docker network create main
+docker network create shared-network
 ```
 
 ## Run container
@@ -21,17 +21,7 @@ docker compose up -d
 mkcert -install
 mkcert -cert-file reverse-proxy/traefik/certs/local-cert.pem -key-file reverse-proxy/traefik/certs/local-key.pem \
     "traefik.localhost" "*.traefik.localhost" \
-    "mariadb.localhost" "*.mariadb.localhost" \
-    "mysql.localhost" "*.mysql.localhost" \
-    "mysql5.localhost" "*.mysql5.localhost" \
-    "percona.localhost" "*.percona.localhost" \
-    "percona5.localhost" "*.percona5.localhost" \
-    "pgvector.localhost" "*.pgvector.localhost" \
-    "postgres.localhost" "*.postgres.localhost" \
-    "redis.localhost" "*.redis.localhost" \
-    "valkey.localhost" "*.valkey.localhost" \
     "rabbitmq.localhost" "*.rabbitmq.localhost" \
-    "mailserver.localhost" "*.mailserver.localhost" \
     "adminer.localhost" "*.adminer.localhost" \
     "pgadmin.localhost" "*.pgadmin.localhost" \
     "phpmyadmin.localhost" "*.phpmyadmin.localhost" \
@@ -43,7 +33,6 @@ mkcert -cert-file reverse-proxy/traefik/certs/local-cert.pem -key-file reverse-p
     "homepage.localhost" "*.homepage.localhost" \
     "joplin.localhost" "*.joplin.localhost" \
     "macos.localhost" "*.macos.localhost" \
-    "ollama.localhost" "*.ollama.localhost" \
     "open-webui.localhost" "*.open-webui.localhost" \
     "example.localhost" "*.example.localhost"
 ```

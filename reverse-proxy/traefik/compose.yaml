@@ -9,20 +9,13 @@ services:
         ports:
             - 80:80
             - 443:443
-            - 5432:5432
-            - 3306:3306
-            - 6379:6379
-            # - 25:25
-            - 465:465
-            - 587:587
-            - 993:993
-            - 11434:11434
             - 5173:5173
         hostname: "${DOMAIN:-traefik.localhost}"
         networks:
-            main:
+            shared-network:
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock:ro
+            - shared-home:/home/${APP_USER:-app}
             - ./config/traefik.yaml:/etc/traefik/traefik.yaml:ro
             - ./config/dynamic.yaml:/etc/traefik/dynamic.yaml:ro
             - ./certs:/etc/certs:ro
@@ -33,5 +26,11 @@ services:
             traefik.http.routers.traefik.service: "api@internal"
 
 networks:
-    main:
+    shared-network:
+        name: ${SHARED_NETWORK_NAME:-shared-network}
+        external: true
+
+volumes:
+    shared-home:
+        name: ${SHARED_HOME_VOLUME:-shared-home}
         external: true

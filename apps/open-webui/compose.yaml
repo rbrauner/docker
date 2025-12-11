@@ -11,8 +11,9 @@ services:
         #     - ${OPEN_WEBUI_PORT:-3000}:8080
         hostname: "${DOMAIN:-open-webui.localhost}"
         networks:
-            main:
+            shared-network:
         volumes:
+            - shared-home:/home/${APP_USER:-app}
             - open-webui:/app/backend/data
         labels:
             # caddy: "${DOMAIN:-open-webui.localhost}"
@@ -29,9 +30,13 @@ services:
             traefik.http.routers.open-webui-secure.service: "open-webui"
 
 networks:
-    main:
+    shared-network:
+        name: ${SHARED_NETWORK_NAME:-shared-network}
         external: true
 
 volumes:
+    shared-home:
+        name: ${SHARED_HOME_VOLUME:-shared-home}
+        external: true
     open-webui:
         name: open-webui

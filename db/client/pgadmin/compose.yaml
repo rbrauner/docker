@@ -10,8 +10,9 @@ services:
         #     - ${PGADMIN_PORT:-8080}:80
         hostname: "${DOMAIN:-pgadmin.localhost}"
         networks:
-            main:
+            shared-network:
         volumes:
+            - shared-home:/home/${APP_USER:-app}
             - pgadmin:/var/lib/pgadmin
         labels:
             # caddy: "${DOMAIN:-pgadmin.localhost}"
@@ -28,9 +29,13 @@ services:
             traefik.http.routers.pgadmin-secure.service: "pgadmin"
 
 networks:
-    main:
+    shared-network:
+        name: ${SHARED_NETWORK_NAME:-shared-network}
         external: true
 
 volumes:
+    shared-home:
+        name: ${SHARED_HOME_VOLUME:-shared-home}
+        external: true
     pgadmin:
         name: pgadmin

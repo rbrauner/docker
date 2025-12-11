@@ -1,12 +1,12 @@
 services:
-    devbox:
-        container_name: devbox
-        build:
-            context: .
-            dockerfile: Dockerfile
-        restart: unless-stopped
-        user: "${UID:-1000}:${GID:-1000}"
-        tty: true
+    shared-home:
+        container_name: shared-home
+        image: alpine
+        command: chown -R ${UID:-1000}:${GID:-1000} /home/${APP_USER:-app}
+        restart: no
+        user: root
+        group_add:
+            - ${GID:-1000}
         networks:
             shared-network:
         volumes:
@@ -20,4 +20,3 @@ networks:
 volumes:
     shared-home:
         name: ${SHARED_HOME_VOLUME:-shared-home}
-        external: true

@@ -10,7 +10,9 @@ services:
         #     - ${CRONTAB_UI_PORT:-8000}:8000
         hostname: "${DOMAIN:-crontab-ui.localhost}"
         networks:
-            main:
+            shared-network:
+        volumes:
+            - shared-home:/home/${APP_USER:-app}
         labels:
             # caddy: "${DOMAIN:-crontab-ui.localhost}"
             # caddy.reverse_proxy: "{{upstreams 8000}}"
@@ -26,5 +28,11 @@ services:
             traefik.http.routers.crontab-ui-secure.service: "crontab-ui"
 
 networks:
-    main:
+    shared-network:
+        name: ${SHARED_NETWORK_NAME:-shared-network}
+        external: true
+
+volumes:
+    shared-home:
+        name: ${SHARED_HOME_VOLUME:-shared-home}
         external: true

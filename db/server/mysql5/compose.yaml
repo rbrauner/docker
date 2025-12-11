@@ -8,33 +8,30 @@ services:
             TZ: "${TIMEZONE:-Europe/Warsaw}"
             MYSQL_DATABASE: "${DB_NAME:-default}"
             MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD:-secret}"
-        # ports:
-        #     - ${DB_PORT:-3306}:3306
+        ports:
+            - ${DB_PORT:-3306}:3306
         networks:
-            main:
+            shared-network:
         volumes:
+            - shared-home:/home/${APP_USER:-app}
             - mysql5-data:/var/lib/mysql
             - mysql5-conf:/etc/mysql
             - ./docker/mysql5/bin/backup.sh:/bin/backup.sh:ro
             - ${BACKUP_DIR:-${HOME}/data/backups/docker/mysql5}:/backup
-        labels:
-            # ofelia.enabled: "true"
-            # ofelia.job-exec.mysql5.command: "/bin/backup.sh"
-            # ofelia.job-exec.mysql5.schedule: "${BACKUP_CRON_EXPRESSION:-0 9,15,17,21 * * *}"
-            # caddy: "${DOMAIN:-mysql5.localhost}"
-            # caddy.reverse_proxy: "{{upstreams 3306}}"
-            traefik.enable: "true"
-            traefik.tcp.services.mysql5.loadbalancer.server.port: "3306"
-            traefik.tcp.routers.mysql5.rule: "HostSNI(`${DOMAIN:-mysql5.localhost}`)"
-            traefik.tcp.routers.mysql5.entrypoints: "mysql"
-            traefik.tcp.routers.mysql5.tls: "true"
-            traefik.tcp.routers.mysql5.service: "mysql5"
+        # labels:
+        #     ofelia.enabled: "true"
+        #     ofelia.job-exec.mysql5.command: "/bin/backup.sh"
+        #     ofelia.job-exec.mysql5.schedule: "${BACKUP_CRON_EXPRESSION:-0 9,15,17,21 * * *}"
 
 networks:
-    main:
+    shared-network:
+        name: ${SHARED_NETWORK_NAME:-shared-network}
         external: true
 
 volumes:
+    shared-home:
+        name: ${SHARED_HOME_VOLUME:-shared-home}
+        external: true
     mysql5-data:
         name: mysql5-data
     mysql5-conf:

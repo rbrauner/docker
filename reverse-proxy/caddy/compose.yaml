@@ -12,8 +12,9 @@ services:
             - 2019:2019
             - 5173:5173
         networks:
-            main:
+            shared-network:
         volumes:
+            - shared-home:/home/${APP_USER:-app}
             - caddy-data:/data
             - caddy-config:/config
             - caddy-certificate-authority:/data/caddy/pki/authorities/local
@@ -22,10 +23,14 @@ services:
             - ./sites:/etc/caddy/sites:ro
 
 networks:
-    main:
+    shared-network:
+        name: ${SHARED_NETWORK_NAME:-shared-network}
         external: true
 
 volumes:
+    shared-home:
+        name: ${SHARED_HOME_VOLUME:-shared-home}
+        external: true
     caddy-data:
         name: caddy-data
     caddy-config:

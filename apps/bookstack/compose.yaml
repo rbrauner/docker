@@ -17,8 +17,9 @@ services:
         #     - ${BOOKSTACK_PORT:-80}:80
         hostname: "${DOMAIN:-bookstack.localhost}"
         networks:
-            main:
+            shared-network:
         volumes:
+            - shared-home:/home/${APP_USER:-app}
             - bookstack:/config
         labels:
             # caddy: "${DOMAIN:-bookstack.localhost}"
@@ -35,9 +36,13 @@ services:
             traefik.http.routers.bookstack-secure.service: "bookstack"
 
 networks:
-    main:
+    shared-network:
+        name: ${SHARED_NETWORK_NAME:-shared-network}
         external: true
 
 volumes:
+    shared-home:
+        name: ${SHARED_HOME_VOLUME:-shared-home}
+        external: true
     bookstack:
         name: bookstack

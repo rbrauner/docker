@@ -7,26 +7,22 @@ services:
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
             TZ: "${TIMEZONE:-Europe/Warsaw}"
-        # ports:
-        #     - ${REDIS_PORT:-6379}:6379
+        ports:
+            - ${REDIS_PORT:-6379}:6379
         networks:
-            main:
+            shared-network:
         volumes:
+            - shared-home:/home/${APP_USER:-app}
             - redis-data:/data
-        labels:
-            # caddy: "${DOMAIN:-redis.localhost}"
-            # caddy.reverse_proxy: "{{upstreams 6379}}"
-            traefik.enable: "true"
-            traefik.tcp.services.redis.loadbalancer.server.port: "6379"
-            traefik.tcp.routers.redis.rule: "HostSNI(`${DOMAIN:-redis.localhost}`)"
-            traefik.tcp.routers.redis.entrypoints: "redis"
-            traefik.tcp.routers.redis.tls: "true"
-            traefik.tcp.routers.redis.service: "redis"
 
 networks:
-    main:
+    shared-network:
+        name: ${SHARED_NETWORK_NAME:-shared-network}
         external: true
 
 volumes:
+    shared-home:
+        name: ${SHARED_HOME_VOLUME:-shared-home}
+        external: true
     redis-data:
         name: redis-data

@@ -11,9 +11,10 @@ services:
         #     - ${PORTAINER_SSL_PORT:-9443}:9443
         hostname: "${DOMAIN:-portainer.localhost}"
         networks:
-            main:
+            shared-network:
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock:ro
+            - shared-home:/home/${APP_USER:-app}
             - portainer:/data
         labels:
             # caddy: "${DOMAIN:-portainer.localhost}"
@@ -30,9 +31,13 @@ services:
             traefik.http.routers.portainer-secure.service: "portainer"
 
 networks:
-    main:
+    shared-network:
+        name: ${SHARED_NETWORK_NAME:-shared-network}
         external: true
 
 volumes:
+    shared-home:
+        name: ${SHARED_HOME_VOLUME:-shared-home}
+        external: true
     portainer:
         name: portainer

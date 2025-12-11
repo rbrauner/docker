@@ -11,9 +11,10 @@ services:
         #     - ${HOMEPAGE_PORT:-3000}:3000
         hostname: "${DOMAIN:-homepage.localhost}"
         networks:
-            main:
+            shared-network:
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock:ro
+            - shared-home:/home/${APP_USER:-app}
             - ./config:/app/config
         labels:
             # caddy: "${DOMAIN:-homepage.localhost}"
@@ -30,5 +31,11 @@ services:
             traefik.http.routers.homepage-secure.service: "homepage"
 
 networks:
-    main:
+    shared-network:
+        name: ${SHARED_NETWORK_NAME:-shared-network}
+        external: true
+
+volumes:
+    shared-home:
+        name: ${SHARED_HOME_VOLUME:-shared-home}
         external: true

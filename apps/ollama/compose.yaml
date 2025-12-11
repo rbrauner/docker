@@ -6,26 +6,22 @@ services:
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
             TZ: "${TIMEZONE:-Europe/Warsaw}"
-        # ports:
-        #     - ${OLLAMA_PORT:-11434}:11434
+        ports:
+            - ${OLLAMA_PORT:-11434}:11434
         networks:
-            main:
+            shared-network:
         volumes:
+            - shared-home:/home/${APP_USER:-app}
             - ollama:/root/.ollama
-        labels:
-            # caddy: "${DOMAIN:-ollama.localhost}"
-            # caddy.reverse_proxy: "{{upstreams 11434}}"
-            traefik.enable: "true"
-            traefik.tcp.services.ollama.loadbalancer.server.port: "11434"
-            traefik.tcp.routers.ollama.rule: "HostSNI(`${DOMAIN:-ollama.localhost}`)"
-            traefik.tcp.routers.ollama.entrypoints: "ollama"
-            traefik.tcp.routers.ollama.tls: "true"
-            traefik.tcp.routers.ollama.service: "ollama"
 
 networks:
-    main:
+    shared-network:
+        name: ${SHARED_NETWORK_NAME:-shared-network}
         external: true
 
 volumes:
+    shared-home:
+        name: ${SHARED_HOME_VOLUME:-shared-home}
+        external: true
     ollama:
         name: ollama

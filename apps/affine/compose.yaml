@@ -18,7 +18,7 @@ services:
         #     - ${AFFINE_PORT:-3010}:3010
         hostname: "${DOMAIN:-affine.localhost}"
         networks:
-            main:
+            shared-network:
         volumes:
             - affine-storage:/root/.affine/storage
             - affine-conf:/root/.affine/config
@@ -49,16 +49,21 @@ services:
             AFFINE_SERVER_HTTPS: "${AFFINE_SERVER_HTTPS:-true}"
             AFFINE_SERVER_HOST: "${AFFINE_SERVER_HOST:-affine.localhost}"
         networks:
-            main:
+            shared-network:
         volumes:
+            - shared-home:/home/${APP_USER:-app}
             - affine-storage:/root/.affine/storage
             - affine-conf:/root/.affine/config
 
 networks:
-    main:
+    shared-network:
+        name: ${SHARED_NETWORK_NAME:-shared-network}
         external: true
 
 volumes:
+    shared-home:
+        name: ${SHARED_HOME_VOLUME:-shared-home}
+        external: true
     affine-storage:
         name: affine-storage
     affine-conf:
