@@ -7,9 +7,10 @@ services:
         environment:
             TZ: "${TIMEZONE:-Europe/Warsaw}"
         ports:
-            - 80:80
-            - 443:443
             - 2019:2019
+            - 80:80
+            - 443:443/tcp
+            - 443:443/udp
             - 5173:5173
         networks:
             shared-network:

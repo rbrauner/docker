@@ -3,6 +3,9 @@ services:
         container_name: bookstack
         image: linuxserver/bookstack
         restart: unless-stopped
+        depends_on:
+            mariadb:
+                condition: service_started
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
             TZ: "${TIMEZONE:-Europe/Warsaw}"

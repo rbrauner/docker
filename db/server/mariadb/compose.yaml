@@ -18,10 +18,10 @@ services:
             - mariadb-conf:/etc/mysql
             - ./docker/mariadb/bin/backup.sh:/bin/backup.sh:ro
             - ${BACKUP_DIR:-${HOME}/data/backups/docker/mariadb}:/backup
-        # labels:
-        #     ofelia.enabled: "true"
-        #     ofelia.job-exec.mariadb.command: "/bin/backup.sh"
-        #     ofelia.job-exec.mariadb.schedule: "${BACKUP_CRON_EXPRESSION:-0 9,15,17,21 * * *}"
+        labels:
+            ofelia.enabled: "true"
+            ofelia.job-exec.mariadb.command: "/bin/backup.sh"
+            ofelia.job-exec.mariadb.schedule: "${BACKUP_CRON_EXPRESSION:-0 9,15,17,21 * * *}"
 
 networks:
     shared-network:
