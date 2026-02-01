@@ -6,7 +6,7 @@ services:
         depends_on:
             affine_migration:
                 condition: service_completed_successfully
-            postgres:
+            pgvector:
                 condition: service_started
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
@@ -41,9 +41,9 @@ services:
     affine_migration:
         container_name: affine_migration
         image: ghcr.io/toeverything/affine:${AFFINE_REVISION:-stable}
-        command: [ 'sh', '-c', 'node ./scripts/self-host-predeploy.js' ]
+        command: ['sh', '-c', 'node ./scripts/self-host-predeploy.js']
         depends_on:
-            postgres:
+            pgvector:
                 condition: service_started
         # user: "${UID:-1000}:${GID:-1000}"
         environment:

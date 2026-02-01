@@ -3,9 +3,6 @@ services:
         container_name: pgvector
         image: pgvector/pgvector
         restart: unless-stopped
-        depends_on:
-            postgres:
-                condition: service_started
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
             TZ: "${TIMEZONE:-Europe/Warsaw}"

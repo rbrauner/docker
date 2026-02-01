@@ -1,0 +1,57 @@
+services:
+    listmonk:
+        container_name: listmonk
+        image: listmonk/listmonk
+        command: [ sh, -c, "./listmonk --install --idempotent --yes --config '' && ./listmonk --upgrade --yes --config '' && ./listmonk --config ''" ]
+        restart: unless-stopped
+        depends_on:
+            postgres:
+                condition: service_started
+        # user: "${UID:-1000}:${GID:-1000}"
+        environment:
+            TZ: "${TIMEZONE:-Europe/Warsaw}"
+            LISTMONK_app__address: "${LISTMONK_app__address:-0.0.0.0:9000}"
+            LISTMONK_db__user: "${LISTMONK_db__user:-listmonk}"
+            LISTMONK_db__password: "${LISTMONK_db__password:-listmonk}"
+            LISTMONK_db__database: "${LISTMONK_db__database:-listmonk}"
+            LISTMONK_db__host: "${LISTMONK_db__host:-postgres}"
+            LISTMONK_db__port: "${LISTMONK_db__port:-5432}"
+            LISTMONK_db__ssl_mode: "${LISTMONK_db__ssl_mode:-false}"
+            LISTMONK_db__max_open: "${LISTMONK_db__max_open:-25}"
+            LISTMONK_db__max_idle: "${LISTMONK_db__max_idle:-25}"
+            LISTMONK_db__max_lifetime: "${LISTMONK_db__max_lifetime:-300s}"
+            LISTMONK_ADMIN_USER: "${LISTMONK_ADMIN_USER:-root}"
+            LISTMONK_ADMIN_PASSWORD: "${LISTMONK_ADMIN_PASSWORD:-secret}"
+        # ports:
+        #     - ${LISTMONK_PORT:-9000}:9000
+        hostname: "${DOMAIN:-listmonk.localhost}"
+        networks:
+            shared-network:
+        volumes:
+            - shared-home:/home/${APP_USER:-app}
+            - listmonk-uploads:/listmonk/uploads
+        labels:
+            # caddy: "${DOMAIN:-listmonk.localhost}"
+            # caddy.reverse_proxy: "{{upstreams 9000}}"
+            traefik.enable: "true"
+            traefik.http.services.listmonk.loadbalancer.server.port: "9000"
+            traefik.http.routers.listmonk.rule: "Host(`${DOMAIN:-listmonk.localhost}`)"
+            traefik.http.routers.listmonk.entrypoints: "http"
+            traefik.http.routers.listmonk.tls: "false"
+            traefik.http.routers.listmonk.service: "listmonk"
+            traefik.http.routers.listmonk-secure.rule: "Host(`${DOMAIN:-listmonk.localhost}`)"
+            traefik.http.routers.listmonk-secure.entrypoints: "https"
+            traefik.http.routers.listmonk-secure.tls: "true"
+            traefik.http.routers.listmonk-secure.service: "listmonk"
+
+networks:
+    shared-network:
+        name: ${SHARED_NETWORK_NAME:-shared-network}
+        external: true
+
+volumes:
+    shared-home:
+        name: ${SHARED_HOME_VOLUME:-shared-home}
+        external: true
+    listmonk-uploads:
+        name: listmonk-uploads

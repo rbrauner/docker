@@ -26,6 +26,7 @@ mkcert -cert-file reverse-proxy/traefik/certs/local-cert.pem -key-file reverse-p
     "pgadmin.localhost" "*.pgadmin.localhost" \
     "phpmyadmin.localhost" "*.phpmyadmin.localhost" \
     "mailpit.localhost" "*.mailpit.localhost" \
+    "listmonk.localhost" "*.listmonk.localhost" \
     "crontab-ui.localhost" "*.crontab-ui.localhost" \
     "portainer.localhost" "*.portainer.localhost" \
     "affine.localhost" "*.affine.localhost" \
