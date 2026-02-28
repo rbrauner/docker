@@ -1,7 +1,7 @@
 services:
     caddy-labels:
         container_name: caddy-labels
-        image: lucaslorentz/caddy-docker-proxy:ci-alpine
+        image: lucaslorentz/caddy-docker-proxy:ci
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
