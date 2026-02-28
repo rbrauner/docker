@@ -1,7 +1,7 @@
 services:
     portainer:
         container_name: portainer
-        image: portainer/portainer-ce:alpine
+        image: portainer/portainer-ce
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         environment:

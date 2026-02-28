@@ -1,9 +1,9 @@
-FROM alpine:latest AS start
+FROM debian:stable-slim AS start
 
 FROM start AS packages
-RUN apk update
-RUN apk upgrade
-RUN apk add \
+RUN apt update
+RUN apt upgrade
+RUN apt install \
     bash \
     build-base \
     ca-certificates \
@@ -31,12 +31,12 @@ RUN apk add \
     zlib \
     zsh
 
-FROM packages AS node
+FROM packages AS node-base
 RUN npm uninstall -g yarn pnpm
 RUN npm install -g corepack
 RUN corepack enable
 
-FROM node AS user
+FROM node-base AS user
 RUN adduser -D devbox
 USER devbox
 WORKDIR /home/devbox

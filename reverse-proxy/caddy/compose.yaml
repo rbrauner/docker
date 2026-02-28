@@ -1,7 +1,7 @@
 services:
     caddy:
         container_name: caddy
-        image: caddy:alpine
+        image: caddy
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
