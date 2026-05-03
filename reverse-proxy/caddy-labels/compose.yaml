@@ -8,13 +8,12 @@ services:
             TZ: "${TIMEZONE:-Europe/Warsaw}"
             CADDY_INGRESS_NETWORKS: "${CADDY_INGRESS_NETWORKS:-shared-network}"
         ports:
-            - 2019:2020
-            - 80:80
-            - 443:443/tcp
-            - 443:443/udp
-            - 5173:5173
+            - ${CADDY_LABELS_PORT_2019:-2019}:2020
+            - ${CADDY_LABELS_PORT_80:-80}:80
+            - ${CADDY_LABELS_PORT_443_TCP:-443}:443/tcp
+            - ${CADDY_LABELS_PORT_443_UDP:-443}:443/udp
         networks:
-            shared-network:
+            shared-network-internal:
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock:ro
             - shared-home:/home/${APP_USER:-app}
@@ -26,8 +25,8 @@ services:
             caddy_1.reverse_proxy: "localhost:2019"
 
 networks:
-    shared-network:
-        name: ${SHARED_NETWORK_NAME:-shared-network}
+    shared-network-internal:
+        name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
         external: true
 
 volumes:

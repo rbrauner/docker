@@ -31,5 +31,3 @@ entryPoints:
         #             scheme: https
     https:
         address: ":443"
-    vite:
-        address: ":5173"

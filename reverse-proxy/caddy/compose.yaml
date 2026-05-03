@@ -7,13 +7,12 @@ services:
         environment:
             TZ: "${TIMEZONE:-Europe/Warsaw}"
         ports:
-            - 2019:2019
-            - 80:80
-            - 443:443/tcp
-            - 443:443/udp
-            - 5173:5173
+            - ${CADDY_PORT_2019:-2019}:2020
+            - ${CADDY_PORT_80:-80}:80
+            - ${CADDY_PORT_443_TCP:-443}:443/tcp
+            - ${CADDY_PORT_443_UDP:-443}:443/udp
         networks:
-            shared-network:
+            shared-network-internal:
         volumes:
             - shared-home:/home/${APP_USER:-app}
             - caddy-data:/data
@@ -24,8 +23,8 @@ services:
             - ./sites:/etc/caddy/sites:ro
 
 networks:
-    shared-network:
-        name: ${SHARED_NETWORK_NAME:-shared-network}
+    shared-network-internal:
+        name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
         external: true
 
 volumes:

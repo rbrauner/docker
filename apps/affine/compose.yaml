@@ -6,12 +6,14 @@ services:
         depends_on:
             affine_migration:
                 condition: service_completed_successfully
-            pgvector:
-                condition: service_started
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
             TZ: "${TIMEZONE:-Europe/Warsaw}"
             REDIS_SERVER_HOST: "${REDIS_SERVER_HOST:-valkey}"
+            REDIS_SERVER_PORT: "${REDIS_SERVER_PORT:-6379}"
+            REDIS_SERVER_USERNAME: "${REDIS_SERVER_USERNAME:-}"
+            REDIS_SERVER_PASSWORD: "${REDIS_SERVER_PASSWORD:-secret}"
+            REDIS_SERVER_DATABASE: "${REDIS_SERVER_DATABASE:-0}"
             DATABASE_URL: "${DATABASE_URL:-postgresql://affine:affine@pgvector:5432/affine}"
             AFFINE_INDEXER_ENABLED: "${AFFINE_INDEXER_ENABLED:-false}"
             AFFINE_SERVER_HTTPS: "${AFFINE_SERVER_HTTPS:-true}"
@@ -20,8 +22,9 @@ services:
         #     - ${AFFINE_PORT:-3010}:3010
         hostname: "${DOMAIN:-affine.localhost}"
         networks:
-            shared-network:
+            shared-network-internal:
         volumes:
+            - shared-home:/home/${APP_USER:-app}
             - affine-storage:/root/.affine/storage
             - affine-conf:/root/.affine/config
         labels:
@@ -42,27 +45,28 @@ services:
         container_name: affine_migration
         image: ghcr.io/toeverything/affine:${AFFINE_REVISION:-stable}
         command: ['sh', '-c', 'node ./scripts/self-host-predeploy.js']
-        depends_on:
-            pgvector:
-                condition: service_started
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
             TZ: "${TIMEZONE:-Europe/Warsaw}"
             REDIS_SERVER_HOST: "${REDIS_SERVER_HOST:-valkey}"
+            REDIS_SERVER_PORT: "${REDIS_SERVER_PORT:-6379}"
+            REDIS_SERVER_USERNAME: "${REDIS_SERVER_USERNAME:-}"
+            REDIS_SERVER_PASSWORD: "${REDIS_SERVER_PASSWORD:-secret}"
+            REDIS_SERVER_DATABASE: "${REDIS_SERVER_DATABASE:-0}"
             DATABASE_URL: "${DATABASE_URL:-postgresql://affine:affine@pgvector:5432/affine}"
             AFFINE_INDEXER_ENABLED: "${AFFINE_INDEXER_ENABLED:-false}"
             AFFINE_SERVER_HTTPS: "${AFFINE_SERVER_HTTPS:-true}"
             AFFINE_SERVER_HOST: "${AFFINE_SERVER_HOST:-affine.localhost}"
         networks:
-            shared-network:
+            shared-network-internal:
         volumes:
             - shared-home:/home/${APP_USER:-app}
             - affine-storage:/root/.affine/storage
             - affine-conf:/root/.affine/config
 
 networks:
-    shared-network:
-        name: ${SHARED_NETWORK_NAME:-shared-network}
+    shared-network-internal:
+        name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
         external: true
 
 volumes:

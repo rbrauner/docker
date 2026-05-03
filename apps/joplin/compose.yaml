@@ -21,7 +21,7 @@ services:
         #     - ${JOPLIN_PORT:-22300}:22300
         hostname: "${DOMAIN:-joplin.localhost}"
         networks:
-            shared-network:
+            shared-network-internal:
         volumes:
             - shared-home:/home/${APP_USER:-app}
         labels:
@@ -39,8 +39,8 @@ services:
             traefik.http.routers.joplin-secure.service: "joplin"
 
 networks:
-    shared-network:
-        name: ${SHARED_NETWORK_NAME:-shared-network}
+    shared-network-internal:
+        name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
         external: true
 
 volumes:
