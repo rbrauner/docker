@@ -10,17 +10,17 @@ services:
             DISK_SIZE: "${DISK_SIZE:-64G}"
             RAM_SIZE: "${RAM_SIZE:-4G}"
             CPU_CORES: "${CPU_CORES:-2}"
-        ports:
-            # - ${MACOS_PORT:-8006}:8006
-            - ${MACOS_PORT_TCP_UDP:-5900}:5900/tcp
-            - ${MACOS_PORT_TCP_UDP:-5900}:5900/udp
+        # ports:
+        #     - ${MACOS_PORT:-8006}:8006
+        #     - ${MACOS_PORT_TCP_UDP:-5900}:5900/tcp
+        #     - ${MACOS_PORT_TCP_UDP:-5900}:5900/udp
         hostname: "${DOMAIN:-macos.localhost}"
         devices:
             - /dev/kvm
             - /dev/net/tun
         stop_grace_period: 2m
         networks:
-            shared-network:
+            shared-network-internal:
         volumes:
             - shared-home:/home/${APP_USER:-app}
             - macos:/storage
@@ -39,8 +39,8 @@ services:
             traefik.http.routers.macos-secure.service: "macos"
 
 networks:
-    shared-network:
-        name: ${SHARED_NETWORK_NAME:-shared-network}
+    shared-network-internal:
+        name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
         external: true
 
 volumes:

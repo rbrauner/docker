@@ -13,7 +13,7 @@ services:
         #     - ${RABBITMQ_PORT_15672:-15672}:15672
         hostname: "${DOMAIN:-rabbitmq.localhost}"
         networks:
-            shared-network:
+            shared-network-internal:
         volumes:
             - shared-home:/home/${APP_USER:-app}
             - rabbitmq-lib:/var/lib/rabbitmq
@@ -32,8 +32,8 @@ services:
             traefik.http.routers.rabbitmq-secure.service: "rabbitmq"
 
 networks:
-    shared-network:
-        name: ${SHARED_NETWORK_NAME:-shared-network}
+    shared-network-internal:
+        name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
         external: true
 
 volumes:

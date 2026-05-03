@@ -8,7 +8,7 @@ services:
             TZ: "${TIMEZONE:-Europe/Warsaw}"
         hostname: "${DOMAIN:-whoami.localhost}"
         networks:
-            shared-network:
+            shared-network-internal:
         volumes:
             - shared-home:/home/${APP_USER:-app}
         labels:
@@ -18,8 +18,8 @@ services:
             # ofelia.job-exec.example-job.schedule: "@every 5s"
 
 networks:
-    shared-network:
-        name: ${SHARED_NETWORK_NAME:-shared-network}
+    shared-network-internal:
+        name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
         external: true
 
 volumes:

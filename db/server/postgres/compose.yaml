@@ -1,7 +1,7 @@
 services:
     postgres:
         container_name: postgres
-        image: postgres
+        image: postgres:${DB_VERSION:-18}
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
@@ -12,10 +12,10 @@ services:
         ports:
             - ${DB_PORT:-5432}:5432
         networks:
-            shared-network:
+            shared-network-internal:
         volumes:
             - shared-home:/home/${APP_USER:-app}
-            - postgres:/var/lib/postgresql
+            - postgres:/var/lib/postgresql/${DB_VERSION:-18}/docker
             - ./docker/postgres/bin/backup.sh:/bin/backup.sh:ro
             - ${BACKUP_DIR:-${HOME}/data/backups/docker/postgres}:/backup
         labels:
@@ -24,8 +24,8 @@ services:
             ofelia.job-exec.postgres.schedule: "${BACKUP_CRON_EXPRESSION:-0 9,15,17,21 * * *}"
 
 networks:
-    shared-network:
-        name: ${SHARED_NETWORK_NAME:-shared-network}
+    shared-network-internal:
+        name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
         external: true
 
 volumes:

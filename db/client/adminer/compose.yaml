@@ -11,7 +11,7 @@ services:
         #     - ${ADMINER_PORT:-8080}:8080
         hostname: "${DOMAIN:-adminer.localhost}"
         networks:
-            shared-network:
+            shared-network-internal:
         volumes:
             - shared-home:/home/${APP_USER:-app}
         labels:
@@ -29,8 +29,8 @@ services:
             traefik.http.routers.adminer-secure.service: "adminer"
 
 networks:
-    shared-network:
-        name: ${SHARED_NETWORK_NAME:-shared-network}
+    shared-network-internal:
+        name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
         external: true
 
 volumes:

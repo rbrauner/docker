@@ -1,0 +1,50 @@
+services:
+    locust:
+        container_name: locust
+        image: locustio/locust
+        restart: unless-stopped
+        command: -f /mnt/locust/config/locustfile.py --master
+        # user: "${UID:-1000}:${GID:-1000}"
+        # ports:
+        #     - ${LOCUST_PORT:-8089}:8089
+        hostname: "${DOMAIN:-locust.localhost}"
+        networks:
+            shared-network-internal:
+        volumes:
+            - shared-home:/home/${APP_USER:-app}
+            - ./config:/mnt/locust/config
+        labels:
+            # caddy: "${DOMAIN:-locust.localhost}"
+            # caddy.reverse_proxy: "{{upstreams 8089}}"
+            traefik.enable: "true"
+            traefik.http.services.locust.loadbalancer.server.port: "8089"
+            traefik.http.routers.locust.rule: "Host(`${DOMAIN:-locust.localhost}`)"
+            traefik.http.routers.locust.entrypoints: "http"
+            traefik.http.routers.locust.tls: "false"
+            traefik.http.routers.locust.service: "locust"
+            traefik.http.routers.locust-secure.rule: "Host(`${DOMAIN:-locust.localhost}`)"
+            traefik.http.routers.locust-secure.entrypoints: "https"
+            traefik.http.routers.locust-secure.tls: "true"
+            traefik.http.routers.locust-secure.service: "locust"
+
+    locust-worker:
+        container_name: locust-worker
+        image: locustio/locust
+        restart: unless-stopped
+        command: -f /mnt/locust/config/locustfile.py --worker --master-host locust
+        # user: "${UID:-1000}:${GID:-1000}"
+        networks:
+            shared-network-internal:
+        volumes:
+            - shared-home:/home/${APP_USER:-app}
+            - ./config:/mnt/locust/config
+
+networks:
+    shared-network-internal:
+        name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
+        external: true
+
+volumes:
+    shared-home:
+        name: ${SHARED_HOME_VOLUME:-shared-home}
+        external: true

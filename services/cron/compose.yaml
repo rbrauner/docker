@@ -8,14 +8,14 @@ services:
         environment:
             TIMEZONE: "${TIMEZONE:-Europe/Warsaw}"
         networks:
-            shared-network:
+            shared-network-internal:
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock:ro
             - shared-home:/home/${APP_USER:-app}
 
 networks:
-    shared-network:
-        name: ${SHARED_NETWORK_NAME:-shared-network}
+    shared-network-internal:
+        name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
         external: true
 
 volumes:

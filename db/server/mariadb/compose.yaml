@@ -11,7 +11,7 @@ services:
         ports:
             - ${DB_PORT:-3306}:3306
         networks:
-            shared-network:
+            shared-network-internal:
         volumes:
             - shared-home:/home/${APP_USER:-app}
             - mariadb-data:/var/lib/mysql
@@ -24,8 +24,8 @@ services:
             ofelia.job-exec.mariadb.schedule: "${BACKUP_CRON_EXPRESSION:-0 9,15,17,21 * * *}"
 
 networks:
-    shared-network:
-        name: ${SHARED_NETWORK_NAME:-shared-network}
+    shared-network-internal:
+        name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
         external: true
 
 volumes:

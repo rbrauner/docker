@@ -3,6 +3,7 @@
 ## Make shared network
 
 ```bash
+docker network create --internal shared-network-internal
 docker network create shared-network
 ```
 
@@ -33,6 +34,7 @@ mkcert -cert-file reverse-proxy/traefik/certs/local-cert.pem -key-file reverse-p
     "bookstack.localhost" "*.bookstack.localhost" \
     "homepage.localhost" "*.homepage.localhost" \
     "joplin.localhost" "*.joplin.localhost" \
+    "locust.localhost" "*.locust.localhost" \
     "macos.localhost" "*.macos.localhost" \
     "open-webui.localhost" "*.open-webui.localhost" \
     "example.localhost" "*.example.localhost"

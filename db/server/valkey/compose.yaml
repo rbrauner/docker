@@ -3,21 +3,21 @@ services:
         container_name: valkey
         image: valkey/valkey
         restart: unless-stopped
-        command: valkey-server --save 60 1 --loglevel warning
+        command: valkey-server --save 60 1 --loglevel warning --requirepass secret
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
             TZ: "${TIMEZONE:-Europe/Warsaw}"
         ports:
             - ${VALKEY_PORT:-6379}:6379
         networks:
-            shared-network:
+            shared-network-internal:
         volumes:
             - shared-home:/home/${APP_USER:-app}
             - valkey-data:/data
 
 networks:
-    shared-network:
-        name: ${SHARED_NETWORK_NAME:-shared-network}
+    shared-network-internal:
+        name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
         external: true
 
 volumes:

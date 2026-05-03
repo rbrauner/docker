@@ -13,7 +13,7 @@ services:
         #     - ${MAILPIT_SMTP_PORT:-1025}:1025
         hostname: "${DOMAIN:-mailpit.localhost}"
         networks:
-            shared-network:
+            shared-network-internal:
         volumes:
             - shared-home:/home/${APP_USER:-app}
             - mailpit:/data
@@ -32,8 +32,8 @@ services:
             traefik.http.routers.mailpit-secure.service: "mailpit"
 
 networks:
-    shared-network:
-        name: ${SHARED_NETWORK_NAME:-shared-network}
+    shared-network-internal:
+        name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
         external: true
 
 volumes:

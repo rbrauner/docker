@@ -2,5 +2,7 @@
 .env
 /.idea
 /apps/homepage/config/logs
+/apps/locust/config/__pycache__
+/apps/locust/config/locustfile.py
 compose.override.yaml
 ###< rbrauner/docker ###
