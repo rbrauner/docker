@@ -12,10 +12,10 @@ services:
         cap_add:
             - NET_ADMIN # For Fail2Ban to work
         ports:
-            - ${MAILSERVER_PORT_25:-25}:25
-            - ${MAILSERVER_PORT_465:-465}:465
-            - ${MAILSERVER_PORT_587:-587}:587
-            - ${MAILSERVER_PORT_993:-993}:993
+            - ${MAILSERVER_PORT_25:-1025}:25
+            - ${MAILSERVER_PORT_465:-1465}:465
+            - ${MAILSERVER_PORT_587:-1587}:587
+            - ${MAILSERVER_PORT_993:-1993}:993
         hostname: "${DOMAIN:-mailserver.localhost}"
         networks:
             shared-network-internal:

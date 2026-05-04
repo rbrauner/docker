@@ -9,9 +9,9 @@ services:
             CADDY_INGRESS_NETWORKS: "${CADDY_INGRESS_NETWORKS:-shared-network}"
         ports:
             - ${CADDY_LABELS_PORT_2019:-2019}:2020
-            - ${CADDY_LABELS_PORT_80:-80}:80
-            - ${CADDY_LABELS_PORT_443_TCP:-443}:443/tcp
-            - ${CADDY_LABELS_PORT_443_UDP:-443}:443/udp
+            - ${CADDY_LABELS_PORT_80:-8080}:80
+            - ${CADDY_LABELS_PORT_443_TCP:-8443}:443/tcp
+            - ${CADDY_LABELS_PORT_443_UDP:-8443}:443/udp
         networks:
             shared-network-internal:
         volumes:
