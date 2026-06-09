@@ -45,12 +45,3 @@ mkcert -cert-file reverse-proxy/traefik/certs/local-cert.pem -key-file reverse-p
 ```bash
 caddy trust
 ```
-
-## Other
-
-### Ollama
-
-```bash
-docker exec -it ollama bash -c "ollama pull llama3.1:8b"
-docker exec -it ollama bash -c "ollama pull qwen2.5-coder:32B"
-```
