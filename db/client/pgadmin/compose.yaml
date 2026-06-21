@@ -23,6 +23,7 @@ services:
             traefik.http.routers.pgadmin.entrypoints: "http"
             traefik.http.routers.pgadmin.tls: "false"
             traefik.http.routers.pgadmin.service: "pgadmin"
+            traefik.http.routers.pgadmin.middlewares: "redirect-to-https@docker"
             traefik.http.routers.pgadmin-secure.rule: "Host(`${DOMAIN:-pgadmin.localhost}`)"
             traefik.http.routers.pgadmin-secure.entrypoints: "https"
             traefik.http.routers.pgadmin-secure.tls: "true"

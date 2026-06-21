@@ -25,6 +25,7 @@ services:
             traefik.http.routers.portainer.entrypoints: "http"
             traefik.http.routers.portainer.tls: "false"
             traefik.http.routers.portainer.service: "portainer"
+            traefik.http.routers.portainer.middlewares: "redirect-to-https@docker"
             traefik.http.routers.portainer-secure.rule: "Host(`${DOMAIN:-portainer.localhost}`)"
             traefik.http.routers.portainer-secure.entrypoints: "https"
             traefik.http.routers.portainer-secure.tls: "true"

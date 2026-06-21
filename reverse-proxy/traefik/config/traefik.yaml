@@ -15,19 +15,10 @@ providers:
         filename: /etc/traefik/dynamic.yaml
         watch: true
 
-log:
-    level: DEBUG
-    format: common
-
 entryPoints:
     traefik:
         address: ":8999"
     http:
         address: ":80"
-        # http:
-        #     redirections:
-        #         entryPoint:
-        #             to: https
-        #             scheme: https
     https:
         address: ":443"

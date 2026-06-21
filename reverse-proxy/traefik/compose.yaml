@@ -22,6 +22,9 @@ services:
             - ./certs:/etc/certs:ro
         labels:
             traefik.enable: "true"
+            # Redirect http to https
+            traefik.http.middlewares.redirect-to-https.redirectscheme.scheme: "https"
+            traefik.http.middlewares.redirect-to-https.redirectscheme.permanent: "true"
             # traefik.localhost
             traefik.http.routers.traefik.rule: "Host(`${DOMAIN:-traefik.localhost}`)"
             traefik.http.routers.traefik.service: "api@internal"

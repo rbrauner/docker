@@ -23,6 +23,7 @@ services:
             traefik.http.routers.phpmyadmin.entrypoints: "http"
             traefik.http.routers.phpmyadmin.tls: "false"
             traefik.http.routers.phpmyadmin.service: "phpmyadmin"
+            traefik.http.routers.phpmyadmin.middlewares: "redirect-to-https@docker"
             traefik.http.routers.phpmyadmin-secure.rule: "Host(`${DOMAIN:-phpmyadmin.localhost}`)"
             traefik.http.routers.phpmyadmin-secure.entrypoints: "https"
             traefik.http.routers.phpmyadmin-secure.tls: "true"

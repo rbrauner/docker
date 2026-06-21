@@ -39,6 +39,7 @@ services:
             traefik.http.routers.listmonk.entrypoints: "http"
             traefik.http.routers.listmonk.tls: "false"
             traefik.http.routers.listmonk.service: "listmonk"
+            traefik.http.routers.listmonk.middlewares: "redirect-to-https@docker"
             traefik.http.routers.listmonk-secure.rule: "Host(`${DOMAIN:-listmonk.localhost}`)"
             traefik.http.routers.listmonk-secure.entrypoints: "https"
             traefik.http.routers.listmonk-secure.tls: "true"

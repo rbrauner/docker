@@ -22,6 +22,7 @@ services:
             traefik.http.routers.locust.entrypoints: "http"
             traefik.http.routers.locust.tls: "false"
             traefik.http.routers.locust.service: "locust"
+            traefik.http.routers.locust.middlewares: "redirect-to-https@docker"
             traefik.http.routers.locust-secure.rule: "Host(`${DOMAIN:-locust.localhost}`)"
             traefik.http.routers.locust-secure.entrypoints: "https"
             traefik.http.routers.locust-secure.tls: "true"

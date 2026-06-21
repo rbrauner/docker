@@ -19,6 +19,7 @@ services:
             traefik.http.routers.whoami.entrypoints: "http"
             traefik.http.routers.whoami.tls: "false"
             traefik.http.routers.whoami.service: "whoami"
+            # traefik.http.routers.whoami.middlewares: "redirect-to-https@docker"
             # traefik.http.routers.whoami-secure.rule: "Host(`${DOMAIN:-whoami.localhost}`)"
             # traefik.http.routers.whoami-secure.entrypoints: "https"
             # traefik.http.routers.whoami-secure.tls: "true"

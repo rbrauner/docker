@@ -26,6 +26,7 @@ services:
             traefik.http.routers.rabbitmq.entrypoints: "http"
             traefik.http.routers.rabbitmq.tls: "false"
             traefik.http.routers.rabbitmq.service: "rabbitmq"
+            traefik.http.routers.rabbitmq.middlewares: "redirect-to-https@docker"
             traefik.http.routers.rabbitmq-secure.rule: "Host(`${DOMAIN:-rabbitmq.localhost}`)"
             traefik.http.routers.rabbitmq-secure.entrypoints: "https"
             traefik.http.routers.rabbitmq-secure.tls: "true"

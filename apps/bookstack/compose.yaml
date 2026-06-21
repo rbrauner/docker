@@ -33,6 +33,7 @@ services:
             traefik.http.routers.bookstack.entrypoints: "http"
             traefik.http.routers.bookstack.tls: "false"
             traefik.http.routers.bookstack.service: "bookstack"
+            traefik.http.routers.bookstack.middlewares: "redirect-to-https@docker"
             traefik.http.routers.bookstack-secure.rule: "Host(`${DOMAIN:-bookstack.localhost}`)"
             traefik.http.routers.bookstack-secure.entrypoints: "https"
             traefik.http.routers.bookstack-secure.tls: "true"
