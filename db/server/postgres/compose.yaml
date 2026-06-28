@@ -1,7 +1,14 @@
 services:
     postgres:
         container_name: postgres
-        image: postgres:${DB_VERSION:-18}
+        build:
+            context: .
+            dockerfile: ./Dockerfile
+            target: base
+            network: host
+            args:
+                DB_VERSION: ${DB_VERSION:-18}
+                TZ: ${TZ:-Europe/Warsaw}
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
@@ -9,8 +16,8 @@ services:
             POSTGRES_USER: "${DB_USER:-root}"
             POSTGRES_PASSWORD: "${DB_PASSWORD:-secret}"
             POSTGRES_DB: "${DB_NAME:-default}"
-        ports:
-            - ${DB_PORT:-5432}:5432
+        # ports:
+        #     - ${DB_PORT:-5432}:5432
         networks:
             shared-network-internal:
         volumes:
