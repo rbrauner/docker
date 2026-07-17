@@ -5,7 +5,7 @@ services:
         container_name: redis7
         image: redis:7
         restart: unless-stopped
-        command: redis-server --save 60 1 --loglevel warning --requirepass secret
+        command: redis-server --save 60 1 --loglevel warning --requirepass "${REDIS_PASSWORD:-secret}"
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
             TZ: "${TIMEZONE:-Europe/Warsaw}"

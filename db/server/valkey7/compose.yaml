@@ -5,7 +5,7 @@ services:
         container_name: valkey7
         image: valkey/valkey:7-trixie
         restart: unless-stopped
-        command: valkey-server --save 60 1 --loglevel warning --requirepass secret
+        command: valkey-server --save 60 1 --loglevel warning --requirepass "${VALKEY_PASSWORD:-secret}"
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
             TZ: "${TIMEZONE:-Europe/Warsaw}"
