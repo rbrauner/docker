@@ -1,3 +1,5 @@
+name: bookstack
+
 services:
     bookstack:
         container_name: bookstack
@@ -38,6 +40,7 @@ services:
             traefik.http.routers.bookstack-secure.entrypoints: "https"
             traefik.http.routers.bookstack-secure.tls: "true"
             traefik.http.routers.bookstack-secure.service: "bookstack"
+        tty: true
 
 networks:
     shared-network-internal:

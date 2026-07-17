@@ -1,3 +1,5 @@
+name: traefik
+
 services:
     traefik:
         container_name: traefik
@@ -12,8 +14,8 @@ services:
             - ${TRAEFIK_PORT_443_UDP:-443}:443/udp
         hostname: "${DOMAIN:-traefik.localhost}"
         networks:
-            shared-network:
             shared-network-internal:
+            shared-network:
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock:ro
             - shared-home:/home/${APP_USER:-app}
@@ -28,13 +30,14 @@ services:
             # traefik.localhost
             traefik.http.routers.traefik.rule: "Host(`${DOMAIN:-traefik.localhost}`)"
             traefik.http.routers.traefik.service: "api@internal"
+        tty: true
 
 networks:
-    shared-network:
-        name: ${SHARED_NETWORK_NAME:-shared-network}
-        external: true
     shared-network-internal:
         name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
+        external: true
+    shared-network:
+        name: ${SHARED_NETWORK_NAME:-shared-network}
         external: true
 
 volumes:

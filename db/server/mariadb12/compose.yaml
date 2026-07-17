@@ -1,0 +1,41 @@
+name: mariadb12
+
+services:
+    mariadb12:
+        container_name: mariadb12
+        image: mariadb:12
+        restart: unless-stopped
+        # user: "${UID:-1000}:${GID:-1000}"
+        environment:
+            TZ: "${TIMEZONE:-Europe/Warsaw}"
+            MYSQL_DATABASE: "${DB_NAME:-default}"
+            MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD:-secret}"
+        ports:
+            - ${DB_PORT:-3312}:3306
+        networks:
+            shared-network-internal:
+        volumes:
+            - shared-home:/home/${APP_USER:-app}
+            - mariadb12-data:/var/lib/mysql
+            - mariadb12-conf:/etc/mysql
+            - ./bin/backup.sh:/bin/backup.sh:ro
+            - ${BACKUP_DIR:-${HOME}/data/backups/docker/mariadb12}:/backup
+#        labels:
+#             ofelia.enabled: "true"
+#             ofelia.job-exec.mariadb12.command: "/bin/backup.sh"
+#             ofelia.job-exec.mariadb12.schedule: "${BACKUP_CRON_EXPRESSION:-0 9,15,17,21 * * *}"
+        tty: true
+
+networks:
+    shared-network-internal:
+        name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
+        external: true
+
+volumes:
+    shared-home:
+        name: ${SHARED_HOME_VOLUME:-shared-home}
+        external: true
+    mariadb12-data:
+        name: mariadb12-data
+    mariadb12-conf:
+        name: mariadb12-conf

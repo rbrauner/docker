@@ -1,3 +1,5 @@
+name: pgadmin
+
 services:
     pgadmin:
         container_name: pgadmin
@@ -28,6 +30,7 @@ services:
             traefik.http.routers.pgadmin-secure.entrypoints: "https"
             traefik.http.routers.pgadmin-secure.tls: "true"
             traefik.http.routers.pgadmin-secure.service: "pgadmin"
+        tty: true
 
 networks:
     shared-network-internal:

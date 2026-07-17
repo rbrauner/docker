@@ -1,3 +1,5 @@
+name: devbox
+
 services:
     devbox:
         container_name: devbox

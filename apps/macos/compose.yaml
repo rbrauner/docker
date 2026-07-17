@@ -1,3 +1,5 @@
+name: macos
+
 services:
     macos:
         container_name: macos
@@ -38,6 +40,7 @@ services:
             traefik.http.routers.macos-secure.entrypoints: "https"
             traefik.http.routers.macos-secure.tls: "true"
             traefik.http.routers.macos-secure.service: "macos"
+        tty: true
 
 networks:
     shared-network-internal:

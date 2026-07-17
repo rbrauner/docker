@@ -1,3 +1,5 @@
+name: open-webui
+
 services:
     open-webui:
         container_name: open-webui
@@ -29,6 +31,7 @@ services:
             traefik.http.routers.open-webui-secure.entrypoints: "https"
             traefik.http.routers.open-webui-secure.tls: "true"
             traefik.http.routers.open-webui-secure.service: "open-webui"
+        tty: true
 
 networks:
     shared-network-internal:

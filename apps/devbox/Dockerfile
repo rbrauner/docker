@@ -1,9 +1,10 @@
 FROM debian:stable-slim AS start
 
 FROM start AS packages
-RUN apt update
-RUN apt upgrade
-RUN apt install \
+# hadolint ignore=DL3008
+RUN apt-get update \
+    && apt-get upgrade -y \
+    && apt-get install -y --no-install-recommends \
     bash \
     build-base \
     ca-certificates \
@@ -29,12 +30,15 @@ RUN apt install \
     yarn \
     zip \
     zlib \
-    zsh
+    zsh \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 FROM packages AS node-base
-RUN npm uninstall -g yarn pnpm
-RUN npm install -g corepack
-RUN corepack enable
+# hadolint ignore=DL3016
+RUN npm uninstall -g yarn pnpm \
+    && npm install -g corepack \
+    && corepack enable
 
 FROM node-base AS user
 RUN adduser -D devbox

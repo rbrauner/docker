@@ -1,0 +1,31 @@
+name: redis8
+
+services:
+    redis8:
+        container_name: redis8
+        image: redis:8-trixie
+        restart: unless-stopped
+        command: redis-server --save 60 1 --loglevel warning --requirepass secret
+        # user: "${UID:-1000}:${GID:-1000}"
+        environment:
+            TZ: "${TIMEZONE:-Europe/Warsaw}"
+        ports:
+            - ${REDIS_PORT:-6308}:6379
+        networks:
+            shared-network-internal:
+        volumes:
+            - shared-home:/home/${APP_USER:-app}
+            - redis8-data:/data
+        tty: true
+
+networks:
+    shared-network-internal:
+        name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
+        external: true
+
+volumes:
+    shared-home:
+        name: ${SHARED_HOME_VOLUME:-shared-home}
+        external: true
+    redis8-data:
+        name: redis8-data

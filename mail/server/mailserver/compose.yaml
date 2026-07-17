@@ -1,0 +1,48 @@
+name: mailserver
+
+services:
+    mailserver:
+        container_name: mailserver
+        image: mailserver/docker-mailserver
+        restart: unless-stopped
+        # user: "${UID:-1000}:${GID:-1000}"
+        environment:
+            TZ: "${TIMEZONE:-Europe/Warsaw}"
+            ENABLE_RSPAMD: "${ENABLE_RSPAMD:-1}"
+            ENABLE_CLAMAV: "${ENABLE_CLAMAV:-1}"
+            ENABLE_FAIL2BAN: "${ENABLE_FAIL2BAN:-1}"
+        cap_add:
+            - NET_ADMIN # For Fail2Ban to work
+        ports:
+            - ${MAILSERVER_PORT_25:-1025}:25
+            - ${MAILSERVER_PORT_465:-1465}:465
+            - ${MAILSERVER_PORT_587:-1587}:587
+            - ${MAILSERVER_PORT_993:-1993}:993
+        hostname: "${DOMAIN:-mailserver.localhost}"
+        networks:
+            shared-network-internal:
+        volumes:
+            - shared-home:/home/${APP_USER:-app}
+            - mailserver-mail-data:/var/mail/
+            - mailserver-mail-state:/var/mail-state/
+            - mailserver-mail-logs:/var/log/mail/
+            - mailserver-config:/tmp/docker-mailserver/
+        tty: true
+
+networks:
+    shared-network-internal:
+        name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
+        external: true
+
+volumes:
+    shared-home:
+        name: ${SHARED_HOME_VOLUME:-shared-home}
+        external: true
+    mailserver-mail-data:
+        name: mailserver-mail-data
+    mailserver-mail-state:
+        name: mailserver-mail-state
+    mailserver-mail-logs:
+        name: mailserver-mail-logs
+    mailserver-config:
+        name: mailserver-config

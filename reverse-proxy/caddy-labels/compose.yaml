@@ -1,3 +1,5 @@
+name: caddy-labels
+
 services:
     caddy-labels:
         container_name: caddy-labels
@@ -23,6 +25,7 @@ services:
             caddy_0.servers.trusted_proxies: "static private_ranges"
             caddy_1: ":2020"
             caddy_1.reverse_proxy: "localhost:2019"
+        tty: true
 
 networks:
     shared-network-internal:

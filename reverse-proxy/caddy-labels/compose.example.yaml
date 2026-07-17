@@ -1,3 +1,5 @@
+name: caddy-labels
+
 services:
     whoami:
         container_name: whoami
@@ -8,21 +10,22 @@ services:
             TZ: "${TIMEZONE:-Europe/Warsaw}"
         hostname: "${DOMAIN:-whoami.localhost}"
         networks:
-            # shared-network:
             shared-network-internal:
+            # shared-network:
         volumes:
             - shared-home:/home/${APP_USER:-app}
         labels:
             caddy: "${DOMAIN:-whoami.localhost}"
             caddy.reverse_proxy: "{{upstreams http}}"
+        tty: true
 
 networks:
-    # shared-network:
-    #     name: ${SHARED_NETWORK_NAME:-shared-network}
-    #     external: true
     shared-network-internal:
         name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
         external: true
+    # shared-network:
+    #     name: ${SHARED_NETWORK_NAME:-shared-network}
+    #     external: true
 
 volumes:
     shared-home:

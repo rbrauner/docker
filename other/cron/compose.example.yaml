@@ -1,0 +1,31 @@
+name: cron
+
+services:
+    whoami:
+        container_name: whoami
+        image: traefik/whoami
+        restart: unless-stopped
+        # user: "${UID:-1000}:${GID:-1000}"
+        environment:
+            TZ: "${TIMEZONE:-Europe/Warsaw}"
+        hostname: "${DOMAIN:-whoami.localhost}"
+        networks:
+            shared-network-internal:
+        volumes:
+            - shared-home:/home/${APP_USER:-app}
+        labels:
+            ofelia.enabled: "true"
+            ofelia.job-exec.example-job.command: "uname -a"
+            ofelia.job-exec.example-job.schedule: "0,20,40 * * * *"
+            # ofelia.job-exec.example-job.schedule: "@every 5s"
+        tty: true
+
+networks:
+    shared-network-internal:
+        name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
+        external: true
+
+volumes:
+    shared-home:
+        name: ${SHARED_HOME_VOLUME:-shared-home}
+        external: true

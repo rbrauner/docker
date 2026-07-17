@@ -1,3 +1,5 @@
+name: homepage
+
 services:
     homepage:
         container_name: homepage
@@ -30,6 +32,7 @@ services:
             traefik.http.routers.homepage-secure.entrypoints: "https"
             traefik.http.routers.homepage-secure.tls: "true"
             traefik.http.routers.homepage-secure.service: "homepage"
+        tty: true
 
 networks:
     shared-network-internal:
