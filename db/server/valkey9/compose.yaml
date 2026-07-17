@@ -1,0 +1,31 @@
+name: valkey9
+
+services:
+    valkey9:
+        container_name: valkey9
+        image: valkey/valkey:9-trixie
+        restart: unless-stopped
+        command: valkey-server --save 60 1 --loglevel warning --requirepass "${VALKEY_PASSWORD:-secret}"
+        # user: "${UID:-1000}:${GID:-1000}"
+        environment:
+            TZ: "${TIMEZONE:-Europe/Warsaw}"
+        ports:
+            - ${VALKEY_PORT:-6209}:6379
+        networks:
+            shared-network-internal:
+        volumes:
+            - shared-home:/home/${APP_USER:-app}
+            - valkey9-data:/data
+        tty: true
+
+networks:
+    shared-network-internal:
+        name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
+        external: true
+
+volumes:
+    shared-home:
+        name: ${SHARED_HOME_VOLUME:-shared-home}
+        external: true
+    valkey9-data:
+        name: valkey9-data

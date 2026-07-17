@@ -1,0 +1,31 @@
+name: redis7
+
+services:
+    redis7:
+        container_name: redis7
+        image: redis:7
+        restart: unless-stopped
+        command: redis-server --save 60 1 --loglevel warning --requirepass "${REDIS_PASSWORD:-secret}"
+        # user: "${UID:-1000}:${GID:-1000}"
+        environment:
+            TZ: "${TIMEZONE:-Europe/Warsaw}"
+        ports:
+            - ${REDIS_PORT:-6307}:6379
+        networks:
+            shared-network-internal:
+        volumes:
+            - shared-home:/home/${APP_USER:-app}
+            - redis7-data:/data
+        tty: true
+
+networks:
+    shared-network-internal:
+        name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
+        external: true
+
+volumes:
+    shared-home:
+        name: ${SHARED_HOME_VOLUME:-shared-home}
+        external: true
+    redis7-data:
+        name: redis7-data

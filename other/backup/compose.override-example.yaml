@@ -1,0 +1,27 @@
+name: backup
+
+services:
+    backup:
+        volumes:
+            # ================
+            # = local backup =
+            # ================
+            - ${HOME}/data/directory:/backup/data/directory:ro
+
+            # =================
+            # = volume backup =
+            # =================
+            - mariadb-data:/backup/mariadb-data:ro
+            - mariadb-data-conf:/backup/mariadb-data-conf:ro
+
+        # =================
+        # = volume backup =
+        # =================
+        tty: true
+volumes:
+    mariadb-data:
+        name: mariadb-data
+        external: true
+    mariadb-data-conf:
+        name: mariadb-data-conf
+        external: true

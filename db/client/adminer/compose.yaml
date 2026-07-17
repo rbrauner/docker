@@ -1,3 +1,5 @@
+name: adminer
+
 services:
     adminer:
         container_name: adminer
@@ -28,6 +30,7 @@ services:
             traefik.http.routers.adminer-secure.entrypoints: "https"
             traefik.http.routers.adminer-secure.tls: "true"
             traefik.http.routers.adminer-secure.service: "adminer"
+        tty: true
 
 networks:
     shared-network-internal:

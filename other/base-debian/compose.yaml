@@ -1,0 +1,34 @@
+name: base-debian
+
+services:
+    base-debian:
+        container_name: base-debian
+        build:
+            context: .
+            dockerfile: ./Dockerfile
+            target: prod
+            network: host
+            args:
+                TZ: ${TZ:-Europe/Warsaw}
+                USER: ${APP_USER:-app}
+                GROUP: ${APP_GROUP:-app}
+                UID: ${UID:-1000}
+                GID: ${GID:-1000}
+        restart: no
+        # user: "${UID:-1000}:${GID:-1000}"
+        tty: true
+        networks:
+            shared-network-internal:
+        volumes:
+            - shared-home:/home/${APP_USER:-app}
+            - .:/var/www/html
+
+networks:
+    shared-network-internal:
+        name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
+        external: true
+
+volumes:
+    shared-home:
+        name: ${SHARED_HOME_VOLUME:-shared-home}
+        external: true

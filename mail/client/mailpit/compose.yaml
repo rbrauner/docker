@@ -1,0 +1,48 @@
+name: mailpit
+
+services:
+    mailpit:
+        container_name: mailpit
+        image: axllent/mailpit
+        restart: unless-stopped
+        # user: "${UID:-1000}:${GID:-1000}"
+        environment:
+            TZ: "${TIMEZONE:-Europe/Warsaw}"
+            MP_SMTP_AUTH_ACCEPT_ANY: "${MP_SMTP_AUTH_ACCEPT_ANY:-1}"
+            MP_SMTP_AUTH_ALLOW_INSECURE: "${MP_SMTP_AUTH_ALLOW_INSECURE:-1}"
+        # ports:
+        #     - ${MAILPIT_PORT:-8025}:8025
+        #     - ${MAILPIT_SMTP_PORT:-1025}:1025
+        hostname: "${DOMAIN:-mailpit.localhost}"
+        networks:
+            shared-network-internal:
+        volumes:
+            - shared-home:/home/${APP_USER:-app}
+            - mailpit:/data
+        labels:
+            # caddy: "${DOMAIN:-mailpit.localhost}"
+            # caddy.reverse_proxy: "{{upstreams 8025}}"
+            traefik.enable: "true"
+            traefik.http.services.mailpit.loadbalancer.server.port: "8025"
+            traefik.http.routers.mailpit.rule: "Host(`${DOMAIN:-mailpit.localhost}`)"
+            traefik.http.routers.mailpit.entrypoints: "http"
+            traefik.http.routers.mailpit.tls: "false"
+            traefik.http.routers.mailpit.service: "mailpit"
+            traefik.http.routers.mailpit.middlewares: "redirect-to-https@docker"
+            traefik.http.routers.mailpit-secure.rule: "Host(`${DOMAIN:-mailpit.localhost}`)"
+            traefik.http.routers.mailpit-secure.entrypoints: "https"
+            traefik.http.routers.mailpit-secure.tls: "true"
+            traefik.http.routers.mailpit-secure.service: "mailpit"
+        tty: true
+
+networks:
+    shared-network-internal:
+        name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
+        external: true
+
+volumes:
+    shared-home:
+        name: ${SHARED_HOME_VOLUME:-shared-home}
+        external: true
+    mailpit:
+        name: mailpit

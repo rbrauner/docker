@@ -1,0 +1,41 @@
+name: mysql8
+
+services:
+    mysql8:
+        container_name: mysql8
+        image: mysql:8
+        restart: unless-stopped
+        # user: "${UID:-1000}:${GID:-1000}"
+        environment:
+            TZ: "${TIMEZONE:-Europe/Warsaw}"
+            MYSQL_DATABASE: "${DB_NAME:-default}"
+            MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD:-secret}"
+        ports:
+            - ${DB_PORT:-3308}:3306
+        networks:
+            shared-network-internal:
+        volumes:
+            - shared-home:/home/${APP_USER:-app}
+            - mysql8-data:/var/lib/mysql
+            - mysql8-conf:/etc/mysql
+            - ./bin/backup.sh:/bin/backup.sh:ro
+            - ${BACKUP_DIR:-${HOME}/data/backups/docker/mysql8}:/backup
+#        labels:
+#             ofelia.enabled: "true"
+#             ofelia.job-exec.mysql8.command: "/bin/backup.sh"
+#             ofelia.job-exec.mysql8.schedule: "${BACKUP_CRON_EXPRESSION:-0 9,15,17,21 * * *}"
+        tty: true
+
+networks:
+    shared-network-internal:
+        name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
+        external: true
+
+volumes:
+    shared-home:
+        name: ${SHARED_HOME_VOLUME:-shared-home}
+        external: true
+    mysql8-data:
+        name: mysql8-data
+    mysql8-conf:
+        name: mysql8-conf

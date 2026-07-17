@@ -1,3 +1,5 @@
+name: caddy
+
 services:
     caddy:
         container_name: caddy
@@ -21,6 +23,7 @@ services:
             - ./Caddyfile:/etc/caddy/Caddyfile:ro
             - ./config:/etc/caddy/config:ro
             - ./sites:/etc/caddy/sites:ro
+        tty: true
 
 networks:
     shared-network-internal:

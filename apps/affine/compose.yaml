@@ -1,3 +1,5 @@
+name: affine
+
 services:
     affine:
         container_name: affine
@@ -41,11 +43,12 @@ services:
             traefik.http.routers.affine-secure.entrypoints: "https"
             traefik.http.routers.affine-secure.tls: "true"
             traefik.http.routers.affine-secure.service: "affine"
+        tty: true
 
     affine_migration:
         container_name: affine_migration
         image: ghcr.io/toeverything/affine:${AFFINE_REVISION:-stable}
-        command: ['sh', '-c', 'node ./scripts/self-host-predeploy.js']
+        command: ["sh", "-c", "node ./scripts/self-host-predeploy.js"]
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
             TZ: "${TIMEZONE:-Europe/Warsaw}"

@@ -1,0 +1,39 @@
+name: postgres17
+
+services:
+    postgres17:
+        container_name: postgres17
+        image: postgres:17-trixie
+        restart: unless-stopped
+        # user: "${UID:-1000}:${GID:-1000}"
+        environment:
+            TZ: "${TIMEZONE:-Europe/Warsaw}"
+            POSTGRES_USER: "${DB_USER:-root}"
+            POSTGRES_PASSWORD: "${DB_PASSWORD:-secret}"
+            POSTGRES_DB: "${DB_NAME:-default}"
+        ports:
+            - ${DB_PORT:-5517}:5432
+        networks:
+            shared-network-internal:
+        volumes:
+            - shared-home:/home/${APP_USER:-app}
+            - postgres17:/var/lib/postgresql/data
+            - ./bin/backup.sh:/bin/backup.sh:ro
+            - ${BACKUP_DIR:-${HOME}/data/backups/docker/postgres17}:/backup
+#        labels:
+#             ofelia.enabled: "true"
+#             ofelia.job-exec.postgres17.command: "/bin/backup.sh"
+#             ofelia.job-exec.postgres17.schedule: "${BACKUP_CRON_EXPRESSION:-0 9,15,17,21 * * *}"
+        tty: true
+
+networks:
+    shared-network-internal:
+        name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
+        external: true
+
+volumes:
+    shared-home:
+        name: ${SHARED_HOME_VOLUME:-shared-home}
+        external: true
+    postgres17:
+        name: postgres17

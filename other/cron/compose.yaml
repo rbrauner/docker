@@ -1,0 +1,27 @@
+name: cron
+
+services:
+    cron:
+        container_name: cron
+        image: mcuadros/ofelia
+        restart: unless-stopped
+        # user: "${UID:-1000}:${GID:-1000}"
+        command: daemon --docker
+        environment:
+            TIMEZONE: "${TIMEZONE:-Europe/Warsaw}"
+        networks:
+            shared-network-internal:
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+            - shared-home:/home/${APP_USER:-app}
+        tty: true
+
+networks:
+    shared-network-internal:
+        name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
+        external: true
+
+volumes:
+    shared-home:
+        name: ${SHARED_HOME_VOLUME:-shared-home}
+        external: true
