@@ -1,0 +1,28 @@
+{
+    "priority": 2,
+    "request": {
+        "method": "GET",
+        "url": "/test/scenario-3",
+        "headers": {
+            "X-Login": {
+                "matches": ".+"
+            }
+        },
+        "customMatcher": {
+            "name": "state-matcher",
+            "parameters": {
+                "hasContext": "{{request.headers.X-Login}}"
+            }
+        }
+    },
+    "response": {
+        "status": 200,
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "body": "{\n    \"login\": \"{{request.headers.X-Login}}\",\n    \"message\": \"Second call for {{request.headers.X-Login}} - call /test/scenario-3-reset to reset back to the first state\"\n}",
+        "transformers": [
+            "response-template"
+        ]
+    }
+}

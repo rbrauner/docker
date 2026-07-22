@@ -1,0 +1,45 @@
+name: grafana
+
+services:
+    grafana:
+        container_name: grafana
+        image: grafana/grafana
+        restart: unless-stopped
+        # user: "${UID:-1000}:${GID:-1000}"
+        environment:
+            TZ: "${TZ:-Europe/Warsaw}"
+        # ports:
+        #     - ${GRAFANA_PORT:-3000}:3000
+        hostname: "${DOMAIN:-grafana.localhost}"
+        networks:
+            shared-network-internal:
+        volumes:
+            - shared-home:/home/${APP_USER:-app}
+            - grafana:/var/lib/grafana
+        labels:
+            # caddy: "${DOMAIN:-grafana.localhost}"
+            # caddy.reverse_proxy: "{{upstreams http}}"
+            traefik.enable: "true"
+            traefik.http.services.grafana.loadbalancer.server.port: "3000"
+            traefik.http.routers.grafana.rule: "Host(`${DOMAIN:-grafana.localhost}`)"
+            traefik.http.routers.grafana.entrypoints: "http"
+            traefik.http.routers.grafana.tls: "false"
+            traefik.http.routers.grafana.service: "grafana"
+            traefik.http.routers.grafana.middlewares: "redirect-to-https@docker"
+            traefik.http.routers.grafana-secure.rule: "Host(`${DOMAIN:-grafana.localhost}`)"
+            traefik.http.routers.grafana-secure.entrypoints: "https"
+            traefik.http.routers.grafana-secure.tls: "true"
+            traefik.http.routers.grafana-secure.service: "grafana"
+        tty: true
+
+networks:
+    shared-network-internal:
+        name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
+        external: true
+
+volumes:
+    shared-home:
+        name: ${SHARED_HOME_VOLUME:-shared-home}
+        external: true
+    grafana:
+        name: grafana

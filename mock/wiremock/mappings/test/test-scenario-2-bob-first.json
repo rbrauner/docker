@@ -1,0 +1,21 @@
+{
+    "scenarioName": "test-scenario-2-bob",
+    "requiredScenarioState": "Started",
+    "newScenarioState": "Second call",
+    "request": {
+        "method": "GET",
+        "url": "/test/scenario-2",
+        "headers": {
+            "X-Login": {
+                "equalTo": "bob"
+            }
+        }
+    },
+    "response": {
+        "status": 200,
+        "jsonBody": {
+            "login": "bob",
+            "message": "First call for bob - next request will return the second state"
+        }
+    }
+}

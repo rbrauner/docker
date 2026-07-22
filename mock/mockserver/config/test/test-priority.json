@@ -1,0 +1,12 @@
+[
+    {
+        "priority": 1,
+        "httpRequest": {
+            "method": "GET",
+            "path": "/test/priority"
+        },
+        "httpResponse": {
+            "statusCode": 200
+        }
+    }
+]

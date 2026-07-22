@@ -27,23 +27,27 @@ docker compose up -d
 ```bash
 mkcert -install
 mkcert -cert-file reverse-proxy/traefik/certs/local-cert.pem -key-file reverse-proxy/traefik/certs/local-key.pem \
-    "traefik.localhost" "*.traefik.localhost" \
-    "rabbitmq.localhost" "*.rabbitmq.localhost" \
     "adminer.localhost" "*.adminer.localhost" \
-    "pgadmin.localhost" "*.pgadmin.localhost" \
-    "phpmyadmin.localhost" "*.phpmyadmin.localhost" \
-    "mailpit.localhost" "*.mailpit.localhost" \
-    "listmonk.localhost" "*.listmonk.localhost" \
-    "crontab-ui.localhost" "*.crontab-ui.localhost" \
-    "portainer.localhost" "*.portainer.localhost" \
     "affine.localhost" "*.affine.localhost" \
     "bookstack.localhost" "*.bookstack.localhost" \
+    "crontab-ui.localhost" "*.crontab-ui.localhost" \
+    "example.localhost" "*.example.localhost" \
+    "grafana.localhost" "*.grafana.localhost" \
     "homepage.localhost" "*.homepage.localhost" \
     "joplin.localhost" "*.joplin.localhost" \
+    "listmonk.localhost" "*.listmonk.localhost" \
     "locust.localhost" "*.locust.localhost" \
     "macos.localhost" "*.macos.localhost" \
+    "mailpit.localhost" "*.mailpit.localhost" \
+    "mockserver.localhost" "*.mockserver.localhost" \
     "open-webui.localhost" "*.open-webui.localhost" \
-    "example.localhost" "*.example.localhost"
+    "pgadmin.localhost" "*.pgadmin.localhost" \
+    "phpmyadmin.localhost" "*.phpmyadmin.localhost" \
+    "portainer.localhost" "*.portainer.localhost" \
+    "rabbitmq.localhost" "*.rabbitmq.localhost" \
+    "traefik.localhost" "*.traefik.localhost" \
+    "whoami.localhost" "*.whoami.localhost" \
+    "wiremock.localhost" "*.wiremock.localhost"
 ```
 
 ### Caddy and caddy labels

@@ -1,0 +1,20 @@
+{
+    "scenarioName": "test-scenario-2-alice",
+    "newScenarioState": "Started",
+    "request": {
+        "method": "GET",
+        "url": "/test/scenario-2-reset",
+        "headers": {
+            "X-Login": {
+                "equalTo": "alice"
+            }
+        }
+    },
+    "response": {
+        "status": 200,
+        "jsonBody": {
+            "login": "alice",
+            "message": "Scenario for alice has been reset to the first state"
+        }
+    }
+}

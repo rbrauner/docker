@@ -10,7 +10,7 @@ services:
                 condition: service_started
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
-            TZ: "${TIMEZONE:-Europe/Warsaw}"
+            TZ: "${TZ:-Europe/Warsaw}"
             APP_BASE_URL: "${APP_BASE_URL:-https://${DOMAIN:-joplin.localhost}}"
             APP_PORT: "${APP_PORT:-22300}"
             DB_CLIENT: "${DB_CLIENT:-pg}"

@@ -7,7 +7,7 @@ services:
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
-            TZ: "${TIMEZONE:-Europe/Warsaw}"
+            TZ: "${TZ:-Europe/Warsaw}"
             RABBITMQ_DEFAULT_USER: "${RABBITMQ_DEFAULT_USER:-root}"
             RABBITMQ_DEFAULT_PASS: "${RABBITMQ_DEFAULT_PASS:-secret}"
         # ports:

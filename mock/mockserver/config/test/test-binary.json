@@ -1,0 +1,15 @@
+[
+    {
+        "httpRequest": {
+            "method": "GET",
+            "path": "/test/binary"
+        },
+        "httpResponse": {
+            "statusCode": 200,
+            "body": {
+                "type": "BINARY",
+                "base64Bytes": "SGVsbG8gd29ybGQh"
+            }
+        }
+    }
+]

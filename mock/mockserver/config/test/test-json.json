@@ -1,0 +1,17 @@
+[
+    {
+        "httpRequest": {
+            "method": "GET",
+            "path": "/test/json"
+        },
+        "httpResponse": {
+            "statusCode": 200,
+            "body": {
+                "type": "JSON",
+                "json": {
+                    "arbitrary_json": [1, 2, 3]
+                }
+            }
+        }
+    }
+]

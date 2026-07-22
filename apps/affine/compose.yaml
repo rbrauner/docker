@@ -10,7 +10,7 @@ services:
                 condition: service_completed_successfully
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
-            TZ: "${TIMEZONE:-Europe/Warsaw}"
+            TZ: "${TZ:-Europe/Warsaw}"
             REDIS_SERVER_HOST: "${REDIS_SERVER_HOST:-valkey}"
             REDIS_SERVER_PORT: "${REDIS_SERVER_PORT:-6379}"
             REDIS_SERVER_USERNAME: "${REDIS_SERVER_USERNAME:-}"
@@ -51,7 +51,7 @@ services:
         command: ["sh", "-c", "node ./scripts/self-host-predeploy.js"]
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
-            TZ: "${TIMEZONE:-Europe/Warsaw}"
+            TZ: "${TZ:-Europe/Warsaw}"
             REDIS_SERVER_HOST: "${REDIS_SERVER_HOST:-valkey}"
             REDIS_SERVER_PORT: "${REDIS_SERVER_PORT:-6379}"
             REDIS_SERVER_USERNAME: "${REDIS_SERVER_USERNAME:-}"

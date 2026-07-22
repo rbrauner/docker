@@ -7,7 +7,7 @@ services:
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
-            TZ: "${TIMEZONE:-Europe/Warsaw}"
+            TZ: "${TZ:-Europe/Warsaw}"
             VERSION: "${VERSION:-15}"
             DISK_SIZE: "${DISK_SIZE:-64G}"
             RAM_SIZE: "${RAM_SIZE:-4G}"

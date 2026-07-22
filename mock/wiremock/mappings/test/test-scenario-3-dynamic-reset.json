@@ -1,0 +1,29 @@
+{
+    "request": {
+        "method": "GET",
+        "url": "/test/scenario-3-reset",
+        "headers": {
+            "X-Login": {
+                "matches": ".+"
+            }
+        }
+    },
+    "response": {
+        "status": 200,
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "body": "{\n    \"login\": \"{{request.headers.X-Login}}\",\n    \"message\": \"Scenario for {{request.headers.X-Login}} has been reset to the first state\"\n}",
+        "transformers": [
+            "response-template"
+        ]
+    },
+    "serveEventListeners": [
+        {
+            "name": "deleteState",
+            "parameters": {
+                "context": "{{request.headers.X-Login}}"
+            }
+        }
+    ]
+}

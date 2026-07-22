@@ -7,7 +7,7 @@ services:
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
-            TZ: "${TIMEZONE:-Europe/Warsaw}"
+            TZ: "${TZ:-Europe/Warsaw}"
         # ports:
         #     - ${PGADMIN_PORT:-8080}:80
         hostname: "${DOMAIN:-pgadmin.localhost}"

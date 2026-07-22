@@ -1,0 +1,14 @@
+{
+    "scenarioName": "test-scenario-1",
+    "newScenarioState": "Started",
+    "request": {
+        "method": "GET",
+        "url": "/test/scenario-1-reset"
+    },
+    "response": {
+        "status": 200,
+        "jsonBody": {
+            "message": "Scenario has been reset to the first state"
+        }
+    }
+}

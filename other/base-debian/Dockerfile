@@ -20,8 +20,8 @@ ENV UID=${UID}
 ENV GID=${GID}
 
 FROM environments AS configs
-# timezone and localtime
-RUN echo "${TZ}" > /etc/timezone \
+# TZ and localtime
+RUN echo "${TZ}" > /etc/TZ \
     && ln -snf "/usr/share/zoneinfo/${TZ}" /etc/localtime
 # create user and group for app
 # hadolint ignore=SC3028

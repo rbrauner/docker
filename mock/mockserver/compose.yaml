@@ -1,0 +1,45 @@
+name: mockserver
+
+services:
+    mockserver:
+        container_name: mockserver
+        image: mockserver/mockserver
+        restart: unless-stopped
+        # user: "${UID:-1000}:${GID:-1000}"
+        environment:
+            TZ: "${TZ:-Europe/Warsaw}"
+            MOCKSERVER_INITIALIZATION_JSON_PATH: "/config/{*,**/*}.json"
+            MOCKSERVER_WATCH_INITIALIZATION_JSON: "true"
+        # ports:
+        #     - ${MOCKSERVER_PORT:-1080}:1080
+        hostname: "${DOMAIN:-mockserver.localhost}"
+        networks:
+            shared-network-internal:
+        volumes:
+            - shared-home:/home/${APP_USER:-app}
+            - ./config:/config:ro
+        labels:
+            # caddy: "${DOMAIN:-mockserver.localhost}"
+            # caddy.reverse_proxy: "{{upstreams 1080}}"
+            traefik.enable: "true"
+            traefik.http.services.mockserver.loadbalancer.server.port: "1080"
+            traefik.http.routers.mockserver.rule: "Host(`${DOMAIN:-mockserver.localhost}`)"
+            traefik.http.routers.mockserver.entrypoints: "http"
+            traefik.http.routers.mockserver.tls: "false"
+            traefik.http.routers.mockserver.service: "mockserver"
+            traefik.http.routers.mockserver.middlewares: "redirect-to-https@docker"
+            traefik.http.routers.mockserver-secure.rule: "Host(`${DOMAIN:-mockserver.localhost}`)"
+            traefik.http.routers.mockserver-secure.entrypoints: "https"
+            traefik.http.routers.mockserver-secure.tls: "true"
+            traefik.http.routers.mockserver-secure.service: "mockserver"
+        tty: true
+
+networks:
+    shared-network-internal:
+        name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
+        external: true
+
+volumes:
+    shared-home:
+        name: ${SHARED_HOME_VOLUME:-shared-home}
+        external: true

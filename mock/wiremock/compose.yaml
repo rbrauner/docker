@@ -1,0 +1,46 @@
+name: wiremock
+
+services:
+    wiremock:
+        container_name: wiremock
+        image: wiremock/wiremock
+        restart: unless-stopped
+        command: [ "--global-response-templating" ]
+        # user: "${UID:-1000}:${GID:-1000}"
+        environment:
+            TZ: "${TZ:-Europe/Warsaw}"
+        # ports:
+        #     - ${WIREMOCK_PORT:-8080}:8080
+        hostname: "${DOMAIN:-wiremock.localhost}"
+        networks:
+            shared-network-internal:
+        volumes:
+            - shared-home:/home/${APP_USER:-app}
+            - ./extensions:/var/wiremock/extensions:ro
+            - ./__files:/home/wiremock/__files:ro
+            - ./mappings:/home/wiremock/mappings:ro
+        labels:
+            # caddy: "${DOMAIN:-wiremock.localhost}"
+            # caddy.reverse_proxy: "{{upstreams 8080}}"
+            traefik.enable: "true"
+            traefik.http.services.wiremock.loadbalancer.server.port: "8080"
+            traefik.http.routers.wiremock.rule: "Host(`${DOMAIN:-wiremock.localhost}`)"
+            traefik.http.routers.wiremock.entrypoints: "http"
+            traefik.http.routers.wiremock.tls: "false"
+            traefik.http.routers.wiremock.service: "wiremock"
+            traefik.http.routers.wiremock.middlewares: "redirect-to-https@docker"
+            traefik.http.routers.wiremock-secure.rule: "Host(`${DOMAIN:-wiremock.localhost}`)"
+            traefik.http.routers.wiremock-secure.entrypoints: "https"
+            traefik.http.routers.wiremock-secure.tls: "true"
+            traefik.http.routers.wiremock-secure.service: "wiremock"
+        tty: true
+
+networks:
+    shared-network-internal:
+        name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
+        external: true
+
+volumes:
+    shared-home:
+        name: ${SHARED_HOME_VOLUME:-shared-home}
+        external: true

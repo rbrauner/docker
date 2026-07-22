@@ -7,7 +7,7 @@ services:
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
-            TZ: "${TIMEZONE:-Europe/Warsaw}"
+            TZ: "${TZ:-Europe/Warsaw}"
             CADDY_INGRESS_NETWORKS: "${CADDY_INGRESS_NETWORKS:-shared-network}"
         ports:
             - ${CADDY_LABELS_PORT_2019:-2019}:2020

@@ -10,7 +10,7 @@ services:
                 condition: service_started
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
-            TZ: "${TIMEZONE:-Europe/Warsaw}"
+            TZ: "${TZ:-Europe/Warsaw}"
             APP_URL: "${APP_URL:-https://${DOMAIN:-bookstack.localhost}}"
             APP_KEY: "${APP_KEY:-secret}"
             DB_HOST: "${DB_HOST:-mariadb}"

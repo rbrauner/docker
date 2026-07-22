@@ -1,0 +1,14 @@
+{
+    "scenarioName": "test-scenario-1",
+    "requiredScenarioState": "Second call",
+    "request": {
+        "method": "GET",
+        "url": "/test/scenario-1"
+    },
+    "response": {
+        "status": 200,
+        "jsonBody": {
+            "message": "Second call - next request will reset back to the first state"
+        }
+    }
+}

@@ -7,7 +7,7 @@ services:
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
-            TZ: "${TIMEZONE:-Europe/Warsaw}"
+            TZ: "${TZ:-Europe/Warsaw}"
             BACKUP_CRON_EXPRESSION: "${BACKUP_CRON_EXPRESSION:-0 9,15,17,21 * * *}"
             BACKUP_FILENAME: "${BACKUP_FILENAME:-backup-%Y-%m-%dT%H-%M-%S.tar.gz}"
             BACKUP_LATEST_SYMLINK: "${BACKUP_LATEST_SYMLINK:-backup-latest.tar.gz}"

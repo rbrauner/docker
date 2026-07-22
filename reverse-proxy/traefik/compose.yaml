@@ -7,7 +7,7 @@ services:
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
-            TZ: "${TIMEZONE:-Europe/Warsaw}"
+            TZ: "${TZ:-Europe/Warsaw}"
         ports:
             - ${TRAEFIK_PORT_80:-80}:80
             - ${TRAEFIK_PORT_443_TCP:-443}:443/tcp

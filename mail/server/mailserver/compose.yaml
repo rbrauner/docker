@@ -7,7 +7,7 @@ services:
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
-            TZ: "${TIMEZONE:-Europe/Warsaw}"
+            TZ: "${TZ:-Europe/Warsaw}"
             ENABLE_RSPAMD: "${ENABLE_RSPAMD:-1}"
             ENABLE_CLAMAV: "${ENABLE_CLAMAV:-1}"
             ENABLE_FAIL2BAN: "${ENABLE_FAIL2BAN:-1}"

@@ -7,7 +7,7 @@ services:
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
-            TZ: "${TIMEZONE:-Europe/Warsaw}"
+            TZ: "${TZ:-Europe/Warsaw}"
             PMA_ARBITRARY: ${PMA_ARBITRARY:-1}
         # ports:
         #     - ${PHPMYADMIN_PORT:-8080}:80

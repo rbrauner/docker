@@ -3,7 +3,7 @@ name: pgadmin
 services:
     pgadmin:
         environment:
-            TZ: "${TIMEZONE:-Europe/Warsaw}"
+            TZ: "${TZ:-Europe/Warsaw}"
             PGADMIN_DEFAULT_EMAIL: "${PGADMIN_DEFAULT_EMAIL:-user@domain.com}"
             PGADMIN_DEFAULT_PASSWORD: "${PGADMIN_DEFAULT_PASSWORD:-secret}"
         tty: true

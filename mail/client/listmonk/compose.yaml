@@ -11,7 +11,7 @@ services:
                 condition: service_started
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
-            TZ: "${TIMEZONE:-Europe/Warsaw}"
+            TZ: "${TZ:-Europe/Warsaw}"
             LISTMONK_app__address: "${LISTMONK_app__address:-0.0.0.0:9000}"
             LISTMONK_db__user: "${LISTMONK_db__user:-listmonk}"
             LISTMONK_db__password: "${LISTMONK_db__password:-listmonk}"

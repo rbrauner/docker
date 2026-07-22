@@ -1,0 +1,17 @@
+[
+    {
+        "httpRequest": {
+            "method": "GET",
+            "path": "/test/hello-world"
+        },
+        "httpResponse": {
+            "statusCode": 200,
+            "body": {
+                "string": "Hello world!"
+            },
+            "headers": {
+                "Content-Type": "text/plain"
+            }
+        }
+    }
+]
