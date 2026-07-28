@@ -1,0 +1,15 @@
+[
+    {
+        "httpRequest": {
+            "method": "GET",
+            "path": "/test/response-html"
+        },
+        "httpResponse": {
+            "statusCode": 200,
+            "headers": {
+                "Content-Type": ["text/html"]
+            },
+            "body": "<!DOCTYPE html>\n<html>\n<head><title>Test</title></head>\n<body>\n    <h1>Hello world!</h1>\n</body>\n</html>"
+        }
+    }
+]

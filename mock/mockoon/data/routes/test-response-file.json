@@ -1,0 +1,10 @@
+{
+    "method": "get",
+    "endpoint": "test/response-file",
+    "responses": [
+        {
+            "file": "/data/files/test/test.pdf",
+            "headers": { "Content-Type": "application/pdf" }
+        }
+    ]
+}

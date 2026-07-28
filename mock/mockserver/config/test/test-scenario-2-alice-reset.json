@@ -1,0 +1,25 @@
+[
+    {
+        "scenarioName": "test-scenario-2-alice",
+        "newScenarioState": "Started",
+        "httpRequest": {
+            "method": "GET",
+            "path": "/test/scenario-2-reset",
+            "headers": {
+                "X-Login": [
+                    "alice"
+                ]
+            }
+        },
+        "httpResponse": {
+            "statusCode": 200,
+            "body": {
+                "type": "JSON",
+                "json": {
+                    "login": "alice",
+                    "message": "Scenario for alice has been reset to the first state"
+                }
+            }
+        }
+    }
+]

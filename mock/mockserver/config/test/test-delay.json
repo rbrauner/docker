@@ -1,0 +1,21 @@
+[
+    {
+        "httpRequest": {
+            "method": "GET",
+            "path": "/test/delay"
+        },
+        "httpResponse": {
+            "statusCode": 200,
+            "body": {
+                "type": "JSON",
+                "json": {
+                    "message": "Response delayed by 2000ms"
+                }
+            },
+            "delay": {
+                "timeUnit": "MILLISECONDS",
+                "value": 2000
+            }
+        }
+    }
+]

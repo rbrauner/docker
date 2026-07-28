@@ -1,0 +1,10 @@
+get:
+    summary: Plain text response
+    responses:
+        "200":
+            description: OK
+            content:
+                text/plain:
+                    schema:
+                        type: string
+                    example: "Hello world!"

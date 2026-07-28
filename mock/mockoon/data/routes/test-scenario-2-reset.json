@@ -1,0 +1,20 @@
+{
+    "method": "get",
+    "endpoint": "test/scenario-2-reset",
+    "responses": [
+        {
+            "default": false,
+            "headers": { "Content-Type": "application/json" },
+            "rules": [
+                { "target": "header", "modifier": "X-Login", "value": ".+", "operator": "regex" }
+            ],
+            "body": [
+                "{{setGlobalVar (concat 'sc2_' (header 'X-Login')) 'first'}}{",
+                "  \"login\": \"{{header 'X-Login'}}\",",
+                "  \"message\": \"Scenario for {{header 'X-Login'}} has been reset to the first state\"",
+                "}"
+            ]
+        },
+        { "json": { "message": "X-Login header is required" }, "status": 400 }
+    ]
+}

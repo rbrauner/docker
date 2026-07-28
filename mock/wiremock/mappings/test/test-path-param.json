@@ -1,0 +1,22 @@
+{
+    "request": {
+        "method": "GET",
+        "urlPathTemplate": "/test/path-param/{id}",
+        "pathParameters": {
+            "id": {
+                "matches": "[0-9]+"
+            }
+        }
+    },
+    "response": {
+        "status": 200,
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "jsonBody": {
+            "id": "{{request.path.id}}",
+            "message": "Received id {{request.path.id}}"
+        },
+        "transformers": ["response-template"]
+    }
+}

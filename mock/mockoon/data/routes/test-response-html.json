@@ -1,0 +1,18 @@
+{
+    "method": "get",
+    "endpoint": "test/response-html",
+    "responses": [
+        {
+            "headers": { "Content-Type": "text/html" },
+            "body": [
+                "<!DOCTYPE html>",
+                "<html>",
+                "<head><title>Test</title></head>",
+                "<body>",
+                "    <h1>Hello world!</h1>",
+                "</body>",
+                "</html>"
+            ]
+        }
+    ]
+}

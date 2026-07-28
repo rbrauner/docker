@@ -1,0 +1,13 @@
+{
+    "request": {
+        "method": "GET",
+        "url": "/test/response-file"
+    },
+    "response": {
+        "status": 200,
+        "headers": {
+            "Content-Type": "application/pdf"
+        },
+        "bodyFileName": "test/test.pdf"
+    }
+}

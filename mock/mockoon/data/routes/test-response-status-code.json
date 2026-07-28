@@ -1,0 +1,9 @@
+{
+    "method": "get",
+    "endpoint": "test/response-status-code",
+    "responses": [
+        {
+            "status": 418
+        }
+    ]
+}

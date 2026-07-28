@@ -1,0 +1,25 @@
+[
+    {
+        "scenarioName": "test-scenario-2-bob",
+        "scenarioState": "Second call",
+        "httpRequest": {
+            "method": "GET",
+            "path": "/test/scenario-2",
+            "headers": {
+                "X-Login": [
+                    "bob"
+                ]
+            }
+        },
+        "httpResponse": {
+            "statusCode": 200,
+            "body": {
+                "type": "JSON",
+                "json": {
+                    "login": "bob",
+                    "message": "Second call for bob - next request will reset back to the first state"
+                }
+            }
+        }
+    }
+]

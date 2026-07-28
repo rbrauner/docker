@@ -39,11 +39,13 @@ mkcert -cert-file reverse-proxy/traefik/certs/local-cert.pem -key-file reverse-p
     "locust.localhost" "*.locust.localhost" \
     "macos.localhost" "*.macos.localhost" \
     "mailpit.localhost" "*.mailpit.localhost" \
+    "mockoon.localhost" "*.mockoon.localhost" \
     "mockserver.localhost" "*.mockserver.localhost" \
     "open-webui.localhost" "*.open-webui.localhost" \
     "pgadmin.localhost" "*.pgadmin.localhost" \
     "phpmyadmin.localhost" "*.phpmyadmin.localhost" \
     "portainer.localhost" "*.portainer.localhost" \
+    "prism.localhost" "*.prism.localhost" \
     "rabbitmq.localhost" "*.rabbitmq.localhost" \
     "traefik.localhost" "*.traefik.localhost" \
     "whoami.localhost" "*.whoami.localhost" \

@@ -1,0 +1,13 @@
+{
+    "request": {
+        "method": "GET",
+        "url": "/test/response-html"
+    },
+    "response": {
+        "status": 200,
+        "headers": {
+            "Content-Type": "text/html"
+        },
+        "body": "<!DOCTYPE html>\n<html>\n<head><title>Test</title></head>\n<body>\n    <h1>Hello world!</h1>\n</body>\n</html>"
+    }
+}

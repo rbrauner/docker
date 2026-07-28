@@ -1,0 +1,19 @@
+[
+    {
+        "scenarioName": "test-scenario-1",
+        "newScenarioState": "Started",
+        "httpRequest": {
+            "method": "GET",
+            "path": "/test/scenario-1-reset"
+        },
+        "httpResponse": {
+            "statusCode": 200,
+            "body": {
+                "type": "JSON",
+                "json": {
+                    "message": "Scenario has been reset to the first state"
+                }
+            }
+        }
+    }
+]

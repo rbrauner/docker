@@ -1,0 +1,14 @@
+{
+    "method": "post",
+    "endpoint": "test/body-match",
+    "responses": [
+        {
+            "json": { "message": "Body matched: product=book" },
+            "default": false,
+            "rules": [
+                { "target": "body", "modifier": "product", "value": "book", "operator": "equals" }
+            ]
+        },
+        { "json": { "message": "Body did not match" }, "status": 404 }
+    ]
+}

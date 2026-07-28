@@ -1,0 +1,26 @@
+[
+    {
+        "scenarioName": "test-scenario-2-alice",
+        "scenarioState": "Started",
+        "newScenarioState": "Second call",
+        "httpRequest": {
+            "method": "GET",
+            "path": "/test/scenario-2",
+            "headers": {
+                "X-Login": [
+                    "alice"
+                ]
+            }
+        },
+        "httpResponse": {
+            "statusCode": 200,
+            "body": {
+                "type": "JSON",
+                "json": {
+                    "login": "alice",
+                    "message": "First call for alice - next request will return the second state"
+                }
+            }
+        }
+    }
+]

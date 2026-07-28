@@ -1,0 +1,16 @@
+{
+    "method": "get",
+    "endpoint": "test/response-faker-data",
+    "responses": [
+        {
+            "headers": { "Content-Type": "application/json" },
+            "body": [
+                "{",
+                "  \"firstName\": \"{{faker 'person.firstName'}}\",",
+                "  \"lastName\": \"{{faker 'person.lastName'}}\",",
+                "  \"email\": \"{{faker 'internet.email'}}\"",
+                "}"
+            ]
+        }
+    ]
+}

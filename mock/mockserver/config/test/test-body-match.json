@@ -1,0 +1,24 @@
+[
+    {
+        "httpRequest": {
+            "method": "POST",
+            "path": "/test/body-match",
+            "body": {
+                "type": "JSON",
+                "json": {
+                    "product": "book"
+                },
+                "matchType": "ONLY_MATCHING_FIELDS"
+            }
+        },
+        "httpResponse": {
+            "statusCode": 200,
+            "body": {
+                "type": "JSON",
+                "json": {
+                    "message": "Body matched: product=book"
+                }
+            }
+        }
+    }
+]

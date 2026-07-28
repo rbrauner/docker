@@ -1,0 +1,19 @@
+get:
+    summary: "Multiple examples, pick one with 'Prefer: example=basic'"
+    responses:
+        "200":
+            description: OK
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            tier:
+                                type: string
+                    examples:
+                        premium:
+                            value:
+                                tier: "premium"
+                        basic:
+                            value:
+                                tier: "basic"

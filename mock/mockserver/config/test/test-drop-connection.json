@@ -1,0 +1,11 @@
+[
+    {
+        "httpRequest": {
+            "method": "GET",
+            "path": "/test/drop-connection"
+        },
+        "httpError": {
+            "dropConnection": true
+        }
+    }
+]

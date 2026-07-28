@@ -1,0 +1,17 @@
+{
+    "request": {
+        "method": "GET",
+        "urlPath": "/test/query-match",
+        "queryParameters": {
+            "type": {
+                "equalTo": "premium"
+            }
+        }
+    },
+    "response": {
+        "status": 200,
+        "jsonBody": {
+            "message": "Matched query parameter type=premium"
+        }
+    }
+}

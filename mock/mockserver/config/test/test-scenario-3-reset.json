@@ -1,0 +1,17 @@
+[
+    {
+        "httpRequest": {
+            "method": "GET",
+            "path": "/test/scenario-3-reset",
+            "headers": {
+                "X-Login": [
+                    ".+"
+                ]
+            }
+        },
+        "httpResponseTemplate": {
+            "templateType": "VELOCITY",
+            "template": "#set($login = $request.headers[\"X-Login\"][0])\n#set($ignore = $scenario.set($login, \"Started\"))\n{ \"statusCode\": 200, \"headers\": { \"Content-Type\": [ \"application/json\" ] }, \"body\": \"{ \\\"login\\\": \\\"$login\\\", \\\"message\\\": \\\"Scenario for $login has been reset to the first state\\\" }\" }"
+        }
+    }
+]

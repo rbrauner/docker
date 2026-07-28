@@ -1,0 +1,46 @@
+name: mockoon
+
+services:
+    mockoon:
+        container_name: mockoon
+        image: mockoon/cli:latest
+        restart: unless-stopped
+        # NOTE: the mockoon/cli image already has "start" in its entrypoint,
+        # so we pass only the flags here.
+        command: ["--data", "/data/environment.json", "--port", "3000"]
+        # user: "${UID:-1000}:${GID:-1000}"
+        environment:
+            TZ: "${TZ:-Europe/Warsaw}"
+        # ports:
+        #     - ${MOCKOON_PORT:-3000}:3000
+        hostname: "${DOMAIN:-mockoon.localhost}"
+        networks:
+            shared-network-internal:
+        volumes:
+            - shared-home:/home/${APP_USER:-app}
+            - ./data:/data:ro
+        labels:
+            # caddy: "${DOMAIN:-mockoon.localhost}"
+            # caddy.reverse_proxy: "{{upstreams 3000}}"
+            traefik.enable: "true"
+            traefik.http.services.mockoon.loadbalancer.server.port: "3000"
+            traefik.http.routers.mockoon.rule: "Host(`${DOMAIN:-mockoon.localhost}`)"
+            traefik.http.routers.mockoon.entrypoints: "http"
+            traefik.http.routers.mockoon.tls: "false"
+            traefik.http.routers.mockoon.service: "mockoon"
+            traefik.http.routers.mockoon.middlewares: "redirect-to-https@docker"
+            traefik.http.routers.mockoon-secure.rule: "Host(`${DOMAIN:-mockoon.localhost}`)"
+            traefik.http.routers.mockoon-secure.entrypoints: "https"
+            traefik.http.routers.mockoon-secure.tls: "true"
+            traefik.http.routers.mockoon-secure.service: "mockoon"
+        tty: true
+
+networks:
+    shared-network-internal:
+        name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
+        external: true
+
+volumes:
+    shared-home:
+        name: ${SHARED_HOME_VOLUME:-shared-home}
+        external: true
