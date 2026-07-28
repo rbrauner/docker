@@ -1,0 +1,20 @@
+[
+    {
+        "httpRequest": {
+            "method": "GET",
+            "path": "/test/query-match",
+            "queryStringParameters": {
+                "type": ["premium"]
+            }
+        },
+        "httpResponse": {
+            "statusCode": 200,
+            "body": {
+                "type": "JSON",
+                "json": {
+                    "message": "Matched query parameter type=premium"
+                }
+            }
+        }
+    }
+]

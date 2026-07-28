@@ -1,0 +1,16 @@
+{
+    "method": "get",
+    "endpoint": "test/scenario-1",
+    "documentation": "Two-state scenario stored in global var sc1. first -> second, then stays on second until /test/scenario-1-reset is called (does NOT loop).",
+    "responses": [
+        {
+            "headers": { "Content-Type": "application/json" },
+            "body": [
+                "{{setVar 'state' (getGlobalVar 'sc1' null 'first')}}{{#switch (getVar 'state')}}{{#case 'first'}}{{setGlobalVar 'sc1' 'second'}}{{/case}}{{/switch}}{",
+                "  \"state\": \"{{getVar 'state'}}\",",
+                "  \"message\": \"{{#switch (getVar 'state')}}{{#case 'first'}}First call - next request will return the second state{{/case}}{{#default}}Second call - call /test/scenario-1-reset to reset back to the first state{{/default}}{{/switch}}\"",
+                "}"
+            ]
+        }
+    ]
+}

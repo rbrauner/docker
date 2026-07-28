@@ -1,0 +1,25 @@
+get:
+    summary: Path parameter (Prism returns the example, it does NOT echo the input)
+    parameters:
+        -
+            name: id
+            in: path
+            required: true
+            schema:
+                type: string
+                pattern: "^[0-9]+$"
+    responses:
+        "200":
+            description: OK
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            id:
+                                type: string
+                            message:
+                                type: string
+                    example:
+                        id: "42"
+                        message: "Received id (static example)"

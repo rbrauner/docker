@@ -1,0 +1,22 @@
+{
+    "method": "get",
+    "endpoint": "test/scenario-3",
+    "documentation": "Same as scenario-2 but an independent store (global var sc3_<login>).",
+    "responses": [
+        {
+            "default": false,
+            "headers": { "Content-Type": "application/json" },
+            "rules": [
+                { "target": "header", "modifier": "X-Login", "value": ".+", "operator": "regex" }
+            ],
+            "body": [
+                "{{setVar 'login' (header 'X-Login')}}{{setVar 'key' (concat 'sc3_' (getVar 'login'))}}{{setVar 'state' (getGlobalVar (getVar 'key') null 'first')}}{{#switch (getVar 'state')}}{{#case 'first'}}{{setGlobalVar (getVar 'key') 'second'}}{{/case}}{{/switch}}{",
+                "  \"login\": \"{{getVar 'login'}}\",",
+                "  \"state\": \"{{getVar 'state'}}\",",
+                "  \"message\": \"{{#switch (getVar 'state')}}{{#case 'first'}}First call for {{getVar 'login'}} - next request will return the second state{{/case}}{{#default}}Second call for {{getVar 'login'}} - call the reset endpoint to start over{{/default}}{{/switch}}\"",
+                "}"
+            ]
+        },
+        { "json": { "message": "X-Login header is required" }, "status": 400 }
+    ]
+}

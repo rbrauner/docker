@@ -1,0 +1,15 @@
+{
+    "method": "get",
+    "endpoint": "test/priority",
+    "documentation": "Mockoon has no explicit priority field; precedence is the response ORDER - the first response whose rules match wins. Call with ?mode=high to hit the higher-priority response, otherwise the default (lower-priority) one is served.",
+    "responses": [
+        {
+            "json": { "message": "High-priority response (first matching rule wins)" },
+            "default": false,
+            "rules": [
+                { "target": "query", "modifier": "mode", "value": "high", "operator": "equals" }
+            ]
+        },
+        { "json": { "message": "Default (lower-priority) response" } }
+    ]
+}

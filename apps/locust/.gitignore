@@ -1,5 +1,4 @@
 ###> rbrauner/docker ###
-.env
-.idea
-compose.override.yaml
+config/__pycache__
+config/locustfile.py
 ###< rbrauner/docker ###

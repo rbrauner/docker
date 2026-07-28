@@ -1,0 +1,25 @@
+[
+    {
+        "scenarioName": "test-scenario-2-bob",
+        "newScenarioState": "Started",
+        "httpRequest": {
+            "method": "GET",
+            "path": "/test/scenario-2-reset",
+            "headers": {
+                "X-Login": [
+                    "bob"
+                ]
+            }
+        },
+        "httpResponse": {
+            "statusCode": 200,
+            "body": {
+                "type": "JSON",
+                "json": {
+                    "login": "bob",
+                    "message": "Scenario for bob has been reset to the first state"
+                }
+            }
+        }
+    }
+]

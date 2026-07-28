@@ -1,0 +1,19 @@
+get:
+    summary: Custom response headers and cookies
+    responses:
+        "200":
+            description: OK
+            headers:
+                Set-Cookie:
+                    schema:
+                        type: string
+                    example: "session_id=91837492837"
+                Cache-Control:
+                    schema:
+                        type: string
+                    example: "no-cache"
+            content:
+                text/plain:
+                    schema:
+                        type: string
+                    example: "headers set"

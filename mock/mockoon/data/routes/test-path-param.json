@@ -1,0 +1,15 @@
+{
+    "method": "get",
+    "endpoint": "test/path-param/:id",
+    "responses": [
+        {
+            "headers": { "Content-Type": "application/json" },
+            "body": [
+                "{",
+                "  \"id\": \"{{urlParam 'id'}}\",",
+                "  \"message\": \"Received id {{urlParam 'id'}}\"",
+                "}"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,13 @@
+{
+    "request": {
+        "method": "GET",
+        "url": "/test/delay"
+    },
+    "response": {
+        "status": 200,
+        "jsonBody": {
+            "message": "Response delayed by 2000ms"
+        },
+        "fixedDelayMilliseconds": 2000
+    }
+}

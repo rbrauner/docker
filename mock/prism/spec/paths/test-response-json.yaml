@@ -1,0 +1,16 @@
+get:
+    summary: Static JSON response
+    responses:
+        "200":
+            description: OK
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            arbitrary_json:
+                                type: array
+                                items:
+                                    type: integer
+                    example:
+                        arbitrary_json: [ 1, 2, 3 ]

@@ -1,0 +1,10 @@
+get:
+    summary: HTML response
+    responses:
+        "200":
+            description: OK
+            content:
+                text/html:
+                    schema:
+                        type: string
+                    example: "<!DOCTYPE html><html><head><title>Test</title></head><body><h1>Hello world!</h1></body></html>"

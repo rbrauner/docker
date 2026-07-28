@@ -1,5 +1,3 @@
 ###> rbrauner/docker ###
-.env
-.idea
-compose.override.yaml
+data/environment.json
 ###< rbrauner/docker ###

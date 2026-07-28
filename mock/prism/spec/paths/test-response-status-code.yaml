@@ -1,0 +1,25 @@
+get:
+    summary: "Multiple status codes, force 500 with 'Prefer: code=500'"
+    responses:
+        "200":
+            description: OK
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            status:
+                                type: string
+                    example:
+                        status: "ok"
+        "500":
+            description: Server error
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            error:
+                                type: string
+                    example:
+                        error: "something went wrong"

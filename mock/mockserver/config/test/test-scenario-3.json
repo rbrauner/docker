@@ -1,0 +1,17 @@
+[
+    {
+        "httpRequest": {
+            "method": "GET",
+            "path": "/test/scenario-3",
+            "headers": {
+                "X-Login": [
+                    ".+"
+                ]
+            }
+        },
+        "httpResponseTemplate": {
+            "templateType": "VELOCITY",
+            "template": "#set($login = $request.headers[\"X-Login\"][0])\n#if($scenario.get($login) == \"second\")\n{ \"statusCode\": 200, \"headers\": { \"Content-Type\": [ \"application/json\" ] }, \"body\": \"{ \\\"login\\\": \\\"$login\\\", \\\"message\\\": \\\"Second call for $login - call /test/scenario-3-reset to reset back to the first state\\\" }\" }\n#else\n#set($ignore = $scenario.set($login, \"second\"))\n{ \"statusCode\": 200, \"headers\": { \"Content-Type\": [ \"application/json\" ] }, \"body\": \"{ \\\"login\\\": \\\"$login\\\", \\\"message\\\": \\\"First call for $login - next request will return the second state\\\" }\" }\n#end"
+        }
+    }
+]

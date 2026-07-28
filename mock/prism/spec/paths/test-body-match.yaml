@@ -1,0 +1,24 @@
+post:
+    summary: Request body validation (422 when the schema is not satisfied)
+    requestBody:
+        required: true
+        content:
+            application/json:
+                schema:
+                    type: object
+                    required: [ product ]
+                    properties:
+                        product:
+                            type: string
+    responses:
+        "200":
+            description: OK
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            message:
+                                type: string
+                    example:
+                        message: "Body is valid"

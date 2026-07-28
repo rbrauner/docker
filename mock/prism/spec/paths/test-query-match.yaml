@@ -1,0 +1,22 @@
+get:
+    summary: Query parameter matching / validation
+    parameters:
+        -
+            name: type
+            in: query
+            required: true
+            schema:
+                type: string
+                enum: [ premium, basic ]
+    responses:
+        "200":
+            description: OK
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            message:
+                                type: string
+                    example:
+                        message: "Matched query parameter type"

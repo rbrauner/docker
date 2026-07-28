@@ -1,0 +1,7 @@
+{
+    "method": "get",
+    "endpoint": "test/response-plain-text",
+    "responses": [
+        { "body": "Hello world!", "headers": { "Content-Type": "text/plain" } }
+    ]
+}

@@ -1,0 +1,13 @@
+{
+    "method": "get",
+    "endpoint": "test/response-headers",
+    "responses": [
+        {
+            "headers": {
+                "Content-Type": "text/plain",
+                "Set-Cookie": ["session_id=91837492837", "split_test_group=B"],
+                "Cache-Control": "no-cache"
+            }
+        }
+    ]
+}

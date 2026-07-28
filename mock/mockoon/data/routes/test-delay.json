@@ -1,0 +1,7 @@
+{
+    "method": "get",
+    "endpoint": "test/delay",
+    "responses": [
+        { "json": { "message": "Response delayed by 2000ms" }, "latency": 2000 }
+    ]
+}

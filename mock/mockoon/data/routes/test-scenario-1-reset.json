@@ -1,0 +1,15 @@
+{
+    "method": "get",
+    "endpoint": "test/scenario-1-reset",
+    "documentation": "Resets the scenario-1 global var back to the first state.",
+    "responses": [
+        {
+            "headers": { "Content-Type": "application/json" },
+            "body": [
+                "{{setGlobalVar 'sc1' 'first'}}{",
+                "  \"message\": \"Scenario has been reset to the first state\"",
+                "}"
+            ]
+        }
+    ]
+}

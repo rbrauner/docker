@@ -1,0 +1,19 @@
+get:
+    summary: Dynamic data from schema (run Prism with -d to generate random values)
+    responses:
+        "200":
+            description: OK
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            firstName:
+                                type: string
+                                x-faker: person.firstName
+                            lastName:
+                                type: string
+                                x-faker: person.lastName
+                            email:
+                                type: string
+                                format: email

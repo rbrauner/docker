@@ -1,0 +1,30 @@
+openapi: 3.0.3
+info:
+    title: Prism test mock
+    version: 1.0.0
+    description: >
+        Analogous /test/* endpoints for Prism. Each endpoint lives in its own
+        file under ./paths and is stitched in here via $ref. Prism resolves the
+        external references when it loads the root document.
+
+paths:
+    /test/response-plain-text:
+        $ref: "./paths/test-response-plain-text.yaml"
+    /test/response-json:
+        $ref: "./paths/test-response-json.yaml"
+    /test/response-html:
+        $ref: "./paths/test-response-html.yaml"
+    /test/response-headers:
+        $ref: "./paths/test-response-headers.yaml"
+    /test/response-faker-data:
+        $ref: "./paths/test-response-faker-data.yaml"
+    /test/response-status-code:
+        $ref: "./paths/test-response-status-code.yaml"
+    /test/query-match:
+        $ref: "./paths/test-query-match.yaml"
+    /test/path-param/{id}:
+        $ref: "./paths/test-path-param.yaml"
+    /test/body-match:
+        $ref: "./paths/test-body-match.yaml"
+    /test/multi-example:
+        $ref: "./paths/test-multi-example.yaml"
