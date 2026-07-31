@@ -1,0 +1,45 @@
+name: cloudbeaver
+
+services:
+    cloudbeaver:
+        container_name: cloudbeaver
+        image: dbeaver/cloudbeaver
+        restart: unless-stopped
+        # user: "${UID:-1000}:${GID:-1000}"
+        environment:
+            TZ: "${TZ:-Europe/Warsaw}"
+        # ports:
+        #     - ${CLOUDBEAVER_PORT:-8978}:8978
+        hostname: "${DOMAIN:-cloudbeaver.localhost}"
+        networks:
+            shared-network-internal:
+        volumes:
+            - shared-home:/home/${APP_USER:-app}
+            - cloudbeaver:/opt/cloudbeaver/workspace
+        labels:
+            # caddy: "${DOMAIN:-cloudbeaver.localhost}"
+            # caddy.reverse_proxy: "{{upstreams 8978}}"
+            traefik.enable: "true"
+            traefik.http.services.cloudbeaver.loadbalancer.server.port: "8978"
+            traefik.http.routers.cloudbeaver.rule: "Host(`${DOMAIN:-cloudbeaver.localhost}`)"
+            traefik.http.routers.cloudbeaver.entrypoints: "http"
+            traefik.http.routers.cloudbeaver.tls: "false"
+            traefik.http.routers.cloudbeaver.middlewares: "redirect-to-https@docker"
+            traefik.http.routers.cloudbeaver.service: "cloudbeaver"
+            traefik.http.routers.cloudbeaver-secure.rule: "Host(`${DOMAIN:-cloudbeaver.localhost}`)"
+            traefik.http.routers.cloudbeaver-secure.entrypoints: "https"
+            traefik.http.routers.cloudbeaver-secure.tls: "true"
+            traefik.http.routers.cloudbeaver-secure.service: "cloudbeaver"
+        tty: true
+
+networks:
+    shared-network-internal:
+        name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
+        external: true
+
+volumes:
+    shared-home:
+        name: ${SHARED_HOME_VOLUME:-shared-home}
+        external: true
+    cloudbeaver:
+        name: cloudbeaver

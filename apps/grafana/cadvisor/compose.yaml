@@ -1,0 +1,29 @@
+name: cadvisor
+
+services:
+    cadvisor:
+        container_name: cadvisor
+        image: gcr.io/cadvisor/cadvisor
+        restart: unless-stopped
+        privileged: true
+        environment:
+            TZ: "${TZ:-Europe/Warsaw}"
+        # ports:
+        #     - ${CADVISOR_PORT:-8080}:8080
+        hostname: cadvisor
+        networks:
+            shared-network-internal:
+        devices:
+            - /dev/kmsg
+        volumes:
+            - /:/rootfs:ro
+            - /var/run:/var/run:ro
+            - /sys:/sys:ro
+            - /var/lib/docker/:/var/lib/docker:ro
+            - /dev/disk/:/dev/disk:ro
+        tty: true
+
+networks:
+    shared-network-internal:
+        name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
+        external: true

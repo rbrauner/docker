@@ -1,0 +1,49 @@
+name: prometheus
+
+services:
+    prometheus:
+        container_name: prometheus
+        image: prom/prometheus
+        restart: unless-stopped
+        # user: "${UID:-1000}:${GID:-1000}"
+        command:
+            - "--config.file=/etc/prometheus/prometheus.yml"
+            - "--storage.tsdb.path=/prometheus"
+        environment:
+            TZ: "${TZ:-Europe/Warsaw}"
+        # ports:
+        #     - ${PROMETHEUS_PORT:-9090}:9090
+        hostname: "${DOMAIN:-prometheus.localhost}"
+        networks:
+            shared-network-internal:
+        volumes:
+            - shared-home:/home/${APP_USER:-app}
+            - ./config/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+            - prometheus:/prometheus
+        labels:
+            # caddy: "${DOMAIN:-prometheus.localhost}"
+            # caddy.reverse_proxy: "{{upstreams 9090}}"
+            traefik.enable: "true"
+            traefik.http.services.prometheus.loadbalancer.server.port: "9090"
+            traefik.http.routers.prometheus.rule: "Host(`${DOMAIN:-prometheus.localhost}`)"
+            traefik.http.routers.prometheus.entrypoints: "http"
+            traefik.http.routers.prometheus.tls: "false"
+            traefik.http.routers.prometheus.service: "prometheus"
+            traefik.http.routers.prometheus.middlewares: "redirect-to-https@docker"
+            traefik.http.routers.prometheus-secure.rule: "Host(`${DOMAIN:-prometheus.localhost}`)"
+            traefik.http.routers.prometheus-secure.entrypoints: "https"
+            traefik.http.routers.prometheus-secure.tls: "true"
+            traefik.http.routers.prometheus-secure.service: "prometheus"
+        tty: true
+
+networks:
+    shared-network-internal:
+        name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
+        external: true
+
+volumes:
+    shared-home:
+        name: ${SHARED_HOME_VOLUME:-shared-home}
+        external: true
+    prometheus:
+        name: prometheus
