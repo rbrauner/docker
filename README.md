@@ -30,6 +30,7 @@ mkcert -cert-file reverse-proxy/traefik/certs/local-cert.pem -key-file reverse-p
     "adminer.localhost" "*.adminer.localhost" \
     "affine.localhost" "*.affine.localhost" \
     "bookstack.localhost" "*.bookstack.localhost" \
+    "cloudbeaver.localhost" "*.cloudbeaver.localhost" \
     "crontab-ui.localhost" "*.crontab-ui.localhost" \
     "example.localhost" "*.example.localhost" \
     "grafana.localhost" "*.grafana.localhost" \
@@ -46,6 +47,7 @@ mkcert -cert-file reverse-proxy/traefik/certs/local-cert.pem -key-file reverse-p
     "phpmyadmin.localhost" "*.phpmyadmin.localhost" \
     "portainer.localhost" "*.portainer.localhost" \
     "prism.localhost" "*.prism.localhost" \
+    "prometheus.localhost" "*.prometheus.localhost" \
     "rabbitmq.localhost" "*.rabbitmq.localhost" \
     "traefik.localhost" "*.traefik.localhost" \
     "whoami.localhost" "*.whoami.localhost" \

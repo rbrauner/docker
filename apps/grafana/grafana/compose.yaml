@@ -16,6 +16,7 @@ services:
         volumes:
             - shared-home:/home/${APP_USER:-app}
             - grafana:/var/lib/grafana
+            - ./provisioning:/etc/grafana/provisioning:ro
         labels:
             # caddy: "${DOMAIN:-grafana.localhost}"
             # caddy.reverse_proxy: "{{upstreams http}}"
