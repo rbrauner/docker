@@ -6,6 +6,9 @@ services:
         image: lucaslorentz/caddy-docker-proxy:ci
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
+        user: "root"
+        security_opt:
+            - label=disable
         environment:
             TZ: "${TZ:-Europe/Warsaw}"
             CADDY_INGRESS_NETWORKS: "${CADDY_INGRESS_NETWORKS:-shared-network}"
