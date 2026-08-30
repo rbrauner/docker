@@ -1,0 +1,23 @@
+{
+    auto_https off
+    skip_install_trust
+    frankenphp
+}
+
+:80 {
+    root /var/www/html/public
+    encode zstd br gzip
+    php_server {
+        index adminer.php
+    }
+    file_server
+}
+
+:443 {
+    root /var/www/html/public
+    encode zstd br gzip
+    php_server {
+        index adminer.php
+    }
+    file_server
+}

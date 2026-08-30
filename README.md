@@ -30,6 +30,7 @@ mkcert -cert-file reverse-proxy/traefik/certs/local-cert.pem -key-file reverse-p
     "adminer.localhost" "*.adminer.localhost" \
     "affine.localhost" "*.affine.localhost" \
     "bookstack.localhost" "*.bookstack.localhost" \
+    "buggregator.localhost" "*.buggregator.localhost" \
     "cloudbeaver.localhost" "*.cloudbeaver.localhost" \
     "crontab-ui.localhost" "*.crontab-ui.localhost" \
     "example.localhost" "*.example.localhost" \
@@ -49,6 +50,10 @@ mkcert -cert-file reverse-proxy/traefik/certs/local-cert.pem -key-file reverse-p
     "prism.localhost" "*.prism.localhost" \
     "prometheus.localhost" "*.prometheus.localhost" \
     "rabbitmq.localhost" "*.rabbitmq.localhost" \
+    "scripts-php-disk-space-info.localhost" "*.scripts-php-disk-space-info.localhost" \
+    "scripts-php-opcache-reset.localhost" "*.scripts-php-opcache-reset.localhost" \
+    "scripts-php-phpinfo.localhost" "*.scripts-php-phpinfo.localhost" \
+    "scripts-php-pwd.localhost" "*.scripts-php-pwd.localhost" \
     "traefik.localhost" "*.traefik.localhost" \
     "whoami.localhost" "*.whoami.localhost" \
     "wiremock.localhost" "*.wiremock.localhost"

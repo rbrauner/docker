@@ -1,0 +1,60 @@
+name: scripts-php-disk-space-info
+
+services:
+    php:
+        container_name: scripts-php-disk-space-info-php
+        build:
+            context: .
+            dockerfile: ./Dockerfile
+            target: app
+            network: host
+            args:
+                TZ: ${TZ:-Europe/Warsaw}
+                USER: ${APP_USER:-app}
+                GROUP: ${APP_GROUP:-app}
+                UID: ${UID:-1000}
+                GID: ${GID:-1000}
+        restart: unless-stopped
+        environment:
+            HOME: /home/${APP_USER:-app}
+            PHP_IDE_CONFIG: "serverName=scripts-php-disk-space-info.localhost"
+        tty: true
+        networks:
+            shared-network-internal:
+            shared-network:
+        volumes:
+            - caddy-data:/data
+            - caddy-config:/config
+            - shared-home:/home/${APP_USER:-app}
+            - .:/var/www/html
+            - ./configs/php.ini:/usr/local/etc/php/php.ini
+            - ./configs/Caddyfile:/etc/frankenphp/Caddyfile
+        labels:
+            traefik.enable: true
+            traefik.http.services.scripts-php-disk-space-info.loadbalancer.server.port: 80
+            traefik.http.services.scripts-php-disk-space-info-secure.loadbalancer.server.port: 443
+            traefik.http.routers.scripts-php-disk-space-info.rule: Host(`${DOMAIN:-scripts-php-disk-space-info.localhost}`)
+            traefik.http.routers.scripts-php-disk-space-info.entrypoints: http
+            traefik.http.routers.scripts-php-disk-space-info.tls: false
+            traefik.http.routers.scripts-php-disk-space-info.service: scripts-php-disk-space-info
+            traefik.http.routers.scripts-php-disk-space-info-secure.rule: Host(`${DOMAIN:-scripts-php-disk-space-info.localhost}`)
+            traefik.http.routers.scripts-php-disk-space-info-secure.entrypoints: https
+            traefik.http.routers.scripts-php-disk-space-info-secure.tls: true
+            traefik.http.routers.scripts-php-disk-space-info-secure.service: scripts-php-disk-space-info-secure
+
+networks:
+    shared-network-internal:
+        name: ${SHARED_NETWORK_NAME:-shared-network-internal}
+        external: true
+    shared-network:
+        name: ${SHARED_NETWORK_NAME:-shared-network}
+        external: true
+
+volumes:
+    shared-home:
+        name: ${SHARED_HOME_VOLUME:-shared-home}
+        external: true
+    caddy-data:
+        name: scripts-php-disk-space-info-caddy-data
+    caddy-config:
+        name: scripts-php-disk-space-info-caddy-config

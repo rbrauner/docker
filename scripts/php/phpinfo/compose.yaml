@@ -1,8 +1,8 @@
-name: adminer
+name: scripts-php-phpinfo
 
 services:
     php:
-        container_name: adminer-php
+        container_name: scripts-php-phpinfo-php
         build:
             context: .
             dockerfile: ./Dockerfile
@@ -17,7 +17,7 @@ services:
         restart: unless-stopped
         environment:
             HOME: /home/${APP_USER:-app}
-            PHP_IDE_CONFIG: "serverName=adminer.localhost"
+            PHP_IDE_CONFIG: "serverName=scripts-php-phpinfo.localhost"
         tty: true
         networks:
             shared-network-internal:
@@ -31,16 +31,16 @@ services:
             - ./configs/Caddyfile:/etc/frankenphp/Caddyfile
         labels:
             traefik.enable: true
-            traefik.http.services.adminer.loadbalancer.server.port: 80
-            traefik.http.services.adminer-secure.loadbalancer.server.port: 443
-            traefik.http.routers.adminer.rule: Host(`${DOMAIN:-adminer.localhost}`)
-            traefik.http.routers.adminer.entrypoints: http
-            traefik.http.routers.adminer.tls: false
-            traefik.http.routers.adminer.service: adminer
-            traefik.http.routers.adminer-secure.rule: Host(`${DOMAIN:-adminer.localhost}`)
-            traefik.http.routers.adminer-secure.entrypoints: https
-            traefik.http.routers.adminer-secure.tls: true
-            traefik.http.routers.adminer-secure.service: adminer-secure
+            traefik.http.services.scripts-php-phpinfo.loadbalancer.server.port: 80
+            traefik.http.services.scripts-php-phpinfo-secure.loadbalancer.server.port: 443
+            traefik.http.routers.scripts-php-phpinfo.rule: Host(`${DOMAIN:-scripts-php-phpinfo.localhost}`)
+            traefik.http.routers.scripts-php-phpinfo.entrypoints: http
+            traefik.http.routers.scripts-php-phpinfo.tls: false
+            traefik.http.routers.scripts-php-phpinfo.service: scripts-php-phpinfo
+            traefik.http.routers.scripts-php-phpinfo-secure.rule: Host(`${DOMAIN:-scripts-php-phpinfo.localhost}`)
+            traefik.http.routers.scripts-php-phpinfo-secure.entrypoints: https
+            traefik.http.routers.scripts-php-phpinfo-secure.tls: true
+            traefik.http.routers.scripts-php-phpinfo-secure.service: scripts-php-phpinfo-secure
 
 networks:
     shared-network-internal:
@@ -55,6 +55,6 @@ volumes:
         name: ${SHARED_HOME_VOLUME:-shared-home}
         external: true
     caddy-data:
-        name: adminer-caddy-data
+        name: scripts-php-phpinfo-caddy-data
     caddy-config:
-        name: adminer-caddy-config
+        name: scripts-php-phpinfo-caddy-config

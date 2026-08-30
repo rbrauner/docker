@@ -1,0 +1,49 @@
+name: buggregator
+
+services:
+    buggregator:
+        container_name: buggregator
+        image: ghcr.io/buggregator/server:latest
+        restart: unless-stopped
+        # user: "${UID:-1000}:${GID:-1000}"
+        environment:
+            TZ: "${TZ:-Europe/Warsaw}"
+            DATABASE_DSN: "${DATABASE_DSN:-/data/data.db}"
+            STORAGE_MODE: "${STORAGE_MODE:-filesystem}"
+            STORAGE_PATH: "${STORAGE_PATH:-/data/storage}"
+            MCP_ENABLED: "${MCP_ENABLED:-true}"
+        # ports:
+        #     - ${BUGGREGATOR_PORT:-8000}:8000
+        hostname: "${DOMAIN:-buggregator.localhost}"
+        networks:
+            shared-network-internal:
+        volumes:
+            - shared-home:/home/${APP_USER:-app}
+            - buggregator-data:/data
+        labels:
+            # caddy: "${DOMAIN:-buggregator.localhost}"
+            # caddy.reverse_proxy: "{{upstreams 8000}}"
+            traefik.enable: "true"
+            traefik.http.services.buggregator.loadbalancer.server.port: "8000"
+            traefik.http.routers.buggregator.rule: "Host(`${DOMAIN:-buggregator.localhost}`)"
+            traefik.http.routers.buggregator.entrypoints: "http"
+            traefik.http.routers.buggregator.tls: "false"
+            traefik.http.routers.buggregator.middlewares: "redirect-to-https@docker"
+            traefik.http.routers.buggregator.service: "buggregator"
+            traefik.http.routers.buggregator-secure.rule: "Host(`${DOMAIN:-buggregator.localhost}`)"
+            traefik.http.routers.buggregator-secure.entrypoints: "https"
+            traefik.http.routers.buggregator-secure.tls: "true"
+            traefik.http.routers.buggregator-secure.service: "buggregator"
+        tty: true
+
+networks:
+    shared-network-internal:
+        name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
+        external: true
+
+volumes:
+    shared-home:
+        name: ${SHARED_HOME_VOLUME:-shared-home}
+        external: true
+    buggregator-data:
+        name: buggregator-data
