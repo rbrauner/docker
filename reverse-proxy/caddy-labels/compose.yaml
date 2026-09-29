@@ -18,7 +18,7 @@ services:
             - ${CADDY_LABELS_PORT_443_TCP:-443}:443/tcp
             - ${CADDY_LABELS_PORT_443_UDP:-443}:443/udp
         networks:
-            shared-network-internal:
+            shared-network:
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock:ro
             - shared-home:/home/${APP_USER:-app}
@@ -31,8 +31,8 @@ services:
         tty: true
 
 networks:
-    shared-network-internal:
-        name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
+    shared-network:
+        name: ${SHARED_NETWORK_NAME:-shared-network}
         external: true
 
 volumes:

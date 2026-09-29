@@ -14,7 +14,7 @@ services:
         #     - ${MOCKSERVER_PORT:-1080}:1080
         hostname: "${DOMAIN:-mockserver.localhost}"
         networks:
-            shared-network-internal:
+            shared-network:
         volumes:
             - shared-home:/home/${APP_USER:-app}
             - ./config:/config:ro
@@ -35,8 +35,8 @@ services:
         tty: true
 
 networks:
-    shared-network-internal:
-        name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
+    shared-network:
+        name: ${SHARED_NETWORK_NAME:-shared-network}
         external: true
 
 volumes:

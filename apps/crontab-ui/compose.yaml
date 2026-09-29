@@ -12,7 +12,7 @@ services:
         #     - ${CRONTAB_UI_PORT:-8000}:8000
         hostname: "${DOMAIN:-crontab-ui.localhost}"
         networks:
-            shared-network-internal:
+            shared-network:
         volumes:
             - shared-home:/home/${APP_USER:-app}
         labels:
@@ -32,8 +32,8 @@ services:
         tty: true
 
 networks:
-    shared-network-internal:
-        name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
+    shared-network:
+        name: ${SHARED_NETWORK_NAME:-shared-network}
         external: true
 
 volumes:

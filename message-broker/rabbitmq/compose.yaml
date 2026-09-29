@@ -15,7 +15,7 @@ services:
         #     - ${RABBITMQ_PORT_15672:-15672}:15672
         hostname: "${DOMAIN:-rabbitmq.localhost}"
         networks:
-            shared-network-internal:
+            shared-network:
         volumes:
             - shared-home:/home/${APP_USER:-app}
             - rabbitmq-lib:/var/lib/rabbitmq
@@ -36,8 +36,8 @@ services:
         tty: true
 
 networks:
-    shared-network-internal:
-        name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
+    shared-network:
+        name: ${SHARED_NETWORK_NAME:-shared-network}
         external: true
 
 volumes:

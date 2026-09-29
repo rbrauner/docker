@@ -22,7 +22,7 @@ services:
         #     - ${BOOKSTACK_PORT:-8080}:80
         hostname: "${DOMAIN:-bookstack.localhost}"
         networks:
-            shared-network-internal:
+            shared-network:
         volumes:
             - shared-home:/home/${APP_USER:-app}
             - bookstack:/config
@@ -43,8 +43,8 @@ services:
         tty: true
 
 networks:
-    shared-network-internal:
-        name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
+    shared-network:
+        name: ${SHARED_NETWORK_NAME:-shared-network}
         external: true
 
 volumes:

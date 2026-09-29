@@ -1,0 +1,55 @@
+name: mercure
+
+services:
+    mercure:
+        container_name: mercure
+        image: dunglas/mercure
+        restart: unless-stopped
+        # user: "${UID:-1000}:${GID:-1000}"
+        environment:
+            TZ: "${TZ:-Europe/Warsaw}"
+            SERVER_NAME: ":80"
+            MERCURE_PUBLISHER_JWT_KEY: "${MERCURE_PUBLISHER_JWT_KEY:?}"
+            MERCURE_SUBSCRIBER_JWT_KEY: "${MERCURE_SUBSCRIBER_JWT_KEY:?}"
+            MERCURE_EXTRA_DIRECTIVES: |
+                cors_origins ${MERCURE_CORS_ORIGINS:-*}
+                anonymous
+                publish_origins *
+        # ports:
+        #     - ${MERCURE_PORT:-3000}:80
+        hostname: "${DOMAIN:-mercure.localhost}"
+        networks:
+            shared-network:
+        volumes:
+            - shared-home:/home/${APP_USER:-app}
+            - mercure-data:/data
+            - mercure-config:/config
+        labels:
+            # caddy: "${DOMAIN:-mercure.localhost}"
+            # caddy.reverse_proxy: "{{upstreams 80}}"
+            traefik.enable: "true"
+            traefik.http.services.mercure.loadbalancer.server.port: "80"
+            traefik.http.routers.mercure.rule: "Host(`${DOMAIN:-mercure.localhost}`)"
+            traefik.http.routers.mercure.entrypoints: "http"
+            traefik.http.routers.mercure.tls: "false"
+            traefik.http.routers.mercure.middlewares: "redirect-to-https@docker"
+            traefik.http.routers.mercure.service: "mercure"
+            traefik.http.routers.mercure-secure.rule: "Host(`${DOMAIN:-mercure.localhost}`)"
+            traefik.http.routers.mercure-secure.entrypoints: "https"
+            traefik.http.routers.mercure-secure.tls: "true"
+            traefik.http.routers.mercure-secure.service: "mercure"
+        tty: true
+
+networks:
+    shared-network:
+        name: ${SHARED_NETWORK_NAME:-shared-network}
+        external: true
+
+volumes:
+    shared-home:
+        name: ${SHARED_HOME_VOLUME:-shared-home}
+        external: true
+    mercure-data:
+        name: mercure-data
+    mercure-config:
+        name: mercure-config

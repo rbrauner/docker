@@ -20,7 +20,6 @@ services:
             PHP_IDE_CONFIG: "serverName=scripts-php-opcache-reset.localhost"
         tty: true
         networks:
-            shared-network-internal:
             shared-network:
         volumes:
             - caddy-data:/data
@@ -43,9 +42,6 @@ services:
             traefik.http.routers.scripts-php-opcache-reset-secure.service: scripts-php-opcache-reset-secure
 
 networks:
-    shared-network-internal:
-        name: ${SHARED_NETWORK_NAME:-shared-network-internal}
-        external: true
     shared-network:
         name: ${SHARED_NETWORK_NAME:-shared-network}
         external: true

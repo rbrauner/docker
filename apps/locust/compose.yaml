@@ -11,7 +11,7 @@ services:
         #     - ${LOCUST_PORT:-8089}:8089
         hostname: "${DOMAIN:-locust.localhost}"
         networks:
-            shared-network-internal:
+            shared-network:
         volumes:
             - shared-home:/home/${APP_USER:-app}
             - ./config:/mnt/locust/config
@@ -38,15 +38,15 @@ services:
         command: -f /mnt/locust/config/locustfile.py --worker --master-host locust
         # user: "${UID:-1000}:${GID:-1000}"
         networks:
-            shared-network-internal:
+            shared-network:
         volumes:
             - shared-home:/home/${APP_USER:-app}
             - ./config:/mnt/locust/config
         tty: true
 
 networks:
-    shared-network-internal:
-        name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
+    shared-network:
+        name: ${SHARED_NETWORK_NAME:-shared-network}
         external: true
 
 volumes:

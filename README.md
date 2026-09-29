@@ -9,7 +9,6 @@
 ## Make shared network
 
 ```bash
-docker network create --internal shared-network-internal
 docker network create shared-network
 ```
 
@@ -41,6 +40,7 @@ mkcert -cert-file reverse-proxy/traefik/certs/local-cert.pem -key-file reverse-p
     "locust.localhost" "*.locust.localhost" \
     "macos.localhost" "*.macos.localhost" \
     "mailpit.localhost" "*.mailpit.localhost" \
+    "mercure.localhost" "*.mercure.localhost" \
     "mockoon.localhost" "*.mockoon.localhost" \
     "mockserver.localhost" "*.mockserver.localhost" \
     "open-webui.localhost" "*.open-webui.localhost" \
@@ -63,4 +63,20 @@ mkcert -cert-file reverse-proxy/traefik/certs/local-cert.pem -key-file reverse-p
 
 ```bash
 caddy trust
+```
+
+## Mercure - JWT keys
+
+Generate two different random values, e.g.:
+
+```bash
+openssl rand -base64 32
+openssl rand -base64 32
+```
+
+Put the values in `.env`:
+
+```
+MERCURE_PUBLISHER_JWT_KEY=xxx
+MERCURE_SUBSCRIBER_JWT_KEY=yyy
 ```

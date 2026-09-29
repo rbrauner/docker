@@ -16,7 +16,7 @@ services:
         #     - ${NODE_EXPORTER_PORT:-9100}:9100
         hostname: node-exporter
         networks:
-            shared-network-internal:
+            shared-network:
         volumes:
             - /proc:/host/proc:ro
             - /sys:/host/sys:ro
@@ -24,6 +24,6 @@ services:
         tty: true
 
 networks:
-    shared-network-internal:
-        name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
+    shared-network:
+        name: ${SHARED_NETWORK_NAME:-shared-network}
         external: true

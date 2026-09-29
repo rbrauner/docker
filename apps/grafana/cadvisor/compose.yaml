@@ -12,7 +12,7 @@ services:
         #     - ${CADVISOR_PORT:-8080}:8080
         hostname: cadvisor
         networks:
-            shared-network-internal:
+            shared-network:
         devices:
             - /dev/kmsg
         volumes:
@@ -24,6 +24,6 @@ services:
         tty: true
 
 networks:
-    shared-network-internal:
-        name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
+    shared-network:
+        name: ${SHARED_NETWORK_NAME:-shared-network}
         external: true
