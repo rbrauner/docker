@@ -12,7 +12,7 @@ services:
         #     - ${CLOUDBEAVER_PORT:-8978}:8978
         hostname: "${DOMAIN:-cloudbeaver.localhost}"
         networks:
-            shared-network-internal:
+            shared-network:
         volumes:
             - shared-home:/home/${APP_USER:-app}
             - cloudbeaver:/opt/cloudbeaver/workspace
@@ -33,8 +33,8 @@ services:
         tty: true
 
 networks:
-    shared-network-internal:
-        name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
+    shared-network:
+        name: ${SHARED_NETWORK_NAME:-shared-network}
         external: true
 
 volumes:

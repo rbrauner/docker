@@ -13,7 +13,7 @@ services:
         #     - ${WIREMOCK_PORT:-8080}:8080
         hostname: "${DOMAIN:-wiremock.localhost}"
         networks:
-            shared-network-internal:
+            shared-network:
         volumes:
             - shared-home:/home/${APP_USER:-app}
             - ./extensions:/var/wiremock/extensions:ro
@@ -36,8 +36,8 @@ services:
         tty: true
 
 networks:
-    shared-network-internal:
-        name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
+    shared-network:
+        name: ${SHARED_NETWORK_NAME:-shared-network}
         external: true
 
 volumes:

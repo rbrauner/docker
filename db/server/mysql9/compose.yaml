@@ -12,8 +12,10 @@ services:
             MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD:-secret}"
         ports:
             - ${DB_PORT:-3309}:3306
+        # resolvable as plain "mysql9" from the host via the dns-proxy-server stack (other/dns-proxy-server)
+        hostname: mysql9
         networks:
-            shared-network-internal:
+            shared-network:
         volumes:
             - shared-home:/home/${APP_USER:-app}
             - mysql9-data:/var/lib/mysql
@@ -27,8 +29,8 @@ services:
         tty: true
 
 networks:
-    shared-network-internal:
-        name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
+    shared-network:
+        name: ${SHARED_NETWORK_NAME:-shared-network}
         external: true
 
 volumes:

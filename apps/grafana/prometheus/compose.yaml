@@ -15,7 +15,7 @@ services:
         #     - ${PROMETHEUS_PORT:-9090}:9090
         hostname: "${DOMAIN:-prometheus.localhost}"
         networks:
-            shared-network-internal:
+            shared-network:
         volumes:
             - shared-home:/home/${APP_USER:-app}
             - ./config/prometheus.yml:/etc/prometheus/prometheus.yml:ro
@@ -37,8 +37,8 @@ services:
         tty: true
 
 networks:
-    shared-network-internal:
-        name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
+    shared-network:
+        name: ${SHARED_NETWORK_NAME:-shared-network}
         external: true
 
 volumes:

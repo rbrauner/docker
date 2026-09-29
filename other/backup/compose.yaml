@@ -14,7 +14,7 @@ services:
             BACKUP_PRUNING_PREFIX: "${BACKUP_PRUNING_PREFIX:-backup-}"
             BACKUP_RETENTION_DAYS: "${BACKUP_RETENTION_DAYS:-30}"
         networks:
-            shared-network-internal:
+            shared-network:
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock:ro
             - shared-home:/home/${APP_USER:-app}
@@ -22,8 +22,8 @@ services:
         tty: true
 
 networks:
-    shared-network-internal:
-        name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
+    shared-network:
+        name: ${SHARED_NETWORK_NAME:-shared-network}
         external: true
 
 volumes:

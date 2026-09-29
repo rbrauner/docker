@@ -23,7 +23,7 @@ services:
         #     - ${JOPLIN_PORT:-22300}:22300
         hostname: "${DOMAIN:-joplin.localhost}"
         networks:
-            shared-network-internal:
+            shared-network:
         volumes:
             - shared-home:/home/${APP_USER:-app}
         labels:
@@ -43,8 +43,8 @@ services:
         tty: true
 
 networks:
-    shared-network-internal:
-        name: ${SHARED_NETWORK_INTERNAL_NAME:-shared-network-internal}
+    shared-network:
+        name: ${SHARED_NETWORK_NAME:-shared-network}
         external: true
 
 volumes:
