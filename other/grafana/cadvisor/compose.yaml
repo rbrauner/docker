@@ -9,10 +9,12 @@ services:
         environment:
             TZ: "${TZ:-Europe/Warsaw}"
         # ports:
-        #     - ${CADVISOR_PORT:-8080}:8080
+        #     - ${CADVISOR_BIND_IP:-127.0.0.1}:${CADVISOR_PORT:-8080}:8080
         hostname: cadvisor
         networks:
             shared-network:
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
         devices:
             - /dev/kmsg
         volumes:

@@ -9,11 +9,13 @@ services:
         environment:
             TZ: "${TZ:-Europe/Warsaw}"
         # ports:
-        #     - ${PORTAINER_PORT:-9000}:9000
-        #     - ${PORTAINER_SSL_PORT:-9443}:9443
+        #     - ${PORTAINER_BIND_IP:-127.0.0.1}:${PORTAINER_PORT:-9000}:9000
+        #     - ${PORTAINER_BIND_IP:-127.0.0.1}:${PORTAINER_SSL_PORT:-9443}:9443
         hostname: "${DOMAIN:-portainer.localhost}"
         networks:
             shared-network:
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock:ro
             - shared-home:/home/${APP_USER:-app}

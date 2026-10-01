@@ -9,10 +9,12 @@ services:
         environment:
             TZ: "${TZ:-Europe/Warsaw}"
         # ports:
-        #     - ${GRAFANA_PORT:-3000}:3000
+        #     - ${GRAFANA_BIND_IP:-127.0.0.1}:${GRAFANA_PORT:-3000}:3000
         hostname: "${DOMAIN:-grafana.localhost}"
         networks:
             shared-network:
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
         volumes:
             - shared-home:/home/${APP_USER:-app}
             - grafana:/var/lib/grafana

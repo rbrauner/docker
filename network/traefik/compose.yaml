@@ -12,12 +12,14 @@ services:
         environment:
             TZ: "${TZ:-Europe/Warsaw}"
         ports:
-            - ${TRAEFIK_PORT_80:-80}:80
-            - ${TRAEFIK_PORT_443_TCP:-443}:443/tcp
-            - ${TRAEFIK_PORT_443_UDP:-443}:443/udp
+            - ${TRAEFIK_BIND_IP:-0.0.0.0}:${TRAEFIK_PORT_80:-80}:80
+            - ${TRAEFIK_BIND_IP:-0.0.0.0}:${TRAEFIK_PORT_443_TCP:-443}:443/tcp
+            - ${TRAEFIK_BIND_IP:-0.0.0.0}:${TRAEFIK_PORT_443_UDP:-443}:443/udp
         hostname: "${DOMAIN:-traefik.localhost}"
         networks:
             shared-network:
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock:ro
             - shared-home:/home/${APP_USER:-app}

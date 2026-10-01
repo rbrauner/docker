@@ -9,10 +9,12 @@ services:
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
             TZ: "${TZ:-Europe/Warsaw}"
-        ports:
-            - ${VALKEY_PORT:-6208}:6379
+        # ports:
+        #     - ${VALKEY_BIND_IP:-127.0.0.1}:${VALKEY_PORT:-6208}:6379
         networks:
             shared-network:
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
         volumes:
             - shared-home:/home/${APP_USER:-app}
             - valkey8-data:/data

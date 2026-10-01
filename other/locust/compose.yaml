@@ -8,10 +8,12 @@ services:
         command: -f /mnt/locust/config/locustfile.py --master
         # user: "${UID:-1000}:${GID:-1000}"
         # ports:
-        #     - ${LOCUST_PORT:-8089}:8089
+        #     - ${LOCUST_BIND_IP:-127.0.0.1}:${LOCUST_PORT:-8089}:8089
         hostname: "${DOMAIN:-locust.localhost}"
         networks:
             shared-network:
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
         volumes:
             - shared-home:/home/${APP_USER:-app}
             - ./config:/mnt/locust/config
@@ -32,17 +34,20 @@ services:
         tty: true
 
     locust-worker:
-        container_name: locust-worker
         image: locustio/locust
         restart: unless-stopped
         command: -f /mnt/locust/config/locustfile.py --worker --master-host locust
         # user: "${UID:-1000}:${GID:-1000}"
         networks:
             shared-network:
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
         volumes:
             - shared-home:/home/${APP_USER:-app}
             - ./config:/mnt/locust/config
         tty: true
+        deploy:
+            replicas: 3
 
 networks:
     shared-network:

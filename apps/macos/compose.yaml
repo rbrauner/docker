@@ -13,9 +13,9 @@ services:
             RAM_SIZE: "${RAM_SIZE:-4G}"
             CPU_CORES: "${CPU_CORES:-2}"
         # ports:
-        #     - ${MACOS_PORT:-8006}:8006
-        #     - ${MACOS_PORT_TCP_UDP:-5900}:5900/tcp
-        #     - ${MACOS_PORT_TCP_UDP:-5900}:5900/udp
+        #     - ${MACOS_BIND_IP:-127.0.0.1}:${MACOS_PORT:-8006}:8006
+        #     - ${MACOS_BIND_IP:-127.0.0.1}:${MACOS_PORT_TCP_UDP:-5900}:5900/tcp
+        #     - ${MACOS_BIND_IP:-127.0.0.1}:${MACOS_PORT_TCP_UDP:-5900}:5900/udp
         hostname: "${DOMAIN:-macos.localhost}"
         devices:
             - /dev/kvm
@@ -23,6 +23,8 @@ services:
         stop_grace_period: 2m
         networks:
             shared-network:
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
         volumes:
             - shared-home:/home/${APP_USER:-app}
             - macos:/storage

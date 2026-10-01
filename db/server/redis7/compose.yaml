@@ -9,10 +9,12 @@ services:
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
             TZ: "${TZ:-Europe/Warsaw}"
-        ports:
-            - ${REDIS_PORT:-6307}:6379
+        # ports:
+        #     - ${REDIS_BIND_IP:-127.0.0.1}:${REDIS_PORT:-6307}:6379
         networks:
             shared-network:
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
         volumes:
             - shared-home:/home/${APP_USER:-app}
             - redis7-data:/data

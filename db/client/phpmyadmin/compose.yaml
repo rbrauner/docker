@@ -10,10 +10,12 @@ services:
             TZ: "${TZ:-Europe/Warsaw}"
             PMA_ARBITRARY: ${PMA_ARBITRARY:-1}
         # ports:
-        #     - ${PHPMYADMIN_PORT:-8080}:80
+        #     - ${PHPMYADMIN_BIND_IP:-127.0.0.1}:${PHPMYADMIN_PORT:-8080}:80
         hostname: "${DOMAIN:-phpmyadmin.localhost}"
         networks:
             shared-network:
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
         volumes:
             - shared-home:/home/${APP_USER:-app}
         labels:

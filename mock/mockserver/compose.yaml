@@ -11,10 +11,12 @@ services:
             MOCKSERVER_INITIALIZATION_JSON_PATH: "/config/{*,**/*}.json"
             MOCKSERVER_WATCH_INITIALIZATION_JSON: "true"
         # ports:
-        #     - ${MOCKSERVER_PORT:-1080}:1080
+        #     - ${MOCKSERVER_BIND_IP:-127.0.0.1}:${MOCKSERVER_PORT:-1080}:1080
         hostname: "${DOMAIN:-mockserver.localhost}"
         networks:
             shared-network:
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
         volumes:
             - shared-home:/home/${APP_USER:-app}
             - ./config:/config:ro

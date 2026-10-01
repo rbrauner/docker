@@ -24,6 +24,8 @@ services:
         hostname: "${DOMAIN:-joplin.localhost}"
         networks:
             shared-network:
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
         volumes:
             - shared-home:/home/${APP_USER:-app}
         labels:

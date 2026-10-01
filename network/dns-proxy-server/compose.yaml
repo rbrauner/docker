@@ -1,0 +1,46 @@
+name: dns-proxy-server
+
+services:
+    dns-proxy-server:
+        container_name: dns-proxy-server
+        image: defreitas/dns-proxy-server
+        restart: unless-stopped
+        # user: "${UID:-1000}:${GID:-1000}"
+        environment:
+            TZ: "${TZ:-Europe/Warsaw}"
+            DPS_SOLVER__DOCKER__REGISTER_CONTAINER_NAMES: "true"
+        ports:
+            - ${DNS_PROXY_SERVER_BIND_IP:-127.0.0.1}:${DNS_PROXY_SERVER_PORT_53_TCP:-53}:53/tcp
+            - ${DNS_PROXY_SERVER_BIND_IP:-127.0.0.1}:${DNS_PROXY_SERVER_PORT_53_UDP:-53}:53/udp
+            - ${DNS_PROXY_SERVER_BIND_IP:-127.0.0.1}:${DNS_PROXY_SERVER_PORT_5380:-5380}:5380
+        hostname: "${DOMAIN:-dns-proxy-server.localhost}"
+        networks:
+            shared-network:
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+            - /etc/resolv.conf:/etc/resolv.conf:ro
+            - shared-home:/home/${APP_USER:-app}
+        labels:
+            traefik.enable: true
+            traefik.http.services.dns-proxy-server.loadbalancer.server.port: 5380
+            traefik.http.routers.dns-proxy-server.rule: Host(`${DOMAIN:-dns-proxy-server.localhost}`)
+            traefik.http.routers.dns-proxy-server.entrypoints: http
+            traefik.http.routers.dns-proxy-server.tls: false
+            traefik.http.routers.dns-proxy-server.service: dns-proxy-server
+            traefik.http.routers.dns-proxy-server-secure.rule: Host(`${DOMAIN:-dns-proxy-server.localhost}`)
+            traefik.http.routers.dns-proxy-server-secure.entrypoints: https
+            traefik.http.routers.dns-proxy-server-secure.tls: true
+            traefik.http.routers.dns-proxy-server-secure.service: dns-proxy-server
+        tty: true
+
+networks:
+    shared-network:
+        name: ${SHARED_NETWORK_NAME:-shared-network}
+        external: true
+
+volumes:
+    shared-home:
+        name: ${SHARED_HOME_VOLUME:-shared-home}
+        external: true

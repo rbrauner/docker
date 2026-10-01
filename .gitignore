@@ -2,4 +2,5 @@
 .env
 .idea
 compose.override.yaml
+Makefile.local.mk
 ###< rbrauner/docker ###

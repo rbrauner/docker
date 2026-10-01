@@ -5,15 +5,17 @@ services:
         container_name: prism
         image: stoplight/prism:4
         restart: unless-stopped
-        command: [ "mock", "-d", "-h", "0.0.0.0", "/spec/openapi.yaml" ]
+        command: ["mock", "-d", "-h", "0.0.0.0", "/spec/openapi.yaml"]
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
             TZ: "${TZ:-Europe/Warsaw}"
         # ports:
-        #     - ${PRISM_PORT:-4010}:4010
+        #     - ${PRISM_BIND_IP:-127.0.0.1}:${PRISM_PORT:-4010}:4010
         hostname: "${DOMAIN:-prism.localhost}"
         networks:
             shared-network:
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
         volumes:
             - shared-home:/home/${APP_USER:-app}
             - ./spec:/spec:ro

@@ -5,7 +5,12 @@ services:
         container_name: listmonk
         image: listmonk/listmonk
         restart: unless-stopped
-        command: [ sh, -c, "./listmonk --install --idempotent --yes --config '' && ./listmonk --upgrade --yes --config '' && ./listmonk --config ''" ]
+        command:
+            [
+                sh,
+                -c,
+                "./listmonk --install --idempotent --yes --config '' && ./listmonk --upgrade --yes --config '' && ./listmonk --config ''",
+            ]
         depends_on:
             postgres:
                 condition: service_started
@@ -25,10 +30,12 @@ services:
             LISTMONK_ADMIN_USER: "${LISTMONK_ADMIN_USER:-root}"
             LISTMONK_ADMIN_PASSWORD: "${LISTMONK_ADMIN_PASSWORD:-secret}"
         # ports:
-        #     - ${LISTMONK_PORT:-9000}:9000
+        #     - ${LISTMONK_BIND_IP:-127.0.0.1}:${LISTMONK_PORT:-9000}:9000
         hostname: "${DOMAIN:-listmonk.localhost}"
         networks:
             shared-network:
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
         volumes:
             - shared-home:/home/${APP_USER:-app}
             - listmonk-uploads:/listmonk/uploads

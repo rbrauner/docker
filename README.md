@@ -32,6 +32,7 @@ mkcert -cert-file network/traefik/certs/local-cert.pem -key-file network/traefik
     "buggregator.localhost" "*.buggregator.localhost" \
     "cloudbeaver.localhost" "*.cloudbeaver.localhost" \
     "crontab-ui.localhost" "*.crontab-ui.localhost" \
+    "dns-proxy-server.localhost" "*.dns-proxy-server.localhost" \
     "example.localhost" "*.example.localhost" \
     "grafana.localhost" "*.grafana.localhost" \
     "homepage.localhost" "*.homepage.localhost" \
@@ -63,6 +64,76 @@ mkcert -cert-file network/traefik/certs/local-cert.pem -key-file network/traefik
 
 ```bash
 caddy trust
+```
+
+## Resolve containers by name from the host (DNS Proxy Server)
+
+[`network/dns-proxy-server`](network/dns-proxy-server) runs [`defreitas/dns-proxy-server`](https://github.com/mageddo/dns-proxy-server), a DNS server backed by the Docker socket. Once the host uses it as a DNS resolver, you can connect to any running container by its container name with a `.docker` suffix (e.g. `mysql9.docker`) directly from host tools like DBeaver, without that container publishing its port to the host — just remove the container's `ports:` section in its `compose.yaml` and keep it on `shared-network`.
+
+```bash
+cd network/dns-proxy-server
+docker compose up -d
+```
+
+Optional admin UI (to add custom DNS entries): https://dns-proxy-server.localhost
+
+### Linux
+
+#### NetworkManager
+
+Check using:
+
+```bash
+nmcli -t -f GENERAL.CONNECTION,IP4.DNS device show <your-interface>
+```
+
+Enable using:
+
+```bash
+sudo nmcli connection modify "<connection-name>" ipv4.dns "127.0.0.1" ipv4.ignore-auto-dns yes
+sudo nmcli connection up "<connection-name>"
+```
+
+Revert using:
+
+```bash
+sudo nmcli connection modify "<connection-name>" ipv4.ignore-auto-dns no ipv4.dns ""
+sudo nmcli connection up "<connection-name>"
+```
+
+##### openvpn3 (CLI client)
+
+Enable using:
+
+```bash
+sudo openvpn3-admin netcfg-service --config-set systemd-resolved 1
+openvpn3 config-manage --config <your-config-name> --dns-scope tunnel
+```
+
+Revert using:
+
+```bash
+sudo openvpn3-admin netcfg-service --config-set systemd-resolved 0
+openvpn3 config-manage --config <your-config-name> --dns-scope global
+```
+
+### macOS
+
+Enable using:
+
+```bash
+networksetup -listallnetworkservices
+networksetup -setdnsservers Wi-Fi 127.0.0.1
+brew install chipmk/tap/docker-mac-net-connect
+sudo brew services start chipmk/tap/docker-mac-net-connect
+```
+
+Revert using:
+
+```bash
+networksetup -setdnsservers Wi-Fi Empty
+sudo brew services stop chipmk/tap/docker-mac-net-connect
+brew uninstall chipmk/tap/docker-mac-net-connect
 ```
 
 ## Mercure - JWT keys

@@ -11,19 +11,21 @@ services:
             POSTGRES_USER: "${DB_USER:-root}"
             POSTGRES_PASSWORD: "${DB_PASSWORD:-secret}"
             POSTGRES_DB: "${DB_NAME:-default}"
-        ports:
-            - ${DB_PORT:-5416}:5432
+        # ports:
+        #     - ${DB_BIND_IP:-127.0.0.1}:${DB_PORT:-5416}:5432
         networks:
             shared-network:
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
         volumes:
             - shared-home:/home/${APP_USER:-app}
             - pgvector-pg16:/var/lib/postgresql/data
             - ./bin/backup.sh:/bin/backup.sh:ro
             - ${BACKUP_DIR:-${HOME}/data/backups/docker/pgvector-pg16}:/backup
-#        labels:
-#             ofelia.enabled: "true"
-#             ofelia.job-exec.pgvector-pg16.command: "/bin/backup.sh"
-#             ofelia.job-exec.pgvector-pg16.schedule: "${BACKUP_CRON_EXPRESSION:-0 9,15,17,21 * * *}"
+        #        labels:
+        #             ofelia.enabled: "true"
+        #             ofelia.job-exec.pgvector-pg16.command: "/bin/backup.sh"
+        #             ofelia.job-exec.pgvector-pg16.schedule: "${BACKUP_CRON_EXPRESSION:-0 9,15,17,21 * * *}"
         tty: true
 
 networks:

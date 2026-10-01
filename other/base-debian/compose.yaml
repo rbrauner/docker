@@ -19,6 +19,8 @@ services:
         tty: true
         networks:
             shared-network:
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
         volumes:
             - shared-home:/home/${APP_USER:-app}
             - .:/var/www/html
