@@ -7,7 +7,6 @@ services:
             context: .
             dockerfile: ./Dockerfile
             target: app
-            network: host
             args:
                 TZ: ${TZ:-Europe/Warsaw}
                 USER: ${APP_USER:-app}
