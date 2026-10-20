@@ -6,7 +6,7 @@ per route under ./data/routes/ and compile them into ./data/environment.json.
 
 Run after editing any fragment:
 
-    python3 mock/mockoon/build.py
+    make mocks
 
 Fragment schema (compact; the builder fills in Mockoon's boilerplate):
     {

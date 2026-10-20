@@ -1,15 +1,28 @@
 # Docker
 
+Local development stack: every directory with a `compose.yaml` is a standalone compose project. All projects share one external network (`shared-network`) and one external home volume (`shared-home`), so containers from different projects can reach each other by container name (e.g. an app connects to `postgres18` or `mariadb12`).
+
 ## Requirements
 
 - docker
+- make
+- python3
+- mkcert
 - hadolint
+- shellcheck
 - prettier
 
 ## Make shared network
 
 ```bash
 docker network create shared-network
+```
+
+## Make shared home volume
+
+```bash
+cd other/shared-home
+docker compose up -d
 ```
 
 ## Run container
@@ -19,7 +32,21 @@ cd xxx/yyy
 docker compose up -d
 ```
 
+Published ports bind to `127.0.0.1` by default. To expose a service to the LAN, set its `*_BIND_IP` variable (e.g. `TRAEFIK_BIND_IP=0.0.0.0`) in `.env` next to its `compose.yaml`.
+
+## Database backups
+
+Each database server mounts a shared script as `/bin/backup.sh` (`db/server/_shared/backup-mysql.sh` or `backup-postgres.sh`). It dumps every non-system database to `${BACKUP_DIR:-~/data/backups/docker/<name>}` and removes dumps older than `BACKUP_RETENTION_DAYS` (default 7). Run it manually:
+
+```bash
+docker exec mysql8 /bin/backup.sh
+```
+
+or on a schedule: start [`other/cron`](other/cron) and uncomment the `ofelia` labels in the database `compose.yaml`.
+
 ## Reverse proxy - certificates
+
+Use only one reverse proxy at a time: `network/traefik`, `network/caddy` and `network/caddy-labels` all bind ports 80 and 443. Services are labeled for Traefik by default; Caddy labels are left commented out.
 
 ### Traefik
 

@@ -17,7 +17,6 @@ services:
         environment:
             HOME: /home/${APP_USER:-app}
             PHP_IDE_CONFIG: "serverName=scripts-php-opcache-reset.localhost"
-        tty: true
         networks:
             shared-network:
         extra_hosts:
@@ -30,17 +29,18 @@ services:
             - ./configs/php.ini:/usr/local/etc/php/php.ini
             - ./configs/Caddyfile:/etc/frankenphp/Caddyfile
         labels:
-            traefik.enable: true
-            traefik.http.services.scripts-php-opcache-reset.loadbalancer.server.port: 80
-            traefik.http.services.scripts-php-opcache-reset-secure.loadbalancer.server.port: 443
-            traefik.http.routers.scripts-php-opcache-reset.rule: Host(`${DOMAIN:-scripts-php-opcache-reset.localhost}`)
-            traefik.http.routers.scripts-php-opcache-reset.entrypoints: http
-            traefik.http.routers.scripts-php-opcache-reset.tls: false
-            traefik.http.routers.scripts-php-opcache-reset.service: scripts-php-opcache-reset
-            traefik.http.routers.scripts-php-opcache-reset-secure.rule: Host(`${DOMAIN:-scripts-php-opcache-reset.localhost}`)
-            traefik.http.routers.scripts-php-opcache-reset-secure.entrypoints: https
-            traefik.http.routers.scripts-php-opcache-reset-secure.tls: true
-            traefik.http.routers.scripts-php-opcache-reset-secure.service: scripts-php-opcache-reset-secure
+            traefik.enable: "true"
+            traefik.http.services.scripts-php-opcache-reset.loadbalancer.server.port: "80"
+            traefik.http.routers.scripts-php-opcache-reset.rule: "Host(`${DOMAIN:-scripts-php-opcache-reset.localhost}`)"
+            traefik.http.routers.scripts-php-opcache-reset.entrypoints: "http"
+            traefik.http.routers.scripts-php-opcache-reset.tls: "false"
+            traefik.http.routers.scripts-php-opcache-reset.service: "scripts-php-opcache-reset"
+            traefik.http.routers.scripts-php-opcache-reset.middlewares: "redirect-to-https@docker"
+            traefik.http.routers.scripts-php-opcache-reset-secure.rule: "Host(`${DOMAIN:-scripts-php-opcache-reset.localhost}`)"
+            traefik.http.routers.scripts-php-opcache-reset-secure.entrypoints: "https"
+            traefik.http.routers.scripts-php-opcache-reset-secure.tls: "true"
+            traefik.http.routers.scripts-php-opcache-reset-secure.service: "scripts-php-opcache-reset"
+        tty: true
 
 networks:
     shared-network:

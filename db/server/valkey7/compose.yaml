@@ -18,6 +18,12 @@ services:
         volumes:
             - shared-home:/home/${APP_USER:-app}
             - valkey7-data:/data
+        healthcheck:
+            test: 'valkey-cli -a "${VALKEY_PASSWORD:-secret}" --no-auth-warning ping | grep -q PONG'
+            interval: 10s
+            timeout: 5s
+            retries: 5
+            start_period: 30s
         tty: true
 
 networks:

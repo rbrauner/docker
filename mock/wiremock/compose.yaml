@@ -3,7 +3,7 @@ name: wiremock
 services:
     wiremock:
         container_name: wiremock
-        image: wiremock/wiremock
+        image: wiremock/wiremock:latest-alpine
         restart: unless-stopped
         command: ["--global-response-templating"]
         # user: "${UID:-1000}:${GID:-1000}"

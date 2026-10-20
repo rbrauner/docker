@@ -13,10 +13,10 @@ services:
             TZ: "${TZ:-Europe/Warsaw}"
             CADDY_INGRESS_NETWORKS: "${CADDY_INGRESS_NETWORKS:-shared-network}"
         ports:
-            - ${CADDY_LABELS_BIND_IP:-0.0.0.0}:${CADDY_LABELS_PORT_2019:-2019}:2020
-            - ${CADDY_LABELS_BIND_IP:-0.0.0.0}:${CADDY_LABELS_PORT_80:-80}:80
-            - ${CADDY_LABELS_BIND_IP:-0.0.0.0}:${CADDY_LABELS_PORT_443_TCP:-443}:443/tcp
-            - ${CADDY_LABELS_BIND_IP:-0.0.0.0}:${CADDY_LABELS_PORT_443_UDP:-443}:443/udp
+            - ${CADDY_LABELS_BIND_IP:-127.0.0.1}:${CADDY_LABELS_PORT_2019:-2019}:2020
+            - ${CADDY_LABELS_BIND_IP:-127.0.0.1}:${CADDY_LABELS_PORT_80:-80}:80
+            - ${CADDY_LABELS_BIND_IP:-127.0.0.1}:${CADDY_LABELS_PORT_443_TCP:-443}:443/tcp
+            - ${CADDY_LABELS_BIND_IP:-127.0.0.1}:${CADDY_LABELS_PORT_443_UDP:-443}:443/udp
         networks:
             shared-network:
         extra_hosts:

@@ -3,7 +3,7 @@ name: prometheus
 services:
     prometheus:
         container_name: prometheus
-        image: prom/prometheus
+        image: prom/prometheus:latest-busybox
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         command:
@@ -21,7 +21,7 @@ services:
         volumes:
             - shared-home:/home/${APP_USER:-app}
             - ./config/prometheus.yml:/etc/prometheus/prometheus.yml:ro
-            - prometheus:/prometheus
+            - prometheus-data:/prometheus
         labels:
             # caddy: "${DOMAIN:-prometheus.localhost}"
             # caddy.reverse_proxy: "{{upstreams 9090}}"
@@ -47,5 +47,5 @@ volumes:
     shared-home:
         name: ${SHARED_HOME_VOLUME:-shared-home}
         external: true
-    prometheus:
-        name: prometheus
+    prometheus-data:
+        name: prometheus-data

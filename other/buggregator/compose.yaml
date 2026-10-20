@@ -3,7 +3,7 @@ name: buggregator
 services:
     buggregator:
         container_name: buggregator
-        image: ghcr.io/buggregator/server:latest
+        image: ghcr.io/buggregator/server
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         environment:

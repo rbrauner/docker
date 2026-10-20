@@ -17,7 +17,6 @@ services:
         environment:
             HOME: /home/${APP_USER:-app}
             PHP_IDE_CONFIG: "serverName=scripts-php-phpinfo.localhost"
-        tty: true
         networks:
             shared-network:
         extra_hosts:
@@ -30,17 +29,18 @@ services:
             - ./configs/php.ini:/usr/local/etc/php/php.ini
             - ./configs/Caddyfile:/etc/frankenphp/Caddyfile
         labels:
-            traefik.enable: true
-            traefik.http.services.scripts-php-phpinfo.loadbalancer.server.port: 80
-            traefik.http.services.scripts-php-phpinfo-secure.loadbalancer.server.port: 443
-            traefik.http.routers.scripts-php-phpinfo.rule: Host(`${DOMAIN:-scripts-php-phpinfo.localhost}`)
-            traefik.http.routers.scripts-php-phpinfo.entrypoints: http
-            traefik.http.routers.scripts-php-phpinfo.tls: false
-            traefik.http.routers.scripts-php-phpinfo.service: scripts-php-phpinfo
-            traefik.http.routers.scripts-php-phpinfo-secure.rule: Host(`${DOMAIN:-scripts-php-phpinfo.localhost}`)
-            traefik.http.routers.scripts-php-phpinfo-secure.entrypoints: https
-            traefik.http.routers.scripts-php-phpinfo-secure.tls: true
-            traefik.http.routers.scripts-php-phpinfo-secure.service: scripts-php-phpinfo-secure
+            traefik.enable: "true"
+            traefik.http.services.scripts-php-phpinfo.loadbalancer.server.port: "80"
+            traefik.http.routers.scripts-php-phpinfo.rule: "Host(`${DOMAIN:-scripts-php-phpinfo.localhost}`)"
+            traefik.http.routers.scripts-php-phpinfo.entrypoints: "http"
+            traefik.http.routers.scripts-php-phpinfo.tls: "false"
+            traefik.http.routers.scripts-php-phpinfo.service: "scripts-php-phpinfo"
+            traefik.http.routers.scripts-php-phpinfo.middlewares: "redirect-to-https@docker"
+            traefik.http.routers.scripts-php-phpinfo-secure.rule: "Host(`${DOMAIN:-scripts-php-phpinfo.localhost}`)"
+            traefik.http.routers.scripts-php-phpinfo-secure.entrypoints: "https"
+            traefik.http.routers.scripts-php-phpinfo-secure.tls: "true"
+            traefik.http.routers.scripts-php-phpinfo-secure.service: "scripts-php-phpinfo"
+        tty: true
 
 networks:
     shared-network:

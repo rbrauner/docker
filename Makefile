@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 
-.PHONY: help lint fix
+.PHONY: help lint fix mocks
 
 # ========
 # = vars =
@@ -17,11 +17,20 @@ help:
 
 # Lint
 lint:
-	hadolint */**/Dockerfile
-	prettier */**/{compose,compose.*}.yaml --check
+	git ls-files '*Dockerfile' | xargs hadolint
+	git ls-files '*.sh' | xargs shellcheck
+	git ls-files '*compose.yaml' '*compose.*.yaml' | xargs prettier --check
+	for f in $$(git ls-files '*compose.yaml' '*compose.*.yaml' | grep -v override-example); do \
+		docker compose -f "$$f" config -q || { echo "invalid: $$f"; exit 1; }; \
+	done
 
 # Fix
 fix:
-	prettier */**/{compose,compose.*}.yaml --write
+	git ls-files '*compose.yaml' '*compose.*.yaml' | xargs prettier --write
+
+# Build mock configs (mockoon, mockserver)
+mocks:
+	python3 mock/mockoon/build.py
+	python3 mock/mockserver/build.py
 
 -include Makefile.local.mk

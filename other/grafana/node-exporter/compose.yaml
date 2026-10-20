@@ -3,7 +3,7 @@ name: node-exporter
 services:
     node-exporter:
         container_name: node-exporter
-        image: prom/node-exporter
+        image: prom/node-exporter:latest-busybox
         restart: unless-stopped
         command:
             - "--path.procfs=/host/proc"

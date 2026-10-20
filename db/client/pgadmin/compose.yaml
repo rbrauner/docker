@@ -17,7 +17,7 @@ services:
             - "host.docker.internal:host-gateway"
         volumes:
             - shared-home:/home/${APP_USER:-app}
-            - pgadmin:/var/lib/pgadmin
+            - pgadmin-data:/var/lib/pgadmin
         labels:
             # caddy: "${DOMAIN:-pgadmin.localhost}"
             # caddy.reverse_proxy: "{{upstreams http}}"
@@ -43,5 +43,5 @@ volumes:
     shared-home:
         name: ${SHARED_HOME_VOLUME:-shared-home}
         external: true
-    pgadmin:
-        name: pgadmin
+    pgadmin-data:
+        name: pgadmin-data

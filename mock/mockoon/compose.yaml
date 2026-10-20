@@ -3,7 +3,7 @@ name: mockoon
 services:
     mockoon:
         container_name: mockoon
-        image: mockoon/cli:latest
+        image: mockoon/cli
         restart: unless-stopped
         # NOTE: the mockoon/cli image already has "start" in its entrypoint,
         # so we pass only the flags here.

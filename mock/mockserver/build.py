@@ -7,7 +7,7 @@ To still keep a physical file as the source of truth, drop the file under
 ./files/ and run this script; it re-encodes the file into the target config's
 BINARY body. Idempotent - re-run whenever the source file changes.
 
-    python3 mock/mockserver/build-files.py
+    make mocks
 
 The mapping lives in ./files-map.json (kept out of ./config so MockServer does
 not try to load it as an expectation). One entry per file-serving endpoint:

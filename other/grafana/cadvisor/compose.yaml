@@ -3,7 +3,7 @@ name: cadvisor
 services:
     cadvisor:
         container_name: cadvisor
-        image: gcr.io/cadvisor/cadvisor
+        image: ghcr.io/google/cadvisor
         restart: unless-stopped
         privileged: true
         environment:

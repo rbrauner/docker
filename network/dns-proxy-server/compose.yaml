@@ -23,16 +23,17 @@ services:
             - /etc/resolv.conf:/etc/resolv.conf:ro
             - shared-home:/home/${APP_USER:-app}
         labels:
-            traefik.enable: true
-            traefik.http.services.dns-proxy-server.loadbalancer.server.port: 5380
-            traefik.http.routers.dns-proxy-server.rule: Host(`${DOMAIN:-dns-proxy-server.localhost}`)
-            traefik.http.routers.dns-proxy-server.entrypoints: http
-            traefik.http.routers.dns-proxy-server.tls: false
-            traefik.http.routers.dns-proxy-server.service: dns-proxy-server
-            traefik.http.routers.dns-proxy-server-secure.rule: Host(`${DOMAIN:-dns-proxy-server.localhost}`)
-            traefik.http.routers.dns-proxy-server-secure.entrypoints: https
-            traefik.http.routers.dns-proxy-server-secure.tls: true
-            traefik.http.routers.dns-proxy-server-secure.service: dns-proxy-server
+            traefik.enable: "true"
+            traefik.http.services.dns-proxy-server.loadbalancer.server.port: "5380"
+            traefik.http.routers.dns-proxy-server.rule: "Host(`${DOMAIN:-dns-proxy-server.localhost}`)"
+            traefik.http.routers.dns-proxy-server.entrypoints: "http"
+            traefik.http.routers.dns-proxy-server.tls: "false"
+            traefik.http.routers.dns-proxy-server.service: "dns-proxy-server"
+            traefik.http.routers.dns-proxy-server.middlewares: "redirect-to-https@docker"
+            traefik.http.routers.dns-proxy-server-secure.rule: "Host(`${DOMAIN:-dns-proxy-server.localhost}`)"
+            traefik.http.routers.dns-proxy-server-secure.entrypoints: "https"
+            traefik.http.routers.dns-proxy-server-secure.tls: "true"
+            traefik.http.routers.dns-proxy-server-secure.service: "dns-proxy-server"
         tty: true
 
 networks:

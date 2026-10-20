@@ -5,15 +5,12 @@ services:
         container_name: bookstack
         image: linuxserver/bookstack
         restart: unless-stopped
-        depends_on:
-            mariadb:
-                condition: service_started
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
             TZ: "${TZ:-Europe/Warsaw}"
             APP_URL: "${APP_URL:-https://${DOMAIN:-bookstack.localhost}}"
             APP_KEY: "${APP_KEY:-secret}"
-            DB_HOST: "${DB_HOST:-mariadb}"
+            DB_HOST: "${DB_HOST:-mariadb12}"
             DB_PORT: "${DB_PORT:-3306}"
             DB_USERNAME: "${DB_USERNAME:-bookstack}"
             DB_PASSWORD: "${DB_PASSWORD:-bookstack}"
@@ -27,7 +24,7 @@ services:
             - "host.docker.internal:host-gateway"
         volumes:
             - shared-home:/home/${APP_USER:-app}
-            - bookstack:/config
+            - bookstack-data:/config
         labels:
             # caddy: "${DOMAIN:-bookstack.localhost}"
             # caddy.reverse_proxy: "{{upstreams http}}"
@@ -53,5 +50,5 @@ volumes:
     shared-home:
         name: ${SHARED_HOME_VOLUME:-shared-home}
         external: true
-    bookstack:
-        name: bookstack
+    bookstack-data:
+        name: bookstack-data

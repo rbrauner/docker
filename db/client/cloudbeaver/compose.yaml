@@ -17,7 +17,7 @@ services:
             - "host.docker.internal:host-gateway"
         volumes:
             - shared-home:/home/${APP_USER:-app}
-            - cloudbeaver:/opt/cloudbeaver/workspace
+            - cloudbeaver-data:/opt/cloudbeaver/workspace
         labels:
             # caddy: "${DOMAIN:-cloudbeaver.localhost}"
             # caddy.reverse_proxy: "{{upstreams 8978}}"
@@ -43,5 +43,5 @@ volumes:
     shared-home:
         name: ${SHARED_HOME_VOLUME:-shared-home}
         external: true
-    cloudbeaver:
-        name: cloudbeaver
+    cloudbeaver-data:
+        name: cloudbeaver-data

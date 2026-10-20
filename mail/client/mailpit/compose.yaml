@@ -20,7 +20,7 @@ services:
             - "host.docker.internal:host-gateway"
         volumes:
             - shared-home:/home/${APP_USER:-app}
-            - mailpit:/data
+            - mailpit-data:/data
         labels:
             # caddy: "${DOMAIN:-mailpit.localhost}"
             # caddy.reverse_proxy: "{{upstreams 8025}}"
@@ -46,5 +46,5 @@ volumes:
     shared-home:
         name: ${SHARED_HOME_VOLUME:-shared-home}
         external: true
-    mailpit:
-        name: mailpit
+    mailpit-data:
+        name: mailpit-data

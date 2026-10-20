@@ -1,1 +1,2 @@
-override: []
+ignored:
+    - DL3059 # multiple consecutive RUN - intentional, one step per concern

@@ -18,7 +18,7 @@ services:
             - "host.docker.internal:host-gateway"
         volumes:
             - shared-home:/home/${APP_USER:-app}
-            - open-webui:/app/backend/data
+            - open-webui-data:/app/backend/data
         labels:
             # caddy: "${DOMAIN:-open-webui.localhost}"
             # caddy.reverse_proxy: "{{upstreams 8080}}"
@@ -44,5 +44,5 @@ volumes:
     shared-home:
         name: ${SHARED_HOME_VOLUME:-shared-home}
         external: true
-    open-webui:
-        name: open-webui
+    open-webui-data:
+        name: open-webui-data

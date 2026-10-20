@@ -3,7 +3,7 @@ name: portainer
 services:
     portainer:
         container_name: portainer
-        image: portainer/portainer-ce
+        image: portainer/portainer-ce:alpine
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
@@ -19,7 +19,7 @@ services:
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock:ro
             - shared-home:/home/${APP_USER:-app}
-            - portainer:/data
+            - portainer-data:/data
         labels:
             # caddy: "${DOMAIN:-portainer.localhost}"
             # caddy.reverse_proxy: "{{upstreams 9000}}"
@@ -45,5 +45,5 @@ volumes:
     shared-home:
         name: ${SHARED_HOME_VOLUME:-shared-home}
         external: true
-    portainer:
-        name: portainer
+    portainer-data:
+        name: portainer-data

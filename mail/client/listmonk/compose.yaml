@@ -11,9 +11,6 @@ services:
                 -c,
                 "./listmonk --install --idempotent --yes --config '' && ./listmonk --upgrade --yes --config '' && ./listmonk --config ''",
             ]
-        depends_on:
-            postgres:
-                condition: service_started
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
             TZ: "${TZ:-Europe/Warsaw}"
@@ -21,7 +18,7 @@ services:
             LISTMONK_db__user: "${LISTMONK_db__user:-listmonk}"
             LISTMONK_db__password: "${LISTMONK_db__password:-listmonk}"
             LISTMONK_db__database: "${LISTMONK_db__database:-listmonk}"
-            LISTMONK_db__host: "${LISTMONK_db__host:-postgres}"
+            LISTMONK_db__host: "${LISTMONK_db__host:-postgres18}"
             LISTMONK_db__port: "${LISTMONK_db__port:-5432}"
             LISTMONK_db__ssl_mode: "${LISTMONK_db__ssl_mode:-false}"
             LISTMONK_db__max_open: "${LISTMONK_db__max_open:-25}"

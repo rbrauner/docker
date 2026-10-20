@@ -17,7 +17,6 @@ services:
         environment:
             HOME: /home/${APP_USER:-app}
             PHP_IDE_CONFIG: "serverName=scripts-php-pwd.localhost"
-        tty: true
         networks:
             shared-network:
         extra_hosts:
@@ -30,17 +29,18 @@ services:
             - ./configs/php.ini:/usr/local/etc/php/php.ini
             - ./configs/Caddyfile:/etc/frankenphp/Caddyfile
         labels:
-            traefik.enable: true
-            traefik.http.services.scripts-php-pwd.loadbalancer.server.port: 80
-            traefik.http.services.scripts-php-pwd-secure.loadbalancer.server.port: 443
-            traefik.http.routers.scripts-php-pwd.rule: Host(`${DOMAIN:-scripts-php-pwd.localhost}`)
-            traefik.http.routers.scripts-php-pwd.entrypoints: http
-            traefik.http.routers.scripts-php-pwd.tls: false
-            traefik.http.routers.scripts-php-pwd.service: scripts-php-pwd
-            traefik.http.routers.scripts-php-pwd-secure.rule: Host(`${DOMAIN:-scripts-php-pwd.localhost}`)
-            traefik.http.routers.scripts-php-pwd-secure.entrypoints: https
-            traefik.http.routers.scripts-php-pwd-secure.tls: true
-            traefik.http.routers.scripts-php-pwd-secure.service: scripts-php-pwd-secure
+            traefik.enable: "true"
+            traefik.http.services.scripts-php-pwd.loadbalancer.server.port: "80"
+            traefik.http.routers.scripts-php-pwd.rule: "Host(`${DOMAIN:-scripts-php-pwd.localhost}`)"
+            traefik.http.routers.scripts-php-pwd.entrypoints: "http"
+            traefik.http.routers.scripts-php-pwd.tls: "false"
+            traefik.http.routers.scripts-php-pwd.service: "scripts-php-pwd"
+            traefik.http.routers.scripts-php-pwd.middlewares: "redirect-to-https@docker"
+            traefik.http.routers.scripts-php-pwd-secure.rule: "Host(`${DOMAIN:-scripts-php-pwd.localhost}`)"
+            traefik.http.routers.scripts-php-pwd-secure.entrypoints: "https"
+            traefik.http.routers.scripts-php-pwd-secure.tls: "true"
+            traefik.http.routers.scripts-php-pwd-secure.service: "scripts-php-pwd"
+        tty: true
 
 networks:
     shared-network:

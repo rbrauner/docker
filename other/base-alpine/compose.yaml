@@ -15,7 +15,6 @@ services:
                 GID: ${GID:-1000}
         restart: no
         # user: "${UID:-1000}:${GID:-1000}"
-        tty: true
         networks:
             shared-network:
         extra_hosts:
@@ -23,6 +22,7 @@ services:
         volumes:
             - shared-home:/home/${APP_USER:-app}
             - .:/var/www/html
+        tty: true
 
 networks:
     shared-network:
