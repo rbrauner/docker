@@ -10,7 +10,7 @@ services:
         environment:
             TZ: "${TZ:-Europe/Warsaw}"
         # ports:
-        #     - ${VALKEY_BIND_IP:-127.0.0.1}:${VALKEY_PORT:-6207}:6379
+        #     - ${VALKEY_PORT:-6207}:6379
         networks:
             shared-network:
         extra_hosts:

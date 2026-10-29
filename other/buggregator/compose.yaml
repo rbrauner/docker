@@ -13,7 +13,7 @@ services:
             STORAGE_PATH: "${STORAGE_PATH:-/data/storage}"
             MCP_ENABLED: "${MCP_ENABLED:-true}"
         # ports:
-        #     - ${BUGGREGATOR_BIND_IP:-127.0.0.1}:${BUGGREGATOR_PORT:-8000}:8000
+        #     - ${BUGGREGATOR_PORT:-8000}:8000
         hostname: "${DOMAIN:-buggregator.localhost}"
         networks:
             shared-network:

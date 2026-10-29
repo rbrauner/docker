@@ -10,7 +10,7 @@ services:
         environment:
             TZ: "${TZ:-Europe/Warsaw}"
         # ports:
-        #     - ${REDIS_BIND_IP:-127.0.0.1}:${REDIS_PORT:-6307}:6379
+        #     - ${REDIS_PORT:-6307}:6379
         networks:
             shared-network:
         extra_hosts:

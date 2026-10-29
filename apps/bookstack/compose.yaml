@@ -16,7 +16,7 @@ services:
             DB_PASSWORD: "${DB_PASSWORD:-bookstack}"
             DB_DATABASE: "${DB_DATABASE:-bookstack}"
         # ports:
-        #     - ${BOOKSTACK_BIND_IP:-127.0.0.1}:${BOOKSTACK_PORT:-8080}:80
+        #     - ${BOOKSTACK_PORT:-8080}:80
         hostname: "${DOMAIN:-bookstack.localhost}"
         networks:
             shared-network:

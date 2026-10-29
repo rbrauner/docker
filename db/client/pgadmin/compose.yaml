@@ -9,7 +9,7 @@ services:
         environment:
             TZ: "${TZ:-Europe/Warsaw}"
         # ports:
-        #     - ${PGADMIN_BIND_IP:-127.0.0.1}:${PGADMIN_PORT:-8080}:80
+        #     - ${PGADMIN_PORT:-8080}:80
         hostname: "${DOMAIN:-pgadmin.localhost}"
         networks:
             shared-network:

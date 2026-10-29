@@ -10,7 +10,7 @@ services:
         environment:
             TZ: "${TZ:-Europe/Warsaw}"
         # ports:
-        #     - ${PRISM_BIND_IP:-127.0.0.1}:${PRISM_PORT:-4010}:4010
+        #     - ${PRISM_PORT:-4010}:4010
         hostname: "${DOMAIN:-prism.localhost}"
         networks:
             shared-network:

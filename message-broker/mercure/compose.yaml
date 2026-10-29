@@ -16,7 +16,7 @@ services:
                 anonymous
                 publish_origins *
         # ports:
-        #     - ${MERCURE_BIND_IP:-127.0.0.1}:${MERCURE_PORT:-3000}:80
+        #     - ${MERCURE_PORT:-3000}:80
         hostname: "${DOMAIN:-mercure.localhost}"
         networks:
             shared-network:

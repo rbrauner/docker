@@ -9,7 +9,7 @@ services:
         environment:
             TZ: "${TZ:-Europe/Warsaw}"
         # ports:
-        #     - ${CRONTAB_UI_BIND_IP:-127.0.0.1}:${CRONTAB_UI_PORT:-8000}:8000
+        #     - ${CRONTAB_UI_PORT:-8000}:8000
         hostname: "${DOMAIN:-crontab-ui.localhost}"
         networks:
             shared-network:

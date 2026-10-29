@@ -1,4 +1,5 @@
 ###> rbrauner/docker ###
+.DS_Store
 .env
 .idea
 compose.override.yaml

@@ -13,7 +13,7 @@ services:
         environment:
             TZ: "${TZ:-Europe/Warsaw}"
         # ports:
-        #     - ${NODE_EXPORTER_BIND_IP:-127.0.0.1}:${NODE_EXPORTER_PORT:-9100}:9100
+        #     - ${NODE_EXPORTER_PORT:-9100}:9100
         hostname: node-exporter
         networks:
             shared-network:

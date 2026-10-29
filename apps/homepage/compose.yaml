@@ -10,7 +10,7 @@ services:
             TZ: "${TZ:-Europe/Warsaw}"
             HOMEPAGE_ALLOWED_HOSTS: "${HOMEPAGE_ALLOWED_HOSTS:-homepage.localhost}"
         # ports:
-        #     - ${HOMEPAGE_BIND_IP:-127.0.0.1}:${HOMEPAGE_PORT:-3000}:3000
+        #     - ${HOMEPAGE_PORT:-3000}:3000
         hostname: "${DOMAIN:-homepage.localhost}"
         networks:
             shared-network:

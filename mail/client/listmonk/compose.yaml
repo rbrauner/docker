@@ -27,7 +27,7 @@ services:
             LISTMONK_ADMIN_USER: "${LISTMONK_ADMIN_USER:-root}"
             LISTMONK_ADMIN_PASSWORD: "${LISTMONK_ADMIN_PASSWORD:-secret}"
         # ports:
-        #     - ${LISTMONK_BIND_IP:-127.0.0.1}:${LISTMONK_PORT:-9000}:9000
+        #     - ${LISTMONK_PORT:-9000}:9000
         hostname: "${DOMAIN:-listmonk.localhost}"
         networks:
             shared-network:

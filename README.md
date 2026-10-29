@@ -32,8 +32,6 @@ cd xxx/yyy
 docker compose up -d
 ```
 
-Published ports bind to `127.0.0.1` by default. To expose a service to the LAN, set its `*_BIND_IP` variable (e.g. `TRAEFIK_BIND_IP=0.0.0.0`) in `.env` next to its `compose.yaml`.
-
 ## Database backups
 
 Each database server mounts a shared script as `/bin/backup.sh` (`db/server/_shared/backup-mysql.sh` or `backup-postgres.sh`). It dumps every non-system database to `${BACKUP_DIR:-~/data/backups/docker/<name>}` and removes dumps older than `BACKUP_RETENTION_DAYS` (default 7). Run it manually:

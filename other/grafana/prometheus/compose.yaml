@@ -12,7 +12,7 @@ services:
         environment:
             TZ: "${TZ:-Europe/Warsaw}"
         # ports:
-        #     - ${PROMETHEUS_BIND_IP:-127.0.0.1}:${PROMETHEUS_PORT:-9090}:9090
+        #     - ${PROMETHEUS_PORT:-9090}:9090
         hostname: "${DOMAIN:-prometheus.localhost}"
         networks:
             shared-network:

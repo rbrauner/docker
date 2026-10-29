@@ -12,10 +12,10 @@ services:
         environment:
             TZ: "${TZ:-Europe/Warsaw}"
         ports:
-            - ${CADDY_BIND_IP:-127.0.0.1}:${CADDY_PORT_2019:-2019}:2020
-            - ${CADDY_BIND_IP:-127.0.0.1}:${CADDY_PORT_80:-80}:80
-            - ${CADDY_BIND_IP:-127.0.0.1}:${CADDY_PORT_443_TCP:-443}:443/tcp
-            - ${CADDY_BIND_IP:-127.0.0.1}:${CADDY_PORT_443_UDP:-443}:443/udp
+            - ${CADDY_PORT_2019:-2019}:2020
+            - ${CADDY_PORT_80:-80}:80
+            - ${CADDY_PORT_443_TCP:-443}:443/tcp
+            - ${CADDY_PORT_443_UDP:-443}:443/udp
         networks:
             shared-network:
         extra_hosts:

@@ -8,7 +8,7 @@ services:
         command: -f /mnt/locust/config/locustfile.py --master
         # user: "${UID:-1000}:${GID:-1000}"
         # ports:
-        #     - ${LOCUST_BIND_IP:-127.0.0.1}:${LOCUST_PORT:-8089}:8089
+        #     - ${LOCUST_PORT:-8089}:8089
         hostname: "${DOMAIN:-locust.localhost}"
         networks:
             shared-network:

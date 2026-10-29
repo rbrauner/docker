@@ -9,7 +9,7 @@ services:
         environment:
             TZ: "${TZ:-Europe/Warsaw}"
         # ports:
-        #     - ${CLOUDBEAVER_BIND_IP:-127.0.0.1}:${CLOUDBEAVER_PORT:-8978}:8978
+        #     - ${CLOUDBEAVER_PORT:-8978}:8978
         hostname: "${DOMAIN:-cloudbeaver.localhost}"
         networks:
             shared-network:

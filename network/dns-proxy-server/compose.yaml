@@ -10,9 +10,9 @@ services:
             TZ: "${TZ:-Europe/Warsaw}"
             DPS_SOLVER__DOCKER__REGISTER_CONTAINER_NAMES: "true"
         ports:
-            - ${DNS_PROXY_SERVER_BIND_IP:-127.0.0.1}:${DNS_PROXY_SERVER_PORT_53_TCP:-53}:53/tcp
-            - ${DNS_PROXY_SERVER_BIND_IP:-127.0.0.1}:${DNS_PROXY_SERVER_PORT_53_UDP:-53}:53/udp
-            - ${DNS_PROXY_SERVER_BIND_IP:-127.0.0.1}:${DNS_PROXY_SERVER_PORT_5380:-5380}:5380
+            - ${DNS_PROXY_SERVER_PORT_53_TCP:-53}:53/tcp
+            - ${DNS_PROXY_SERVER_PORT_53_UDP:-53}:53/udp
+            - ${DNS_PROXY_SERVER_PORT_5380:-5380}:5380
         hostname: "${DOMAIN:-dns-proxy-server.localhost}"
         networks:
             shared-network:
