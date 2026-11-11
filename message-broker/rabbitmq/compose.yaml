@@ -35,6 +35,11 @@ services:
             traefik.http.routers.rabbitmq-secure.entrypoints: "https"
             traefik.http.routers.rabbitmq-secure.tls: "true"
             traefik.http.routers.rabbitmq-secure.service: "rabbitmq"
+            traefik.tcp.services.rabbitmq5672.loadbalancer.server.port: "5672"
+            traefik.tcp.routers.rabbitmq5672.rule: "HostSNI(`rabbitmq5672.localhost`)"
+            traefik.tcp.routers.rabbitmq5672.entrypoints: "rabbitmq"
+            traefik.tcp.routers.rabbitmq5672.tls: "true"
+            traefik.tcp.routers.rabbitmq5672.service: "rabbitmq5672"
         tty: true
 
 networks:

@@ -15,6 +15,14 @@ services:
             - ${TRAEFIK_PORT_80:-80}:80
             - ${TRAEFIK_PORT_443_TCP:-443}:443/tcp
             - ${TRAEFIK_PORT_443_UDP:-443}:443/udp
+            - ${TRAEFIK_PORT_3306:-3306}:3306
+            - ${TRAEFIK_PORT_5432:-5432}:5432
+            - ${TRAEFIK_PORT_6379:-6379}:6379
+            - ${TRAEFIK_PORT_25:-25}:25
+            - ${TRAEFIK_PORT_465:-465}:465
+            - ${TRAEFIK_PORT_587:-587}:587
+            - ${TRAEFIK_PORT_993:-993}:993
+            - ${TRAEFIK_PORT_5672:-5672}:5672
         hostname: "${DOMAIN:-traefik.localhost}"
         networks:
             shared-network:

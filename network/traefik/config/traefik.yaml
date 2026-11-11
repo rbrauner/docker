@@ -22,3 +22,19 @@ entryPoints:
         address: ":80"
     https:
         address: ":443"
+    mysql:
+        address: ":3306"
+    postgres:
+        address: ":5432"
+    redis:
+        address: ":6379"
+    mailserver25:
+        address: ":25"
+    mailserver465:
+        address: ":465"
+    mailserver587:
+        address: ":587"
+    mailserver993:
+        address: ":993"
+    rabbitmq:
+        address: ":5672"

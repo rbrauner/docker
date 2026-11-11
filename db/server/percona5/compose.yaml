@@ -12,7 +12,7 @@ services:
             MYSQL_DATABASE: "${DB_NAME:-default}"
             MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD:-secret}"
         # ports:
-        #     - ${DB_PORT:-3315}:3306
+        #     - ${DB_PORT:-3306}:3306
         networks:
             shared-network:
         extra_hosts:
@@ -23,10 +23,16 @@ services:
             - percona5-conf:/etc/mysql
             - ../_shared/backup-mysql.sh:/bin/backup.sh:ro
             - ${BACKUP_DIR:-${HOME}/data/backups/docker/percona5}:/backup
-        # labels:
-        #     ofelia.enabled: "true"
-        #     ofelia.job-exec.percona5.command: "/bin/backup.sh"
-        #     ofelia.job-exec.percona5.schedule: "${BACKUP_CRON_EXPRESSION:-0 9,15,17,21 * * *}"
+        labels:
+            # ofelia.enabled: "true"
+            # ofelia.job-exec.percona5.command: "/bin/backup.sh"
+            # ofelia.job-exec.percona5.schedule: "${BACKUP_CRON_EXPRESSION:-0 9,15,17,21 * * *}"
+            traefik.enable: "true"
+            traefik.tcp.services.percona5.loadbalancer.server.port: "3306"
+            traefik.tcp.routers.percona5.rule: "HostSNI(`percona5.localhost`)"
+            traefik.tcp.routers.percona5.entrypoints: "mysql"
+            traefik.tcp.routers.percona5.tls: "true"
+            traefik.tcp.routers.percona5.service: "percona5"
         healthcheck:
             test: 'mysqladmin ping -h 127.0.0.1 -uroot -p"$$MYSQL_ROOT_PASSWORD" --silent'
             interval: 10s

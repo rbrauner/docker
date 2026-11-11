@@ -1,6 +1,6 @@
 # Docker
 
-Local development stack: every directory with a `compose.yaml` is a standalone compose project. All projects share one external network (`shared-network`) and one external home volume (`shared-home`), so containers from different projects can reach each other by container name (e.g. an app connects to `postgres18` or `mariadb12`).
+Local development stack. Every directory with a `compose.yaml` is a standalone compose project. All projects share one external network (`shared-network`) and one external home volume (`shared-home`), so containers from different projects can reach each other by container name (e.g. an app connects to `postgres18` or `mariadb12`).
 
 ## Requirements
 
@@ -12,41 +12,22 @@ Local development stack: every directory with a `compose.yaml` is a standalone c
 - shellcheck
 - prettier
 
-## Make shared network
+## Prepare
+
+### 1. Make shared network
 
 ```bash
 docker network create shared-network
 ```
 
-## Make shared home volume
+### 2. Make shared home volume
 
 ```bash
 cd other/shared-home
 docker compose up -d
 ```
 
-## Run container
-
-```bash
-cd xxx/yyy
-docker compose up -d
-```
-
-## Database backups
-
-Each database server mounts a shared script as `/bin/backup.sh` (`db/server/_shared/backup-mysql.sh` or `backup-postgres.sh`). It dumps every non-system database to `${BACKUP_DIR:-~/data/backups/docker/<name>}` and removes dumps older than `BACKUP_RETENTION_DAYS` (default 7). Run it manually:
-
-```bash
-docker exec mysql8 /bin/backup.sh
-```
-
-or on a schedule: start [`other/cron`](other/cron) and uncomment the `ofelia` labels in the database `compose.yaml`.
-
-## Reverse proxy - certificates
-
-Use only one reverse proxy at a time: `network/traefik`, `network/caddy` and `network/caddy-labels` all bind ports 80 and 443. Services are labeled for Traefik by default; Caddy labels are left commented out.
-
-### Traefik
+### 3. Make traefik certificates
 
 ```bash
 mkcert -install
@@ -85,80 +66,34 @@ mkcert -cert-file network/traefik/certs/local-cert.pem -key-file network/traefik
     "wiremock.localhost" "*.wiremock.localhost"
 ```
 
-### Caddy and caddy labels
+### 4. Run traefik
 
 ```bash
-caddy trust
-```
-
-## Resolve containers by name from the host (DNS Proxy Server)
-
-[`network/dns-proxy-server`](network/dns-proxy-server) runs [`defreitas/dns-proxy-server`](https://github.com/mageddo/dns-proxy-server), a DNS server backed by the Docker socket. Once the host uses it as a DNS resolver, you can connect to any running container by its container name with a `.docker` suffix (e.g. `mysql9.docker`) directly from host tools like DBeaver, without that container publishing its port to the host — just remove the container's `ports:` section in its `compose.yaml` and keep it on `shared-network`.
-
-```bash
-cd network/dns-proxy-server
+cd network/traefik
 docker compose up -d
 ```
 
-Optional admin UI (to add custom DNS entries): https://dns-proxy-server.localhost
-
-### Linux
-
-#### NetworkManager
-
-Check using:
+## Run container
 
 ```bash
-nmcli -t -f GENERAL.CONNECTION,IP4.DNS device show <your-interface>
+cd xxx/yyy
+docker compose up -d
 ```
 
-Enable using:
+## Database backups
+
+Each database server mounts a shared script as `/bin/backup.sh` (`db/server/_shared/backup-mysql.sh` or `backup-postgres.sh`). It dumps every non-system database to `${BACKUP_DIR:-~/data/backups/docker/<name>}` and removes dumps older than `BACKUP_RETENTION_DAYS` (default 7). Run it manually:
 
 ```bash
-sudo nmcli connection modify "<connection-name>" ipv4.dns "127.0.0.1" ipv4.ignore-auto-dns yes
-sudo nmcli connection up "<connection-name>"
+docker exec mysql8 /bin/backup.sh
 ```
 
-Revert using:
+or on a schedule: start [`other/cron`](other/cron) and uncomment the `ofelia` labels in the database `compose.yaml`.
+
+## Caddy and caddy labels certificates
 
 ```bash
-sudo nmcli connection modify "<connection-name>" ipv4.ignore-auto-dns no ipv4.dns ""
-sudo nmcli connection up "<connection-name>"
-```
-
-##### openvpn3 (CLI client)
-
-Enable using:
-
-```bash
-sudo openvpn3-admin netcfg-service --config-set systemd-resolved 1
-openvpn3 config-manage --config <your-config-name> --dns-scope tunnel
-```
-
-Revert using:
-
-```bash
-sudo openvpn3-admin netcfg-service --config-set systemd-resolved 0
-openvpn3 config-manage --config <your-config-name> --dns-scope global
-```
-
-### macOS
-
-Enable using:
-
-```bash
-networksetup -listallnetworkservices
-networksetup -setdnsservers Wi-Fi 127.0.0.1
-brew install chipmk/tap/docker-mac-net-connect
-sudo brew services start chipmk/tap/docker-mac-net-connect
-```
-
-Revert using:
-
-```bash
-networksetup -setdnsservers Wi-Fi Empty
-sudo brew services stop chipmk/tap/docker-mac-net-connect
-brew uninstall chipmk/tap/docker-mac-net-connect
+caddy trust
 ```
 
 ## Mercure - JWT keys

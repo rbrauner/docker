@@ -13,7 +13,7 @@ services:
             POSTGRES_PASSWORD: "${DB_PASSWORD:-secret}"
             POSTGRES_DB: "${DB_NAME:-default}"
         # ports:
-        #     - ${DB_PORT:-5418}:5432
+        #     - ${DB_PORT:-5432}:5432
         networks:
             shared-network:
         extra_hosts:
@@ -23,10 +23,16 @@ services:
             - pgvector-pg18-data:/var/lib/postgresql/18/docker
             - ../_shared/backup-postgres.sh:/bin/backup.sh:ro
             - ${BACKUP_DIR:-${HOME}/data/backups/docker/pgvector-pg18}:/backup
-        # labels:
-        #     ofelia.enabled: "true"
-        #     ofelia.job-exec.pgvector-pg18.command: "/bin/backup.sh"
-        #     ofelia.job-exec.pgvector-pg18.schedule: "${BACKUP_CRON_EXPRESSION:-0 9,15,17,21 * * *}"
+        labels:
+            # ofelia.enabled: "true"
+            # ofelia.job-exec.pgvector-pg18.command: "/bin/backup.sh"
+            # ofelia.job-exec.pgvector-pg18.schedule: "${BACKUP_CRON_EXPRESSION:-0 9,15,17,21 * * *}"
+            traefik.enable: "true"
+            traefik.tcp.services.pgvector-pg18.loadbalancer.server.port: "5432"
+            traefik.tcp.routers.pgvector-pg18.rule: "HostSNI(`pgvector-pg18.localhost`)"
+            traefik.tcp.routers.pgvector-pg18.entrypoints: "postgres"
+            traefik.tcp.routers.pgvector-pg18.tls: "true"
+            traefik.tcp.routers.pgvector-pg18.service: "pgvector-pg18"
         healthcheck:
             test: 'pg_isready -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"'
             interval: 10s
