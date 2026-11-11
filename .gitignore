@@ -2,6 +2,7 @@
 .DS_Store
 .env
 .idea
+AGENTS.md
 compose.override.yaml
 Makefile.local.mk
 ###< rbrauner/docker ###

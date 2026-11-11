@@ -14,20 +14,26 @@ Local development stack. Every directory with a `compose.yaml` is a standalone c
 
 ## Prepare
 
-### 1. Make shared network
+### 1. Create AGENTS.md
+
+```bash
+cp AGENTS.example.md AGENTS.md
+```
+
+### 2. Make shared network
 
 ```bash
 docker network create shared-network
 ```
 
-### 2. Make shared home volume
+### 3. Make shared home volume
 
 ```bash
 cd other/shared-home
 docker compose up -d
 ```
 
-### 3. Make traefik certificates
+### 4. Make traefik certificates
 
 ```bash
 mkcert -install
@@ -66,7 +72,7 @@ mkcert -cert-file network/traefik/certs/local-cert.pem -key-file network/traefik
     "wiremock.localhost" "*.wiremock.localhost"
 ```
 
-### 4. Run traefik
+### 5. Run traefik
 
 ```bash
 cd network/traefik
