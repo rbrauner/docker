@@ -14,77 +14,40 @@ Local development stack. Every directory with a `compose.yaml` is a standalone c
 
 ## Prepare
 
-### 1. Create AGENTS.md
-
 ```bash
-cp AGENTS.example.md AGENTS.md
+make bootstrap CERTS_SCAN_DIRS=". ~/data/workspace"
 ```
 
-### 2. Make shared network
-
-```bash
-docker network create shared-network
-```
-
-### 3. Make shared home volume
-
-```bash
-cd other/shared-home
-docker compose up -d
-```
-
-### 4. Make traefik certificates
-
-```bash
-mkcert -install
-mkcert -cert-file network/traefik/certs/local-cert.pem -key-file network/traefik/certs/local-key.pem \
-    "adminer.localhost" "*.adminer.localhost" \
-    "affine.localhost" "*.affine.localhost" \
-    "bookstack.localhost" "*.bookstack.localhost" \
-    "buggregator.localhost" "*.buggregator.localhost" \
-    "cloudbeaver.localhost" "*.cloudbeaver.localhost" \
-    "crontab-ui.localhost" "*.crontab-ui.localhost" \
-    "dns-proxy-server.localhost" "*.dns-proxy-server.localhost" \
-    "example.localhost" "*.example.localhost" \
-    "grafana.localhost" "*.grafana.localhost" \
-    "homepage.localhost" "*.homepage.localhost" \
-    "joplin.localhost" "*.joplin.localhost" \
-    "listmonk.localhost" "*.listmonk.localhost" \
-    "locust.localhost" "*.locust.localhost" \
-    "macos.localhost" "*.macos.localhost" \
-    "mailpit.localhost" "*.mailpit.localhost" \
-    "mercure.localhost" "*.mercure.localhost" \
-    "mockoon.localhost" "*.mockoon.localhost" \
-    "mockserver.localhost" "*.mockserver.localhost" \
-    "open-webui.localhost" "*.open-webui.localhost" \
-    "pgadmin.localhost" "*.pgadmin.localhost" \
-    "phpmyadmin.localhost" "*.phpmyadmin.localhost" \
-    "portainer.localhost" "*.portainer.localhost" \
-    "prism.localhost" "*.prism.localhost" \
-    "prometheus.localhost" "*.prometheus.localhost" \
-    "rabbitmq.localhost" "*.rabbitmq.localhost" \
-    "scripts-php-disk-space-info.localhost" "*.scripts-php-disk-space-info.localhost" \
-    "scripts-php-opcache-reset.localhost" "*.scripts-php-opcache-reset.localhost" \
-    "scripts-php-phpinfo.localhost" "*.scripts-php-phpinfo.localhost" \
-    "scripts-php-pwd.localhost" "*.scripts-php-pwd.localhost" \
-    "traefik.localhost" "*.traefik.localhost" \
-    "whoami.localhost" "*.whoami.localhost" \
-    "wiremock.localhost" "*.wiremock.localhost"
-```
-
-### 5. Run traefik
-
-```bash
-cd network/traefik
-docker compose up -d
-```
+`make bootstrap` creates `AGENTS.md` (from `AGENTS.example.md`), installs the mkcert local CA, creates the shared network, starts `other/shared-home`, generates traefik certificates and starts `network/traefik`. Every step is safe to re-run.
 
 ## Run container
 
 ```bash
-cd xxx/yyy
-docker compose up -d
+make up S=db/server/postgres18      # or: cd db/server/postgres18 && docker compose up -d
+make down S=db/server/postgres18
+make ps                             # containers started from this repo
+make list                           # projects with their default *.localhost domains
 ```
+
+Extra flags go through `OPTIONS`, e.g. `make up S=apps/joplin OPTIONS=--pull=always`.
+
+## Configuration
+
+Every project reads its own `.env` (next to `compose.yaml`, gitignored). Common variables:
+
+| Variable                                                | Default                                           | Meaning                                                             |
+| ------------------------------------------------------- | ------------------------------------------------- | ------------------------------------------------------------------- |
+| `<NAME>_VERSION` / `DB_VERSION`                         | shortest published version tag (e.g. `3`, `13.3`) | image tag                                                           |
+| `DOMAIN`                                                | `<project>.localhost`                             | hostname and traefik router rule                                    |
+| `<NAME>_BIND_IP`                                        | `127.0.0.1`                                       | host IP for published ports (commented `ports:` blocks and traefik) |
+| `<NAME>_PORT`, `TRAEFIK_PORT_<port>`                    | service port                                      | published host port                                                 |
+| `TZ`                                                    | `Europe/Warsaw`                                   | container timezone                                                  |
+| `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `DB_ROOT_PASSWORD` | `default`, `root`, `secret`                       | database servers                                                    |
+| `SHARED_NETWORK_NAME`                                   | `shared-network`                                  | external network shared by all projects                             |
+| `SHARED_HOME_VOLUME`                                    | `shared-home`                                     | external home volume shared by all projects                         |
+| `APP_USER`                                              | `app`                                             | home directory name inside the shared volume                        |
+
+Apps that use a database (joplin, bookstack, listmonk, affine) connect to a server from another project (e.g. `postgres18`), so start it first - `depends_on` does not work across compose projects.
 
 ## Database backups
 
@@ -111,7 +74,7 @@ openssl rand -base64 32
 openssl rand -base64 32
 ```
 
-Put the values in `.env`:
+Copy `message-broker/mercure/.env.example` to `.env` and put the values there:
 
 ```
 MERCURE_PUBLISHER_JWT_KEY=xxx

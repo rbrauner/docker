@@ -3,7 +3,7 @@ name: backup
 services:
     backup:
         container_name: backup
-        image: offen/docker-volume-backup
+        image: offen/docker-volume-backup:${BACKUP_VERSION:-v2}
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         environment:

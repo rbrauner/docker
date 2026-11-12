@@ -1,36 +1,28 @@
 name: adminer
 
 services:
-    php:
-        container_name: adminer-php
-        build:
-            context: .
-            dockerfile: ./Dockerfile
-            target: app
-            args:
-                TZ: ${TZ:-Europe/Warsaw}
-                USER: ${APP_USER:-app}
-                GROUP: ${APP_GROUP:-app}
-                UID: ${UID:-1000}
-                GID: ${GID:-1000}
+    adminer:
+        container_name: adminer
+        image: adminer:${ADMINER_VERSION:-6}
         restart: unless-stopped
+        # user: "${UID:-1000}:${GID:-1000}"
         environment:
-            HOME: /home/${APP_USER:-app}
-            PHP_IDE_CONFIG: "serverName=adminer.localhost"
+            TZ: "${TZ:-Europe/Warsaw}"
+            ADMINER_PLUGINS: "${ADMINER_PLUGINS:-}"
+        # ports:
+        #     - ${ADMINER_BIND_IP:-127.0.0.1}:${ADMINER_PORT:-8080}:8080
+        hostname: "${DOMAIN:-adminer.localhost}"
         networks:
             shared-network:
         extra_hosts:
             - "host.docker.internal:host-gateway"
         volumes:
-            - caddy-data:/data
-            - caddy-config:/config
             - shared-home:/home/${APP_USER:-app}
-            - .:/var/www/html
-            - ./configs/php.ini:/usr/local/etc/php/php.ini
-            - ./configs/Caddyfile:/etc/frankenphp/Caddyfile
         labels:
+            # caddy: "${DOMAIN:-adminer.localhost}"
+            # caddy.reverse_proxy: "{{upstreams 8080}}"
             traefik.enable: "true"
-            traefik.http.services.adminer.loadbalancer.server.port: "80"
+            traefik.http.services.adminer.loadbalancer.server.port: "8080"
             traefik.http.routers.adminer.rule: "Host(`${DOMAIN:-adminer.localhost}`)"
             traefik.http.routers.adminer.entrypoints: "http"
             traefik.http.routers.adminer.tls: "false"
@@ -40,6 +32,12 @@ services:
             traefik.http.routers.adminer-secure.entrypoints: "https"
             traefik.http.routers.adminer-secure.tls: "true"
             traefik.http.routers.adminer-secure.service: "adminer"
+        healthcheck:
+            test: "wget -qO /dev/null http://127.0.0.1:8080/"
+            interval: 10s
+            timeout: 5s
+            retries: 5
+            start_period: 30s
         tty: true
 
 networks:
@@ -51,7 +49,3 @@ volumes:
     shared-home:
         name: ${SHARED_HOME_VOLUME:-shared-home}
         external: true
-    caddy-data:
-        name: adminer-caddy-data
-    caddy-config:
-        name: adminer-caddy-config

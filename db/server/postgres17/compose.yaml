@@ -3,7 +3,7 @@ name: postgres17
 services:
     postgres17:
         container_name: postgres17
-        image: postgres:17-trixie
+        image: postgres:${DB_VERSION:-17-trixie}
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
@@ -13,7 +13,8 @@ services:
             POSTGRES_PASSWORD: "${DB_PASSWORD:-secret}"
             POSTGRES_DB: "${DB_NAME:-default}"
         # ports:
-        #     - ${DB_PORT:-5432}:5432
+        #     - ${DB_BIND_IP:-127.0.0.1}:${DB_PORT:-5432}:5432
+        hostname: "${DOMAIN:-postgres17.localhost}"
         networks:
             shared-network:
         extra_hosts:
@@ -29,7 +30,7 @@ services:
             # ofelia.job-exec.postgres17.schedule: "${BACKUP_CRON_EXPRESSION:-0 9,15,17,21 * * *}"
             traefik.enable: "true"
             traefik.tcp.services.postgres17.loadbalancer.server.port: "5432"
-            traefik.tcp.routers.postgres17.rule: "HostSNI(`postgres17.localhost`)"
+            traefik.tcp.routers.postgres17.rule: "HostSNI(`${DOMAIN:-postgres17.localhost}`)"
             traefik.tcp.routers.postgres17.entrypoints: "postgres"
             traefik.tcp.routers.postgres17.tls: "true"
             traefik.tcp.routers.postgres17.service: "postgres17"

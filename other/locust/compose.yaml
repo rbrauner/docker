@@ -3,12 +3,15 @@ name: locust
 services:
     locust:
         container_name: locust
-        image: locustio/locust
+        # no major tag published - bump manually
+        image: locustio/locust:${LOCUST_VERSION:-2.47.0}
         restart: unless-stopped
         command: -f /mnt/locust/config/locustfile.py --master
         # user: "${UID:-1000}:${GID:-1000}"
+        environment:
+            TZ: "${TZ:-Europe/Warsaw}"
         # ports:
-        #     - ${LOCUST_PORT:-8089}:8089
+        #     - ${LOCUST_BIND_IP:-127.0.0.1}:${LOCUST_PORT:-8089}:8089
         hostname: "${DOMAIN:-locust.localhost}"
         networks:
             shared-network:
@@ -34,10 +37,13 @@ services:
         tty: true
 
     locust-worker:
-        image: locustio/locust
+        # no major tag published - bump manually
+        image: locustio/locust:${LOCUST_VERSION:-2.47.0}
         restart: unless-stopped
         command: -f /mnt/locust/config/locustfile.py --worker --master-host locust
         # user: "${UID:-1000}:${GID:-1000}"
+        environment:
+            TZ: "${TZ:-Europe/Warsaw}"
         networks:
             shared-network:
         extra_hosts:

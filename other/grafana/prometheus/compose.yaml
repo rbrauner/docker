@@ -3,7 +3,7 @@ name: prometheus
 services:
     prometheus:
         container_name: prometheus
-        image: prom/prometheus:latest-busybox
+        image: prom/prometheus:${PROMETHEUS_VERSION:-v3-busybox}
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         command:
@@ -12,7 +12,7 @@ services:
         environment:
             TZ: "${TZ:-Europe/Warsaw}"
         # ports:
-        #     - ${PROMETHEUS_PORT:-9090}:9090
+        #     - ${PROMETHEUS_BIND_IP:-127.0.0.1}:${PROMETHEUS_PORT:-9090}:9090
         hostname: "${DOMAIN:-prometheus.localhost}"
         networks:
             shared-network:
@@ -36,6 +36,12 @@ services:
             traefik.http.routers.prometheus-secure.entrypoints: "https"
             traefik.http.routers.prometheus-secure.tls: "true"
             traefik.http.routers.prometheus-secure.service: "prometheus"
+        healthcheck:
+            test: "wget -qO /dev/null http://127.0.0.1:9090/-/healthy"
+            interval: 10s
+            timeout: 5s
+            retries: 5
+            start_period: 30s
         tty: true
 
 networks:

@@ -3,13 +3,14 @@ name: crontab-ui
 services:
     crontab-ui:
         container_name: crontab-ui
-        image: alseambusher/crontab-ui
+        # no major tag published - bump manually
+        image: alseambusher/crontab-ui:${CRONTAB_UI_VERSION:-0.4.2}
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
             TZ: "${TZ:-Europe/Warsaw}"
         # ports:
-        #     - ${CRONTAB_UI_PORT:-8000}:8000
+        #     - ${CRONTAB_UI_BIND_IP:-127.0.0.1}:${CRONTAB_UI_PORT:-8000}:8000
         hostname: "${DOMAIN:-crontab-ui.localhost}"
         networks:
             shared-network:

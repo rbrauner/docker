@@ -3,14 +3,16 @@ name: prism
 services:
     prism:
         container_name: prism
-        image: stoplight/prism:4
+        image: stoplight/prism:${PRISM_VERSION:-5}
         restart: unless-stopped
-        command: ["mock", "-d", "-h", "0.0.0.0", "/spec/openapi.yaml"]
+        # multiprocess mode crashes in the v5 image (cluster.isPrimary undefined)
+        command:
+            ["mock", "-d", "-m", "false", "-h", "0.0.0.0", "/spec/openapi.yaml"]
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
             TZ: "${TZ:-Europe/Warsaw}"
         # ports:
-        #     - ${PRISM_PORT:-4010}:4010
+        #     - ${PRISM_BIND_IP:-127.0.0.1}:${PRISM_PORT:-4010}:4010
         hostname: "${DOMAIN:-prism.localhost}"
         networks:
             shared-network:

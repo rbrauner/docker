@@ -1,6 +1,9 @@
 global:
     sendAnonymousUsage: false
 
+ping:
+    entryPoint: traefik
+
 api:
     dashboard: true
     insecure: true

@@ -1,4 +1,4 @@
-FROM debian:stable-slim AS packages
+FROM debian:trixie-slim AS packages
 # hadolint ignore=DL3008
 RUN apt-get update \
     && apt-get upgrade -y \

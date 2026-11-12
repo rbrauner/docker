@@ -3,14 +3,15 @@ name: valkey9
 services:
     valkey9:
         container_name: valkey9
-        image: valkey/valkey:9-trixie
+        image: valkey/valkey:${DB_VERSION:-9-trixie}
         restart: unless-stopped
-        command: valkey-server --save 60 1 --loglevel warning --requirepass "${VALKEY_PASSWORD:-secret}"
+        command: valkey-server --save 60 1 --loglevel warning --requirepass "${DB_PASSWORD:-secret}"
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
             TZ: "${TZ:-Europe/Warsaw}"
         # ports:
-        #     - ${VALKEY_PORT:-6379}:6379
+        #     - ${DB_BIND_IP:-127.0.0.1}:${DB_PORT:-6379}:6379
+        hostname: "${DOMAIN:-valkey9.localhost}"
         networks:
             shared-network:
         extra_hosts:
@@ -19,17 +20,14 @@ services:
             - shared-home:/home/${APP_USER:-app}
             - valkey9-data:/data
         labels:
-            # ofelia.enabled: "true"
-            # ofelia.job-exec.valkey9.command: "/bin/backup.sh"
-            # ofelia.job-exec.valkey9.schedule: "${BACKUP_CRON_EXPRESSION:-0 9,15,17,21 * * *}"
             traefik.enable: "true"
             traefik.tcp.services.valkey9.loadbalancer.server.port: "6379"
-            traefik.tcp.routers.valkey9.rule: "HostSNI(`valkey9.localhost`)"
+            traefik.tcp.routers.valkey9.rule: "HostSNI(`${DOMAIN:-valkey9.localhost}`)"
             traefik.tcp.routers.valkey9.entrypoints: "redis"
             traefik.tcp.routers.valkey9.tls: "true"
             traefik.tcp.routers.valkey9.service: "valkey9"
         healthcheck:
-            test: 'valkey-cli -a "${VALKEY_PASSWORD:-secret}" --no-auth-warning ping | grep -q PONG'
+            test: 'valkey-cli -a "${DB_PASSWORD:-secret}" --no-auth-warning ping | grep -q PONG'
             interval: 10s
             timeout: 5s
             retries: 5

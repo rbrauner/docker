@@ -3,14 +3,14 @@ name: homepage
 services:
     homepage:
         container_name: homepage
-        image: ghcr.io/gethomepage/homepage
+        image: ghcr.io/gethomepage/homepage:${HOMEPAGE_VERSION:-v2}
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
             TZ: "${TZ:-Europe/Warsaw}"
             HOMEPAGE_ALLOWED_HOSTS: "${HOMEPAGE_ALLOWED_HOSTS:-homepage.localhost}"
         # ports:
-        #     - ${HOMEPAGE_PORT:-3000}:3000
+        #     - ${HOMEPAGE_BIND_IP:-127.0.0.1}:${HOMEPAGE_PORT:-3000}:3000
         hostname: "${DOMAIN:-homepage.localhost}"
         networks:
             shared-network:

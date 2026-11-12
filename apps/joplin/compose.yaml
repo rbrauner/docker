@@ -3,7 +3,8 @@ name: joplin
 services:
     joplin:
         container_name: joplin
-        image: joplin/server
+        # no major tag published - bump manually
+        image: joplin/server:${JOPLIN_VERSION:-3.7.5}
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
@@ -17,7 +18,7 @@ services:
             POSTGRES_PORT: "${POSTGRES_PORT:-5432}"
             POSTGRES_HOST: "${POSTGRES_HOST:-postgres18}"
         # ports:
-        #     - ${JOPLIN_PORT:-22300}:22300
+        #     - ${JOPLIN_BIND_IP:-127.0.0.1}:${JOPLIN_PORT:-22300}:22300
         hostname: "${DOMAIN:-joplin.localhost}"
         networks:
             shared-network:
@@ -27,9 +28,9 @@ services:
             - shared-home:/home/${APP_USER:-app}
         labels:
             # caddy: "${DOMAIN:-joplin.localhost}"
-            # caddy.reverse_proxy: "{{upstreams 8080}}"
+            # caddy.reverse_proxy: "{{upstreams ${APP_PORT:-22300}}}"
             traefik.enable: "true"
-            traefik.http.services.joplin.loadbalancer.server.port: "8080"
+            traefik.http.services.joplin.loadbalancer.server.port: "${APP_PORT:-22300}"
             traefik.http.routers.joplin.rule: "Host(`${DOMAIN:-joplin.localhost}`)"
             traefik.http.routers.joplin.entrypoints: "http"
             traefik.http.routers.joplin.tls: "false"
@@ -39,6 +40,18 @@ services:
             traefik.http.routers.joplin-secure.entrypoints: "https"
             traefik.http.routers.joplin-secure.tls: "true"
             traefik.http.routers.joplin-secure.service: "joplin"
+        healthcheck:
+            test:
+                [
+                    "CMD",
+                    "node",
+                    "-e",
+                    "fetch('http://127.0.0.1:${APP_PORT:-22300}/api/ping').then((r) => process.exit(r.status < 500 ? 0 : 1), () => process.exit(1))",
+                ]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+            start_period: 30s
         tty: true
 
 networks:

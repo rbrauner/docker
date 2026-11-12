@@ -3,7 +3,8 @@ name: mockserver
 services:
     mockserver:
         container_name: mockserver
-        image: mockserver/mockserver
+        # no major tag published - bump manually
+        image: mockserver/mockserver:${MOCKSERVER_VERSION:-9.2.0}
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
@@ -11,7 +12,7 @@ services:
             MOCKSERVER_INITIALIZATION_JSON_PATH: "/config/{*,**/*}.json"
             MOCKSERVER_WATCH_INITIALIZATION_JSON: "true"
         # ports:
-        #     - ${MOCKSERVER_PORT:-1080}:1080
+        #     - ${MOCKSERVER_BIND_IP:-127.0.0.1}:${MOCKSERVER_PORT:-1080}:1080
         hostname: "${DOMAIN:-mockserver.localhost}"
         networks:
             shared-network:

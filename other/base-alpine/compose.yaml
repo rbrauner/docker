@@ -8,11 +8,11 @@ services:
             dockerfile: ./Dockerfile
             target: prod
             args:
-                TZ: ${TZ:-Europe/Warsaw}
-                USER: ${APP_USER:-app}
-                GROUP: ${APP_GROUP:-app}
-                UID: ${UID:-1000}
-                GID: ${GID:-1000}
+                TZ: "${TZ:-Europe/Warsaw}"
+                USER: "${APP_USER:-app}"
+                GROUP: "${APP_GROUP:-app}"
+                UID: "${UID:-1000}"
+                GID: "${GID:-1000}"
         restart: no
         # user: "${UID:-1000}:${GID:-1000}"
         networks:

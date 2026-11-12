@@ -1,0 +1,57 @@
+name: mysql26
+
+services:
+    mysql26:
+        container_name: mysql26
+        image: mysql:${DB_VERSION:-26}
+        restart: unless-stopped
+        # user: "${UID:-1000}:${GID:-1000}"
+        environment:
+            TZ: "${TZ:-Europe/Warsaw}"
+            BACKUP_RETENTION_DAYS: "${BACKUP_RETENTION_DAYS:-7}"
+            MYSQL_DATABASE: "${DB_NAME:-default}"
+            MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD:-secret}"
+        # ports:
+        #     - ${DB_BIND_IP:-127.0.0.1}:${DB_PORT:-3306}:3306
+        hostname: "${DOMAIN:-mysql26.localhost}"
+        networks:
+            shared-network:
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
+        volumes:
+            - shared-home:/home/${APP_USER:-app}
+            - mysql26-data:/var/lib/mysql
+            - mysql26-conf:/etc/mysql
+            - ../_shared/backup-mysql.sh:/bin/backup.sh:ro
+            - ${BACKUP_DIR:-${HOME}/data/backups/docker/mysql26}:/backup
+        labels:
+            # ofelia.enabled: "true"
+            # ofelia.job-exec.mysql26.command: "/bin/backup.sh"
+            # ofelia.job-exec.mysql26.schedule: "${BACKUP_CRON_EXPRESSION:-0 9,15,17,21 * * *}"
+            traefik.enable: "true"
+            traefik.tcp.services.mysql26.loadbalancer.server.port: "3306"
+            traefik.tcp.routers.mysql26.rule: "HostSNI(`${DOMAIN:-mysql26.localhost}`)"
+            traefik.tcp.routers.mysql26.entrypoints: "mysql"
+            traefik.tcp.routers.mysql26.tls: "true"
+            traefik.tcp.routers.mysql26.service: "mysql26"
+        healthcheck:
+            test: 'mysqladmin ping -h 127.0.0.1 -uroot -p"$$MYSQL_ROOT_PASSWORD" --silent'
+            interval: 10s
+            timeout: 5s
+            retries: 5
+            start_period: 30s
+        tty: true
+
+networks:
+    shared-network:
+        name: ${SHARED_NETWORK_NAME:-shared-network}
+        external: true
+
+volumes:
+    shared-home:
+        name: ${SHARED_HOME_VOLUME:-shared-home}
+        external: true
+    mysql26-data:
+        name: mysql26-data
+    mysql26-conf:
+        name: mysql26-conf

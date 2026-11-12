@@ -3,7 +3,7 @@ name: pgvector-pg18
 services:
     pgvector-pg18:
         container_name: pgvector-pg18
-        image: pgvector/pgvector:pg18-trixie
+        image: pgvector/pgvector:${DB_VERSION:-pg18-trixie}
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
@@ -13,7 +13,8 @@ services:
             POSTGRES_PASSWORD: "${DB_PASSWORD:-secret}"
             POSTGRES_DB: "${DB_NAME:-default}"
         # ports:
-        #     - ${DB_PORT:-5432}:5432
+        #     - ${DB_BIND_IP:-127.0.0.1}:${DB_PORT:-5432}:5432
+        hostname: "${DOMAIN:-pgvector-pg18.localhost}"
         networks:
             shared-network:
         extra_hosts:
@@ -29,7 +30,7 @@ services:
             # ofelia.job-exec.pgvector-pg18.schedule: "${BACKUP_CRON_EXPRESSION:-0 9,15,17,21 * * *}"
             traefik.enable: "true"
             traefik.tcp.services.pgvector-pg18.loadbalancer.server.port: "5432"
-            traefik.tcp.routers.pgvector-pg18.rule: "HostSNI(`pgvector-pg18.localhost`)"
+            traefik.tcp.routers.pgvector-pg18.rule: "HostSNI(`${DOMAIN:-pgvector-pg18.localhost}`)"
             traefik.tcp.routers.pgvector-pg18.entrypoints: "postgres"
             traefik.tcp.routers.pgvector-pg18.tls: "true"
             traefik.tcp.routers.pgvector-pg18.service: "pgvector-pg18"

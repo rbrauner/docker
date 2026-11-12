@@ -3,7 +3,7 @@ name: buggregator
 services:
     buggregator:
         container_name: buggregator
-        image: ghcr.io/buggregator/server
+        image: ghcr.io/buggregator/server:${BUGGREGATOR_VERSION:-2}
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
@@ -13,7 +13,7 @@ services:
             STORAGE_PATH: "${STORAGE_PATH:-/data/storage}"
             MCP_ENABLED: "${MCP_ENABLED:-true}"
         # ports:
-        #     - ${BUGGREGATOR_PORT:-8000}:8000
+        #     - ${BUGGREGATOR_BIND_IP:-127.0.0.1}:${BUGGREGATOR_PORT:-8000}:8000
         hostname: "${DOMAIN:-buggregator.localhost}"
         networks:
             shared-network:
@@ -30,12 +30,18 @@ services:
             traefik.http.routers.buggregator.rule: "Host(`${DOMAIN:-buggregator.localhost}`)"
             traefik.http.routers.buggregator.entrypoints: "http"
             traefik.http.routers.buggregator.tls: "false"
-            traefik.http.routers.buggregator.middlewares: "redirect-to-https@docker"
             traefik.http.routers.buggregator.service: "buggregator"
+            traefik.http.routers.buggregator.middlewares: "redirect-to-https@docker"
             traefik.http.routers.buggregator-secure.rule: "Host(`${DOMAIN:-buggregator.localhost}`)"
             traefik.http.routers.buggregator-secure.entrypoints: "https"
             traefik.http.routers.buggregator-secure.tls: "true"
             traefik.http.routers.buggregator-secure.service: "buggregator"
+        healthcheck:
+            test: "wget -qO /dev/null http://127.0.0.1:8000/"
+            interval: 10s
+            timeout: 5s
+            retries: 5
+            start_period: 30s
         tty: true
 
 networks:

@@ -3,7 +3,7 @@ name: mockoon
 services:
     mockoon:
         container_name: mockoon
-        image: mockoon/cli
+        image: mockoon/cli:${MOCKOON_VERSION:-9}
         restart: unless-stopped
         # NOTE: the mockoon/cli image already has "start" in its entrypoint,
         # so we pass only the flags here.
@@ -12,7 +12,7 @@ services:
         environment:
             TZ: "${TZ:-Europe/Warsaw}"
         # ports:
-        #     - ${MOCKOON_PORT:-3000}:3000
+        #     - ${MOCKOON_BIND_IP:-127.0.0.1}:${MOCKOON_PORT:-3000}:3000
         hostname: "${DOMAIN:-mockoon.localhost}"
         networks:
             shared-network:

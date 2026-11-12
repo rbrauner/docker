@@ -3,7 +3,7 @@ name: mercure
 services:
     mercure:
         container_name: mercure
-        image: dunglas/mercure
+        image: dunglas/mercure:${MERCURE_VERSION:-v1}
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
@@ -16,7 +16,7 @@ services:
                 anonymous
                 publish_origins *
         # ports:
-        #     - ${MERCURE_PORT:-3000}:80
+        #     - ${MERCURE_BIND_IP:-127.0.0.1}:${MERCURE_PORT:-80}:80
         hostname: "${DOMAIN:-mercure.localhost}"
         networks:
             shared-network:
@@ -34,8 +34,8 @@ services:
             traefik.http.routers.mercure.rule: "Host(`${DOMAIN:-mercure.localhost}`)"
             traefik.http.routers.mercure.entrypoints: "http"
             traefik.http.routers.mercure.tls: "false"
-            traefik.http.routers.mercure.middlewares: "redirect-to-https@docker"
             traefik.http.routers.mercure.service: "mercure"
+            traefik.http.routers.mercure.middlewares: "redirect-to-https@docker"
             traefik.http.routers.mercure-secure.rule: "Host(`${DOMAIN:-mercure.localhost}`)"
             traefik.http.routers.mercure-secure.entrypoints: "https"
             traefik.http.routers.mercure-secure.tls: "true"

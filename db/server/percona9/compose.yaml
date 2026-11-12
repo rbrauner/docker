@@ -1,0 +1,58 @@
+name: percona9
+
+services:
+    percona9:
+        container_name: percona9
+        image: percona:${DB_VERSION:-9}
+        restart: unless-stopped
+        # user: "${UID:-1000}:${GID:-1000}"
+        environment:
+            TZ: "${TZ:-Europe/Warsaw}"
+            BACKUP_RETENTION_DAYS: "${BACKUP_RETENTION_DAYS:-7}"
+            MYSQL_DATABASE: "${DB_NAME:-default}"
+            MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD:-secret}"
+        # ports:
+        #     - ${DB_BIND_IP:-127.0.0.1}:${DB_PORT:-3306}:3306
+        hostname: "${DOMAIN:-percona9.localhost}"
+        networks:
+            shared-network:
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
+        volumes:
+            - shared-home:/home/${APP_USER:-app}
+            - percona9-data:/var/lib/mysql
+            - percona9-conf:/etc/mysql
+            - ../_shared/backup-mysql.sh:/bin/backup.sh:ro
+            - ${BACKUP_DIR:-${HOME}/data/backups/docker/percona9}:/backup
+        labels:
+            # ofelia.enabled: "true"
+            # ofelia.job-exec.percona9.command: "/bin/backup.sh"
+            # ofelia.job-exec.percona9.user: "root" # image runs as mysql (uid 1001), which cannot write to /backup
+            # ofelia.job-exec.percona9.schedule: "${BACKUP_CRON_EXPRESSION:-0 9,15,17,21 * * *}"
+            traefik.enable: "true"
+            traefik.tcp.services.percona9.loadbalancer.server.port: "3306"
+            traefik.tcp.routers.percona9.rule: "HostSNI(`${DOMAIN:-percona9.localhost}`)"
+            traefik.tcp.routers.percona9.entrypoints: "mysql"
+            traefik.tcp.routers.percona9.tls: "true"
+            traefik.tcp.routers.percona9.service: "percona9"
+        healthcheck:
+            test: 'mysqladmin ping -h 127.0.0.1 -uroot -p"$$MYSQL_ROOT_PASSWORD" --silent'
+            interval: 10s
+            timeout: 5s
+            retries: 5
+            start_period: 30s
+        tty: true
+
+networks:
+    shared-network:
+        name: ${SHARED_NETWORK_NAME:-shared-network}
+        external: true
+
+volumes:
+    shared-home:
+        name: ${SHARED_HOME_VOLUME:-shared-home}
+        external: true
+    percona9-data:
+        name: percona9-data
+    percona9-conf:
+        name: percona9-conf

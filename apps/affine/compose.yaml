@@ -3,25 +3,26 @@ name: affine
 services:
     affine:
         container_name: affine
-        image: ghcr.io/toeverything/affine:${AFFINE_REVISION:-stable}
+        # no major tag published - bump manually
+        image: ghcr.io/toeverything/affine:${AFFINE_VERSION:-0.27.4}
         restart: unless-stopped
         depends_on:
-            affine_migration:
+            affine-migration:
                 condition: service_completed_successfully
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
             TZ: "${TZ:-Europe/Warsaw}"
-            REDIS_SERVER_HOST: "${REDIS_SERVER_HOST:-valkey}"
+            REDIS_SERVER_HOST: "${REDIS_SERVER_HOST:-valkey9}"
             REDIS_SERVER_PORT: "${REDIS_SERVER_PORT:-6379}"
             REDIS_SERVER_USERNAME: "${REDIS_SERVER_USERNAME:-}"
             REDIS_SERVER_PASSWORD: "${REDIS_SERVER_PASSWORD:-secret}"
             REDIS_SERVER_DATABASE: "${REDIS_SERVER_DATABASE:-0}"
-            DATABASE_URL: "${DATABASE_URL:-postgresql://affine:affine@pgvector:5432/affine}"
+            DATABASE_URL: "${DATABASE_URL:-postgresql://affine:affine@pgvector-pg18:5432/affine}"
             AFFINE_INDEXER_ENABLED: "${AFFINE_INDEXER_ENABLED:-false}"
             AFFINE_SERVER_HTTPS: "${AFFINE_SERVER_HTTPS:-true}"
             AFFINE_SERVER_HOST: "${AFFINE_SERVER_HOST:-affine.localhost}"
         # ports:
-        #     - ${AFFINE_PORT:-3010}:3010
+        #     - ${AFFINE_BIND_IP:-127.0.0.1}:${AFFINE_PORT:-3010}:3010
         hostname: "${DOMAIN:-affine.localhost}"
         networks:
             shared-network:
@@ -45,21 +46,34 @@ services:
             traefik.http.routers.affine-secure.entrypoints: "https"
             traefik.http.routers.affine-secure.tls: "true"
             traefik.http.routers.affine-secure.service: "affine"
+        healthcheck:
+            test:
+                [
+                    "CMD",
+                    "node",
+                    "-e",
+                    "fetch('http://127.0.0.1:3010/info').then((r) => process.exit(r.ok ? 0 : 1), () => process.exit(1))",
+                ]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+            start_period: 30s
         tty: true
 
-    affine_migration:
-        container_name: affine_migration
-        image: ghcr.io/toeverything/affine:${AFFINE_REVISION:-stable}
+    affine-migration:
+        container_name: affine-migration
+        # no major tag published - bump manually
+        image: ghcr.io/toeverything/affine:${AFFINE_VERSION:-0.27.4}
         command: ["sh", "-c", "node ./scripts/self-host-predeploy.js"]
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
             TZ: "${TZ:-Europe/Warsaw}"
-            REDIS_SERVER_HOST: "${REDIS_SERVER_HOST:-valkey}"
+            REDIS_SERVER_HOST: "${REDIS_SERVER_HOST:-valkey9}"
             REDIS_SERVER_PORT: "${REDIS_SERVER_PORT:-6379}"
             REDIS_SERVER_USERNAME: "${REDIS_SERVER_USERNAME:-}"
             REDIS_SERVER_PASSWORD: "${REDIS_SERVER_PASSWORD:-secret}"
             REDIS_SERVER_DATABASE: "${REDIS_SERVER_DATABASE:-0}"
-            DATABASE_URL: "${DATABASE_URL:-postgresql://affine:affine@pgvector:5432/affine}"
+            DATABASE_URL: "${DATABASE_URL:-postgresql://affine:affine@pgvector-pg18:5432/affine}"
             AFFINE_INDEXER_ENABLED: "${AFFINE_INDEXER_ENABLED:-false}"
             AFFINE_SERVER_HTTPS: "${AFFINE_SERVER_HTTPS:-true}"
             AFFINE_SERVER_HOST: "${AFFINE_SERVER_HOST:-affine.localhost}"
@@ -71,6 +85,7 @@ services:
             - shared-home:/home/${APP_USER:-app}
             - affine-storage:/root/.affine/storage
             - affine-conf:/root/.affine/config
+        tty: true
 
 networks:
     shared-network:

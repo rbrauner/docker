@@ -3,7 +3,8 @@ name: bookstack
 services:
     bookstack:
         container_name: bookstack
-        image: linuxserver/bookstack
+        # no major tag published - bump manually
+        image: linuxserver/bookstack:${BOOKSTACK_VERSION:-26.09.3}
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
@@ -16,7 +17,7 @@ services:
             DB_PASSWORD: "${DB_PASSWORD:-bookstack}"
             DB_DATABASE: "${DB_DATABASE:-bookstack}"
         # ports:
-        #     - ${BOOKSTACK_PORT:-8080}:80
+        #     - ${BOOKSTACK_BIND_IP:-127.0.0.1}:${BOOKSTACK_PORT:-80}:80
         hostname: "${DOMAIN:-bookstack.localhost}"
         networks:
             shared-network:
@@ -39,6 +40,12 @@ services:
             traefik.http.routers.bookstack-secure.entrypoints: "https"
             traefik.http.routers.bookstack-secure.tls: "true"
             traefik.http.routers.bookstack-secure.service: "bookstack"
+        healthcheck:
+            test: "curl -fsS -o /dev/null http://127.0.0.1/status"
+            interval: 10s
+            timeout: 5s
+            retries: 5
+            start_period: 30s
         tty: true
 
 networks:

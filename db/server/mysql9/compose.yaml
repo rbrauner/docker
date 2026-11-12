@@ -3,7 +3,7 @@ name: mysql9
 services:
     mysql9:
         container_name: mysql9
-        image: mysql:9
+        image: mysql:${DB_VERSION:-9}
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
@@ -12,7 +12,8 @@ services:
             MYSQL_DATABASE: "${DB_NAME:-default}"
             MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD:-secret}"
         # ports:
-        #     - ${DB_PORT:-3306}:3306
+        #     - ${DB_BIND_IP:-127.0.0.1}:${DB_PORT:-3306}:3306
+        hostname: "${DOMAIN:-mysql9.localhost}"
         networks:
             shared-network:
         extra_hosts:
@@ -29,7 +30,7 @@ services:
             # ofelia.job-exec.mysql9.schedule: "${BACKUP_CRON_EXPRESSION:-0 9,15,17,21 * * *}"
             traefik.enable: "true"
             traefik.tcp.services.mysql9.loadbalancer.server.port: "3306"
-            traefik.tcp.routers.mysql9.rule: "HostSNI(`mysql9.localhost`)"
+            traefik.tcp.routers.mysql9.rule: "HostSNI(`${DOMAIN:-mysql9.localhost}`)"
             traefik.tcp.routers.mysql9.entrypoints: "mysql"
             traefik.tcp.routers.mysql9.tls: "true"
             traefik.tcp.routers.mysql9.service: "mysql9"

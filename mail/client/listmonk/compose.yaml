@@ -3,7 +3,8 @@ name: listmonk
 services:
     listmonk:
         container_name: listmonk
-        image: listmonk/listmonk
+        # no major tag published - bump manually
+        image: listmonk/listmonk:${LISTMONK_VERSION:-v6.2.0}
         restart: unless-stopped
         command:
             [
@@ -27,7 +28,7 @@ services:
             LISTMONK_ADMIN_USER: "${LISTMONK_ADMIN_USER:-root}"
             LISTMONK_ADMIN_PASSWORD: "${LISTMONK_ADMIN_PASSWORD:-secret}"
         # ports:
-        #     - ${LISTMONK_PORT:-9000}:9000
+        #     - ${LISTMONK_BIND_IP:-127.0.0.1}:${LISTMONK_PORT:-9000}:9000
         hostname: "${DOMAIN:-listmonk.localhost}"
         networks:
             shared-network:
@@ -50,6 +51,12 @@ services:
             traefik.http.routers.listmonk-secure.entrypoints: "https"
             traefik.http.routers.listmonk-secure.tls: "true"
             traefik.http.routers.listmonk-secure.service: "listmonk"
+        healthcheck:
+            test: "wget -qO /dev/null http://127.0.0.1:9000/admin/login"
+            interval: 10s
+            timeout: 5s
+            retries: 5
+            start_period: 30s
         tty: true
 
 networks:

@@ -3,7 +3,8 @@ name: mysql5
 services:
     mysql5:
         container_name: mysql5
-        image: mysql:5
+        # EOL (10.2023) - kept for testing legacy projects
+        image: mysql:${DB_VERSION:-5}
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
@@ -12,7 +13,8 @@ services:
             MYSQL_DATABASE: "${DB_NAME:-default}"
             MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD:-secret}"
         # ports:
-        #     - ${DB_PORT:-3306}:3306
+        #     - ${DB_BIND_IP:-127.0.0.1}:${DB_PORT:-3306}:3306
+        hostname: "${DOMAIN:-mysql5.localhost}"
         networks:
             shared-network:
         extra_hosts:
@@ -29,7 +31,7 @@ services:
             # ofelia.job-exec.mysql5.schedule: "${BACKUP_CRON_EXPRESSION:-0 9,15,17,21 * * *}"
             traefik.enable: "true"
             traefik.tcp.services.mysql5.loadbalancer.server.port: "3306"
-            traefik.tcp.routers.mysql5.rule: "HostSNI(`mysql5.localhost`)"
+            traefik.tcp.routers.mysql5.rule: "HostSNI(`${DOMAIN:-mysql5.localhost}`)"
             traefik.tcp.routers.mysql5.entrypoints: "mysql"
             traefik.tcp.routers.mysql5.tls: "true"
             traefik.tcp.routers.mysql5.service: "mysql5"

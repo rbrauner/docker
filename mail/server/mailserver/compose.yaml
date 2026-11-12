@@ -3,7 +3,7 @@ name: mailserver
 services:
     mailserver:
         container_name: mailserver
-        image: mailserver/docker-mailserver
+        image: mailserver/docker-mailserver:${MAILSERVER_VERSION:-17}
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
@@ -13,11 +13,11 @@ services:
             ENABLE_FAIL2BAN: "${ENABLE_FAIL2BAN:-1}"
         cap_add:
             - NET_ADMIN # For Fail2Ban to work
-        ports:
-            - ${MAILSERVER_PORT_25:-1025}:25
-            - ${MAILSERVER_PORT_465:-1465}:465
-            - ${MAILSERVER_PORT_587:-1587}:587
-            - ${MAILSERVER_PORT_993:-1993}:993
+        # ports:
+        #     - ${MAILSERVER_BIND_IP:-127.0.0.1}:${MAILSERVER_PORT_25:-1025}:25
+        #     - ${MAILSERVER_BIND_IP:-127.0.0.1}:${MAILSERVER_PORT_465:-1465}:465
+        #     - ${MAILSERVER_BIND_IP:-127.0.0.1}:${MAILSERVER_PORT_587:-1587}:587
+        #     - ${MAILSERVER_BIND_IP:-127.0.0.1}:${MAILSERVER_PORT_993:-1993}:993
         hostname: "${DOMAIN:-mailserver.localhost}"
         networks:
             shared-network:
@@ -32,22 +32,22 @@ services:
         labels:
             traefik.enable: "true"
             traefik.tcp.services.mailserver25.loadbalancer.server.port: "25"
-            traefik.tcp.routers.mailserver25.rule: "HostSNI(`mailserver25.localhost`)"
+            traefik.tcp.routers.mailserver25.rule: "HostSNI(`${DOMAIN:-mailserver.localhost}`)"
             traefik.tcp.routers.mailserver25.entrypoints: "mailserver25"
             traefik.tcp.routers.mailserver25.tls: "true"
             traefik.tcp.routers.mailserver25.service: "mailserver25"
             traefik.tcp.services.mailserver465.loadbalancer.server.port: "465"
-            traefik.tcp.routers.mailserver465.rule: "HostSNI(`mailserver465.localhost`)"
+            traefik.tcp.routers.mailserver465.rule: "HostSNI(`${DOMAIN:-mailserver.localhost}`)"
             traefik.tcp.routers.mailserver465.entrypoints: "mailserver465"
             traefik.tcp.routers.mailserver465.tls: "true"
             traefik.tcp.routers.mailserver465.service: "mailserver465"
             traefik.tcp.services.mailserver587.loadbalancer.server.port: "587"
-            traefik.tcp.routers.mailserver587.rule: "HostSNI(`mailserver587.localhost`)"
+            traefik.tcp.routers.mailserver587.rule: "HostSNI(`${DOMAIN:-mailserver.localhost}`)"
             traefik.tcp.routers.mailserver587.entrypoints: "mailserver587"
             traefik.tcp.routers.mailserver587.tls: "true"
             traefik.tcp.routers.mailserver587.service: "mailserver587"
             traefik.tcp.services.mailserver993.loadbalancer.server.port: "993"
-            traefik.tcp.routers.mailserver993.rule: "HostSNI(`mailserver993.localhost`)"
+            traefik.tcp.routers.mailserver993.rule: "HostSNI(`${DOMAIN:-mailserver.localhost}`)"
             traefik.tcp.routers.mailserver993.entrypoints: "mailserver993"
             traefik.tcp.routers.mailserver993.tls: "true"
             traefik.tcp.routers.mailserver993.service: "mailserver993"

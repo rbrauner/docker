@@ -3,7 +3,7 @@ name: shared-home
 services:
     shared-home:
         container_name: shared-home
-        image: debian:stable-slim
+        image: debian:${SHARED_HOME_VERSION:-trixie-slim}
         restart: no
         command: chown -R ${UID:-1000}:${GID:-1000} /home/${APP_USER:-app}
         user: root

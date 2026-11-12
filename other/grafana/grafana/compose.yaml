@@ -3,13 +3,14 @@ name: grafana
 services:
     grafana:
         container_name: grafana
-        image: grafana/grafana
+        # no major tag published - bump manually
+        image: grafana/grafana:${GRAFANA_VERSION:-13.3}
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
             TZ: "${TZ:-Europe/Warsaw}"
         # ports:
-        #     - ${GRAFANA_PORT:-3000}:3000
+        #     - ${GRAFANA_BIND_IP:-127.0.0.1}:${GRAFANA_PORT:-3000}:3000
         hostname: "${DOMAIN:-grafana.localhost}"
         networks:
             shared-network:
@@ -33,6 +34,12 @@ services:
             traefik.http.routers.grafana-secure.entrypoints: "https"
             traefik.http.routers.grafana-secure.tls: "true"
             traefik.http.routers.grafana-secure.service: "grafana"
+        healthcheck:
+            test: "wget -qO /dev/null http://127.0.0.1:3000/api/health"
+            interval: 10s
+            timeout: 5s
+            retries: 5
+            start_period: 30s
         tty: true
 
 networks:

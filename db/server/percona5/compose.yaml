@@ -3,7 +3,8 @@ name: percona5
 services:
     percona5:
         container_name: percona5
-        image: percona/percona-server:5.7
+        # EOL (10.2023) - kept for testing legacy projects
+        image: percona:${DB_VERSION:-5}
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
@@ -12,7 +13,8 @@ services:
             MYSQL_DATABASE: "${DB_NAME:-default}"
             MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD:-secret}"
         # ports:
-        #     - ${DB_PORT:-3306}:3306
+        #     - ${DB_BIND_IP:-127.0.0.1}:${DB_PORT:-3306}:3306
+        hostname: "${DOMAIN:-percona5.localhost}"
         networks:
             shared-network:
         extra_hosts:
@@ -26,10 +28,11 @@ services:
         labels:
             # ofelia.enabled: "true"
             # ofelia.job-exec.percona5.command: "/bin/backup.sh"
+            # ofelia.job-exec.percona5.user: "root" # image runs as mysql (uid 1001), which cannot write to /backup
             # ofelia.job-exec.percona5.schedule: "${BACKUP_CRON_EXPRESSION:-0 9,15,17,21 * * *}"
             traefik.enable: "true"
             traefik.tcp.services.percona5.loadbalancer.server.port: "3306"
-            traefik.tcp.routers.percona5.rule: "HostSNI(`percona5.localhost`)"
+            traefik.tcp.routers.percona5.rule: "HostSNI(`${DOMAIN:-percona5.localhost}`)"
             traefik.tcp.routers.percona5.entrypoints: "mysql"
             traefik.tcp.routers.percona5.tls: "true"
             traefik.tcp.routers.percona5.service: "percona5"

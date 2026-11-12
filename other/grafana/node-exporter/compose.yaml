@@ -3,7 +3,7 @@ name: node-exporter
 services:
     node-exporter:
         container_name: node-exporter
-        image: prom/node-exporter:latest-busybox
+        image: prom/node-exporter:${NODE_EXPORTER_VERSION:-v1-busybox}
         restart: unless-stopped
         command:
             - "--path.procfs=/host/proc"
@@ -13,8 +13,8 @@ services:
         environment:
             TZ: "${TZ:-Europe/Warsaw}"
         # ports:
-        #     - ${NODE_EXPORTER_PORT:-9100}:9100
-        hostname: node-exporter
+        #     - ${NODE_EXPORTER_BIND_IP:-127.0.0.1}:${NODE_EXPORTER_PORT:-9100}:9100
+        hostname: "${DOMAIN:-node-exporter.localhost}"
         networks:
             shared-network:
         extra_hosts:
@@ -23,6 +23,12 @@ services:
             - /proc:/host/proc:ro
             - /sys:/host/sys:ro
             - /:/rootfs:ro
+        healthcheck:
+            test: "wget -qO /dev/null http://127.0.0.1:9100/metrics"
+            interval: 10s
+            timeout: 5s
+            retries: 5
+            start_period: 30s
         tty: true
 
 networks:

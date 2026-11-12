@@ -3,14 +3,14 @@ name: cadvisor
 services:
     cadvisor:
         container_name: cadvisor
-        image: ghcr.io/google/cadvisor
+        image: ghcr.io/google/cadvisor:${CADVISOR_VERSION:-0.60}
         restart: unless-stopped
         privileged: true
         environment:
             TZ: "${TZ:-Europe/Warsaw}"
         # ports:
-        #     - ${CADVISOR_PORT:-8080}:8080
-        hostname: cadvisor
+        #     - ${CADVISOR_BIND_IP:-127.0.0.1}:${CADVISOR_PORT:-8080}:8080
+        hostname: "${DOMAIN:-cadvisor.localhost}"
         networks:
             shared-network:
         extra_hosts:

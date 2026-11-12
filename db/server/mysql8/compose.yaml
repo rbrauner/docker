@@ -3,7 +3,7 @@ name: mysql8
 services:
     mysql8:
         container_name: mysql8
-        image: mysql:8
+        image: mysql:${DB_VERSION:-8}
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
@@ -12,7 +12,8 @@ services:
             MYSQL_DATABASE: "${DB_NAME:-default}"
             MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD:-secret}"
         # ports:
-        #     - ${DB_PORT:-3306}:3306
+        #     - ${DB_BIND_IP:-127.0.0.1}:${DB_PORT:-3306}:3306
+        hostname: "${DOMAIN:-mysql8.localhost}"
         networks:
             shared-network:
         extra_hosts:
@@ -29,7 +30,7 @@ services:
             # ofelia.job-exec.mysql8.schedule: "${BACKUP_CRON_EXPRESSION:-0 9,15,17,21 * * *}"
             traefik.enable: "true"
             traefik.tcp.services.mysql8.loadbalancer.server.port: "3306"
-            traefik.tcp.routers.mysql8.rule: "HostSNI(`mysql8.localhost`)"
+            traefik.tcp.routers.mysql8.rule: "HostSNI(`${DOMAIN:-mysql8.localhost}`)"
             traefik.tcp.routers.mysql8.entrypoints: "mysql"
             traefik.tcp.routers.mysql8.tls: "true"
             traefik.tcp.routers.mysql8.service: "mysql8"

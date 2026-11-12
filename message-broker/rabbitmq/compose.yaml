@@ -3,7 +3,7 @@ name: rabbitmq
 services:
     rabbitmq:
         container_name: rabbitmq
-        image: rabbitmq:management
+        image: rabbitmq:${RABBITMQ_VERSION:-4-management}
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
@@ -11,8 +11,8 @@ services:
             RABBITMQ_DEFAULT_USER: "${RABBITMQ_DEFAULT_USER:-root}"
             RABBITMQ_DEFAULT_PASS: "${RABBITMQ_DEFAULT_PASS:-secret}"
         # ports:
-        #     - ${RABBITMQ_PORT_5672:-5672}:5672
-        #     - ${RABBITMQ_PORT_15672:-15672}:15672
+        #     - ${RABBITMQ_BIND_IP:-127.0.0.1}:${RABBITMQ_PORT_5672:-5672}:5672
+        #     - ${RABBITMQ_BIND_IP:-127.0.0.1}:${RABBITMQ_PORT_15672:-15672}:15672
         hostname: "${DOMAIN:-rabbitmq.localhost}"
         networks:
             shared-network:
@@ -36,10 +36,16 @@ services:
             traefik.http.routers.rabbitmq-secure.tls: "true"
             traefik.http.routers.rabbitmq-secure.service: "rabbitmq"
             traefik.tcp.services.rabbitmq5672.loadbalancer.server.port: "5672"
-            traefik.tcp.routers.rabbitmq5672.rule: "HostSNI(`rabbitmq5672.localhost`)"
+            traefik.tcp.routers.rabbitmq5672.rule: "HostSNI(`${DOMAIN:-rabbitmq.localhost}`)"
             traefik.tcp.routers.rabbitmq5672.entrypoints: "rabbitmq"
             traefik.tcp.routers.rabbitmq5672.tls: "true"
             traefik.tcp.routers.rabbitmq5672.service: "rabbitmq5672"
+        healthcheck:
+            test: "rabbitmq-diagnostics -q ping"
+            interval: 10s
+            timeout: 5s
+            retries: 5
+            start_period: 30s
         tty: true
 
 networks:

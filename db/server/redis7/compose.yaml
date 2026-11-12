@@ -3,14 +3,16 @@ name: redis7
 services:
     redis7:
         container_name: redis7
-        image: redis:7-bookworm
+        # no trixie variant for redis 7
+        image: redis:${DB_VERSION:-7-bookworm}
         restart: unless-stopped
-        command: redis-server --save 60 1 --loglevel warning --requirepass "${REDIS_PASSWORD:-secret}"
+        command: redis-server --save 60 1 --loglevel warning --requirepass "${DB_PASSWORD:-secret}"
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
             TZ: "${TZ:-Europe/Warsaw}"
         # ports:
-        #     - ${REDIS_PORT:-6379}:6379
+        #     - ${DB_BIND_IP:-127.0.0.1}:${DB_PORT:-6379}:6379
+        hostname: "${DOMAIN:-redis7.localhost}"
         networks:
             shared-network:
         extra_hosts:
@@ -19,17 +21,14 @@ services:
             - shared-home:/home/${APP_USER:-app}
             - redis7-data:/data
         labels:
-            # ofelia.enabled: "true"
-            # ofelia.job-exec.redis7.command: "/bin/backup.sh"
-            # ofelia.job-exec.redis7.schedule: "${BACKUP_CRON_EXPRESSION:-0 9,15,17,21 * * *}"
             traefik.enable: "true"
             traefik.tcp.services.redis7.loadbalancer.server.port: "6379"
-            traefik.tcp.routers.redis7.rule: "HostSNI(`redis7.localhost`)"
+            traefik.tcp.routers.redis7.rule: "HostSNI(`${DOMAIN:-redis7.localhost}`)"
             traefik.tcp.routers.redis7.entrypoints: "redis"
             traefik.tcp.routers.redis7.tls: "true"
             traefik.tcp.routers.redis7.service: "redis7"
         healthcheck:
-            test: 'redis-cli -a "${REDIS_PASSWORD:-secret}" --no-auth-warning ping | grep -q PONG'
+            test: 'redis-cli -a "${DB_PASSWORD:-secret}" --no-auth-warning ping | grep -q PONG'
             interval: 10s
             timeout: 5s
             retries: 5

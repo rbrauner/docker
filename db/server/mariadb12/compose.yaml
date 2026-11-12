@@ -3,7 +3,7 @@ name: mariadb12
 services:
     mariadb12:
         container_name: mariadb12
-        image: mariadb:12
+        image: mariadb:${DB_VERSION:-12}
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
@@ -11,8 +11,10 @@ services:
             BACKUP_RETENTION_DAYS: "${BACKUP_RETENTION_DAYS:-7}"
             MYSQL_DATABASE: "${DB_NAME:-default}"
             MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD:-secret}"
+            MARIADB_AUTO_UPGRADE: "${DB_AUTO_UPGRADE:-1}"
         # ports:
-        #     - ${DB_PORT:-3306}:3306
+        #     - ${DB_BIND_IP:-127.0.0.1}:${DB_PORT:-3306}:3306
+        hostname: "${DOMAIN:-mariadb12.localhost}"
         networks:
             shared-network:
         extra_hosts:
@@ -29,7 +31,7 @@ services:
             # ofelia.job-exec.mariadb12.schedule: "${BACKUP_CRON_EXPRESSION:-0 9,15,17,21 * * *}"
             traefik.enable: "true"
             traefik.tcp.services.mariadb12.loadbalancer.server.port: "3306"
-            traefik.tcp.routers.mariadb12.rule: "HostSNI(`mariadb12.localhost`)"
+            traefik.tcp.routers.mariadb12.rule: "HostSNI(`${DOMAIN:-mariadb12.localhost}`)"
             traefik.tcp.routers.mariadb12.entrypoints: "mysql"
             traefik.tcp.routers.mariadb12.tls: "true"
             traefik.tcp.routers.mariadb12.service: "mariadb12"

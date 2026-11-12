@@ -3,13 +3,13 @@ name: cloudbeaver
 services:
     cloudbeaver:
         container_name: cloudbeaver
-        image: dbeaver/cloudbeaver
+        image: dbeaver/cloudbeaver:${CLOUDBEAVER_VERSION:-26}
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
             TZ: "${TZ:-Europe/Warsaw}"
         # ports:
-        #     - ${CLOUDBEAVER_PORT:-8978}:8978
+        #     - ${CLOUDBEAVER_BIND_IP:-127.0.0.1}:${CLOUDBEAVER_PORT:-8978}:8978
         hostname: "${DOMAIN:-cloudbeaver.localhost}"
         networks:
             shared-network:
@@ -26,8 +26,8 @@ services:
             traefik.http.routers.cloudbeaver.rule: "Host(`${DOMAIN:-cloudbeaver.localhost}`)"
             traefik.http.routers.cloudbeaver.entrypoints: "http"
             traefik.http.routers.cloudbeaver.tls: "false"
-            traefik.http.routers.cloudbeaver.middlewares: "redirect-to-https@docker"
             traefik.http.routers.cloudbeaver.service: "cloudbeaver"
+            traefik.http.routers.cloudbeaver.middlewares: "redirect-to-https@docker"
             traefik.http.routers.cloudbeaver-secure.rule: "Host(`${DOMAIN:-cloudbeaver.localhost}`)"
             traefik.http.routers.cloudbeaver-secure.entrypoints: "https"
             traefik.http.routers.cloudbeaver-secure.tls: "true"

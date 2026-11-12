@@ -1,4 +1,4 @@
-FROM dunglas/frankenphp:builder-trixie AS builder
+FROM dunglas/frankenphp:1-builder-php8.5-trixie AS builder
 
 # copy xcaddy in the builder image
 COPY --from=caddy:builder /usr/bin/xcaddy /usr/bin/xcaddy
@@ -19,7 +19,7 @@ RUN CGO_ENABLED=1 \
         --with github.com/dunglas/vulcain/caddy
         # add extra Caddy modules here
 
-FROM dunglas/frankenphp:trixie AS packages
+FROM dunglas/frankenphp:1-php8.5-trixie AS packages
 # hadolint ignore=DL3008
 RUN apt-get update \
     && apt-get upgrade -y \

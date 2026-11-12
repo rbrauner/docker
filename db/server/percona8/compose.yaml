@@ -3,7 +3,7 @@ name: percona8
 services:
     percona8:
         container_name: percona8
-        image: percona/percona-server:8
+        image: percona:${DB_VERSION:-8}
         restart: unless-stopped
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
@@ -12,7 +12,8 @@ services:
             MYSQL_DATABASE: "${DB_NAME:-default}"
             MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD:-secret}"
         # ports:
-        #     - ${DB_PORT:-3306}:3306
+        #     - ${DB_BIND_IP:-127.0.0.1}:${DB_PORT:-3306}:3306
+        hostname: "${DOMAIN:-percona8.localhost}"
         networks:
             shared-network:
         extra_hosts:
@@ -26,10 +27,11 @@ services:
         labels:
             # ofelia.enabled: "true"
             # ofelia.job-exec.percona8.command: "/bin/backup.sh"
+            # ofelia.job-exec.percona8.user: "root" # image runs as mysql (uid 1001), which cannot write to /backup
             # ofelia.job-exec.percona8.schedule: "${BACKUP_CRON_EXPRESSION:-0 9,15,17,21 * * *}"
             traefik.enable: "true"
             traefik.tcp.services.percona8.loadbalancer.server.port: "3306"
-            traefik.tcp.routers.percona8.rule: "HostSNI(`percona8.localhost`)"
+            traefik.tcp.routers.percona8.rule: "HostSNI(`${DOMAIN:-percona8.localhost}`)"
             traefik.tcp.routers.percona8.entrypoints: "mysql"
             traefik.tcp.routers.percona8.tls: "true"
             traefik.tcp.routers.percona8.service: "percona8"
