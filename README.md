@@ -15,10 +15,10 @@ Local development stack. Every directory with a `compose.yaml` is a standalone c
 ## Prepare
 
 ```bash
-make bootstrap CERTS_SCAN_DIRS=". ~/data/workspace"
+make init CERTS_SCAN_DIRS=". ~/data/workspace"
 ```
 
-`make bootstrap` creates `AGENTS.md` (from `AGENTS.example.md`), installs the mkcert local CA, creates the shared network, starts `other/shared-home`, generates traefik certificates and starts `network/traefik`. Every step is safe to re-run.
+`make init` creates `AGENTS.md` (from `AGENTS.example.md`), installs the mkcert local CA, creates the shared network, starts `other/shared-home`, generates traefik certificates and starts `network/traefik`. Every step is safe to re-run.
 
 ## Run container
 

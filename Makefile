@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 
-.PHONY: help lint fix mocks certs bootstrap up down ps list
+.PHONY: help lint fix mocks certs init up down ps list
 
 # ========
 # = vars =
@@ -53,7 +53,7 @@ certs:
 		$$(for d in $$domains; do printf '%s *.%s ' "$$d" "$$d"; done)
 
 # One-time setup: AGENTS.md, local CA, shared network and home volume, certificates, traefik
-bootstrap:
+init:
 	[ -f AGENTS.md ] || cp AGENTS.example.md AGENTS.md
 	mkcert -install
 	docker network inspect $(SHARED_NETWORK_NAME) >/dev/null 2>&1 || docker network create $(SHARED_NETWORK_NAME)
