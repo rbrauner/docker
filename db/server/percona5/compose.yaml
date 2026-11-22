@@ -9,7 +9,7 @@ services:
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
             TZ: "${TZ:-Europe/Warsaw}"
-            BACKUP_RETENTION_DAYS: "${BACKUP_RETENTION_DAYS:-7}"
+            BACKUP_RETENTION_DAYS: "${BACKUP_RETENTION_DAYS:-30}"
             MYSQL_DATABASE: "${DB_NAME:-default}"
             MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD:-secret}"
         # ports:

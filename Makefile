@@ -38,6 +38,20 @@ certs:
 	mkcert -cert-file $(CERTS_DIR)/local-cert.pem -key-file $(CERTS_DIR)/local-key.pem \
 		$$(for d in $$domains; do printf '%s *.%s ' "$$d" "$$d"; done)
 
+# Lint
+lint:
+	git ls-files '*Dockerfile' | xargs hadolint
+	git ls-files '*.sh' | xargs shellcheck
+	git ls-files '*compose.yaml' '*compose.*.yaml' | xargs prettier --check
+	for f in $$(git ls-files '*compose.yaml' '*compose.*.yaml' | grep -v override-example); do \
+		env="$$(dirname "$$f")/.env.example"; \
+		docker compose -f "$$f" $$([ -f "$$env" ] && echo --env-file "$$env") config -q || { echo "invalid: $$f"; exit 1; }; \
+	done
+
+# Fix
+fix:
+	git ls-files '*compose.yaml' '*compose.*.yaml' | xargs prettier --write
+
 # Start a project (ex.: make up S=db/server/postgres18)
 up:
 	$(check_project)
@@ -59,20 +73,6 @@ list:
 		domains=$$(grep -ohE '[a-z0-9_][a-z0-9_-]*(\.[a-z0-9_-]+)*\.localhost' "$$f" | sort -u | tr '\n' ' '); \
 		printf "%-32s %s\n" "$$(dirname "$$f")" "$$domains"; \
 	done
-
-# Lint
-lint:
-	git ls-files '*Dockerfile' | xargs hadolint
-	git ls-files '*.sh' | xargs shellcheck
-	git ls-files '*compose.yaml' '*compose.*.yaml' | xargs prettier --check
-	for f in $$(git ls-files '*compose.yaml' '*compose.*.yaml' | grep -v override-example); do \
-		env="$$(dirname "$$f")/.env.example"; \
-		docker compose -f "$$f" $$([ -f "$$env" ] && echo --env-file "$$env") config -q || { echo "invalid: $$f"; exit 1; }; \
-	done
-
-# Fix
-fix:
-	git ls-files '*compose.yaml' '*compose.*.yaml' | xargs prettier --write
 
 # Build mock configs
 mocks:
