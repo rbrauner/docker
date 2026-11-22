@@ -2,7 +2,10 @@
 .DS_Store
 .env
 .idea
+.worktrees
 AGENTS.md
-compose.override.yaml
+CLAUDE.md
+Makefile.*.local.mk
 Makefile.local.mk
+compose.override.yaml
 ###< rbrauner/docker ###
