@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 
-.PHONY: help init certs up down ps list lint fix mocks
+.PHONY: help init certs lint fix up down ps list mocks
 
 # [[ Vars ]]
 CERTS_DIR := network/traefik/certs
