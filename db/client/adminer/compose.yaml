@@ -8,7 +8,7 @@ services:
         # user: "${UID:-1000}:${GID:-1000}"
         environment:
             TZ: "${TZ:-Europe/Warsaw}"
-            ADMINER_PLUGINS: "${ADMINER_PLUGINS:-}"
+            ADMINER_PLUGINS: "${ADMINER_PLUGINS:-adminer.js backward-keys before-unload config dark-switcher donation dump-alter dump-bz2 dump-date dump-json dump-xml dump-zip edit-foreign edit-textarea enum-option file-upload foreign-system frames import-csv menu-links select-email select-expression select-foreign select-image slugify sql-log sql-url-length table-indexes-structure table-structure tables-filter timeout}"
         # ports:
         #     - ${ADMINER_BIND_IP:-127.0.0.1}:${ADMINER_PORT:-8080}:8080
         hostname: "${DOMAIN:-adminer.localhost}"
