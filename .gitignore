@@ -4,8 +4,6 @@
 .idea
 .worktrees
 AGENTS.md
-CLAUDE.md
-Makefile.*.local.mk
 Makefile.local.mk
 compose.override.yaml
 ###< rbrauner/docker ###
