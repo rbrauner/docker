@@ -26,16 +26,6 @@ CERTS_SCAN_DIRS += ~/data/workspace
 make init
 ```
 
-## Makefile commands
-
-```bash
-make help
-make up S=db/server/postgres18
-make down S=db/server/postgres18
-make ps
-make list
-```
-
 ## Configuration
 
 Every project reads its own `.env` (next to `compose.yaml`).

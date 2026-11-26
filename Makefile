@@ -6,12 +6,7 @@
 CERTS_DIR := network/traefik/certs
 CERTS_EXTRA_DOMAINS := example.localhost whoami.localhost
 CERTS_SCAN_DIRS := .
-OPTIONS :=
-S :=
 SHARED_NETWORK_NAME ?= shared-network
-
-# [[ Functions ]]
-check_project = @[ -f "$(S)/compose.yaml" ] || { echo "usage: make $@ S=<dir with compose.yaml>"; exit 1; }
 
 # [[ Targets ]]
 
@@ -51,28 +46,6 @@ lint:
 # Fix
 fix:
 	git ls-files '*compose.yaml' '*compose.*.yaml' | xargs prettier --write
-
-# Start a project (ex.: make up S=db/server/postgres18)
-up:
-	$(check_project)
-	cd $(S) && docker compose up -d $(OPTIONS)
-
-# Stop a project (ex.: make down S=db/server/postgres18)
-down:
-	$(check_project)
-	cd $(S) && docker compose down $(OPTIONS)
-
-# Show containers status for all projects
-ps:
-	@docker ps -a --format '{{.Label "com.docker.compose.project.working_dir"}}\t{{.Names}}\t{{.Status}}' \
-		| awk -F '\t' -v root="$(CURDIR)/" 'index($$1, root) == 1 { printf "%-32s %-24s %s\n", substr($$1, length(root) + 1), $$2, $$3 }' | sort
-
-# List projects with their default domains
-list:
-	@for f in $$(git ls-files '*compose.yaml'); do \
-		domains=$$(grep -ohE '[a-z0-9_][a-z0-9_-]*(\.[a-z0-9_-]+)*\.localhost' "$$f" | sort -u | tr '\n' ' '); \
-		printf "%-32s %s\n" "$$(dirname "$$f")" "$$domains"; \
-	done
 
 # Build mock configs
 mocks:
