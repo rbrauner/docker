@@ -1,0 +1,55 @@
+name: postgres19
+
+services:
+    postgres19:
+        container_name: postgres19
+        image: postgres:${DB_VERSION:-19-trixie}
+        restart: unless-stopped
+        # user: "${UID:-1000}:${GID:-1000}"
+        environment:
+            TZ: "${TZ:-Europe/Warsaw}"
+            BACKUP_RETENTION_DAYS: "${BACKUP_RETENTION_DAYS:-30}"
+            POSTGRES_USER: "${DB_USER:-root}"
+            POSTGRES_PASSWORD: "${DB_PASSWORD:-secret}"
+            POSTGRES_DB: "${DB_NAME:-default}"
+        # ports:
+        #     - ${DB_BIND_IP:-127.0.0.1}:${DB_PORT:-5432}:5432
+        hostname: "${DOMAIN:-postgres19.localhost}"
+        networks:
+            shared-network:
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
+        volumes:
+            - shared-home:/home/${APP_USER:-app}
+            - postgres19-data:/var/lib/postgresql/19/docker
+            - ../_shared/backup-postgres.sh:/bin/backup.sh:ro
+            - ${BACKUP_DIR:-${HOME}/data/backups/docker/postgres19}:/backup
+        labels:
+            # ofelia.enabled: "true"
+            # ofelia.job-exec.postgres19.command: "/bin/backup.sh"
+            # ofelia.job-exec.postgres19.schedule: "${BACKUP_CRON_EXPRESSION:-0 9,15,17,21 * * *}"
+            traefik.enable: "true"
+            traefik.tcp.services.postgres19.loadbalancer.server.port: "5432"
+            traefik.tcp.routers.postgres19.rule: "HostSNI(`${DOMAIN:-postgres19.localhost}`)"
+            traefik.tcp.routers.postgres19.entrypoints: "postgres"
+            traefik.tcp.routers.postgres19.tls: "true"
+            traefik.tcp.routers.postgres19.service: "postgres19"
+        healthcheck:
+            test: 'pg_isready -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"'
+            interval: 10s
+            timeout: 5s
+            retries: 5
+            start_period: 30s
+        tty: true
+
+networks:
+    shared-network:
+        name: ${SHARED_NETWORK_NAME:-shared-network}
+        external: true
+
+volumes:
+    shared-home:
+        name: ${SHARED_HOME_VOLUME:-shared-home}
+        external: true
+    postgres19-data:
+        name: postgres19-data
