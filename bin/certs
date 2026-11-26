@@ -1,0 +1,45 @@
+#!/usr/bin/env python3
+"""Generate Traefik certificates for every *.localhost domain in the workspace.
+
+Used by `just certs`. Discovery and mkcert logic come from bin/init so both
+entry points stay in sync.
+"""
+from __future__ import annotations
+
+import runpy
+import subprocess
+import sys
+from pathlib import Path
+
+INIT = Path(__file__).with_name("init")
+
+
+def load_init():
+    """Load bin/init without running its main()."""
+    return runpy.run_path(str(INIT))
+
+
+def main(argv=None) -> int:
+    init = load_init()
+    env = init["load_env"]()
+    domains = init["discover_domains"](init["scan_dirs"](env), init["EXTRA_DOMAINS"])
+    certs = init["ROOT"] / "network" / "traefik" / "certs"
+    try:
+        init["generate_certs"](
+            domains, certs / "local-cert.pem", certs / "local-key.pem"
+        )
+    except subprocess.CalledProcessError as exc:
+        print(
+            init["paint"](
+                f"error: mkcert failed with exit code {exc.returncode}",
+                "error",
+                sys.stderr,
+            ),
+            file=sys.stderr,
+        )
+        return exc.returncode or 1
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

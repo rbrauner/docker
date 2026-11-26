@@ -1,0 +1,8 @@
+# Generate traefik certificates for every *.localhost domain found in CERTS_SCAN_DIRS
+certs:
+    python3 bin/certs
+
+# Build mock configs
+mocks:
+    python3 mock/mockoon/build.py
+    python3 mock/mockserver/build.py

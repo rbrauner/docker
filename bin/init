@@ -1,0 +1,305 @@
+#!/usr/bin/env python3
+"""Interactive setup for the local Docker development stack.
+
+Does what `just init` does, but in plain Python and with a question before
+each step. Safe to re-run: steps that are already satisfied are skipped.
+
+Usage:
+    bin/init           ask before each step
+    bin/init --yes     assume yes for every question
+"""
+from __future__ import annotations
+
+import argparse
+import fnmatch
+import os
+import re
+import shlex
+import shutil
+import subprocess
+import sys
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Callable, Iterable, Sequence
+
+ROOT = Path(__file__).resolve().parent.parent
+
+DOMAIN_RE = re.compile(r"[a-z0-9_][a-z0-9_-]*(?:\.[a-z0-9_-]+)*\.localhost\b")
+EXTRA_DOMAINS = ("example.localhost", "whoami.localhost")
+SCAN_PATTERNS = ("*compose*.yaml", "*compose*.yml", ".env", ".env.*")
+PRUNED_DIRS = {".git", "node_modules", "vendor"}
+COLORS = {
+    "title": "\033[1;36m",    # bold cyan
+    "info": "\033[36m",       # cyan
+    "muted": "\033[2m",       # dim
+    "success": "\033[1;32m",  # bold green
+    "warning": "\033[33m",    # yellow
+    "error": "\033[1;31m",    # bold red
+}
+COLOR_RESET = "\033[0m"
+
+
+def colors_enabled(stream=None) -> bool:
+    stream = stream if stream is not None else sys.stdout
+    return stream.isatty() and "NO_COLOR" not in os.environ
+
+
+def paint(text: str, style: str, stream=None) -> str:
+    """Color text with a named style when writing to a terminal."""
+    if not colors_enabled(stream):
+        return text
+    return f"{COLORS[style]}{text}{COLOR_RESET}"
+
+
+def title(text: str, colored: bool | None = None) -> str:
+    """Mark a step title with '=' and color it when writing to a terminal."""
+    if colored is None:
+        return f"= {paint(text, 'title')}"
+    if colored:
+        return f"= {COLORS['title']}{text}{COLOR_RESET}"
+    return f"= {text}"
+
+
+@dataclass(frozen=True)
+class Step:
+    title: str
+    needed: Callable[[], bool]
+    apply: Callable[[], None]
+
+
+def parse_dotenv(text: str) -> dict[str, str]:
+    """Read the small subset of dotenv syntax used by this repo."""
+    values = {}
+    for line in text.splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        value = value.strip().strip('"').strip("'")
+        values[key.strip()] = os.path.expanduser(value)
+    return values
+
+
+def load_env(root: Path = ROOT) -> dict[str, str]:
+    """Load .env.example first, then let the local .env override it."""
+    env: dict[str, str] = {}
+    for name in (".env.example", ".env"):
+        path = root / name
+        if path.is_file():
+            env.update(parse_dotenv(path.read_text(encoding="utf-8")))
+    return env
+
+
+def scan_dirs(env: dict[str, str], root: Path = ROOT) -> list[Path]:
+    """Directories to scan for *.localhost domains."""
+    raw = ". " + env.get("CERTS_SCAN_DIRS_EXTRA", "")
+    return [(root / value).resolve() for value in raw.split()]
+
+
+def discover_domains(dirs: Iterable[Path], extra: Iterable[str] = ()) -> list[str]:
+    """Find *.localhost domains in compose files and .env files."""
+    domains = set(extra)
+    for base in dirs:
+        if not base.is_dir():
+            continue
+        for current, dirnames, filenames in os.walk(base):
+            dirnames[:] = [name for name in dirnames if name not in PRUNED_DIRS]
+            for name in filenames:
+                if not any(fnmatch.fnmatch(name, pattern) for pattern in SCAN_PATTERNS):
+                    continue
+                path = Path(current) / name
+                try:
+                    text = path.read_text(encoding="utf-8", errors="ignore")
+                except OSError:
+                    continue
+                domains.update(match.group(0) for match in DOMAIN_RE.finditer(text))
+    return sorted(domains)
+
+
+def cert_command(
+    domains: Sequence[str], cert_path: Path, key_path: Path
+) -> list[str]:
+    """Build the mkcert command, including a wildcard for every domain."""
+    command = [
+        "mkcert",
+        "-cert-file", str(cert_path),
+        "-key-file", str(key_path),
+    ]
+    for domain in domains:
+        command.extend([domain, "*." + domain])
+    return command
+
+
+def generate_certs(domains: Sequence[str], cert_path: Path, key_path: Path) -> None:
+    if not domains:
+        print(paint("  no *.localhost domains found, nothing to generate", "warning"), flush=True)
+        return
+    print(paint(f"  domains: {', '.join(domains)}", "info"), flush=True)
+    cert_path.parent.mkdir(parents=True, exist_ok=True)
+    run(cert_command(domains, cert_path, key_path))
+
+
+def confirm(question: str, default: bool = True) -> bool:
+    """Ask a yes/no question; an empty answer means the default."""
+    suffix = "[Y/n]" if default else "[y/N]"
+    while True:
+        try:
+            answer = input(f"{question} {paint(suffix, 'muted')} ").strip().lower()
+        except EOFError:
+            return default
+        if not answer:
+            return default
+        if answer in ("y", "yes"):
+            return True
+        if answer in ("n", "no"):
+            return False
+        print(paint("  Answer y or n.", "warning"))
+
+
+def offer_edit(
+    path: Path,
+    assume_yes: bool = False,
+    interactive: bool | None = None,
+) -> None:
+    """Open a just-copied file in $EDITOR and wait until the editor exits."""
+    if assume_yes:
+        print(paint(f"  skipping editor for {path} (--yes)", "muted"))
+        return
+    if interactive is None:
+        interactive = sys.stdin.isatty()
+    if not interactive:
+        print(paint(f"  skipping editor for {path} (non-interactive)", "muted"))
+        return
+    if not confirm(f"Edit {path} now?", default=True):
+        print(paint(f"  left {path} unchanged", "muted"))
+        return
+    editor = os.environ.get("EDITOR") or os.environ.get("VISUAL") or "vi"
+    command = [*(shlex.split(editor) or ["vi"]), str(path)]
+    print(paint("  save and quit the editor to continue", "info"), flush=True)
+    try:
+        subprocess.run(command, check=False)
+    except OSError as exc:
+        print(paint(f"  warning: could not open editor: {exc}", "warning", sys.stderr), file=sys.stderr)
+
+
+def copy_file(source: Path, destination: Path, assume_yes: bool = False) -> None:
+    """Copy a template, then give the user a chance to edit the result."""
+    shutil.copyfile(source, destination)
+    print(paint(f"  copied {source.name} -> {destination}", "info"))
+    offer_edit(destination, assume_yes=assume_yes)
+
+
+def run_steps(
+    steps: Iterable[Step],
+    assume_yes: bool = False,
+    ask: Callable[[str], bool] | None = None,
+    out: Callable[[str], None] | None = None,
+) -> None:
+    ask = ask or confirm
+    out = out or print
+    for step in steps:
+        label = title(step.title)
+        if not step.needed():
+            out(f"{label}: {paint('already ok, skipping', 'muted')}")
+            continue
+        if assume_yes or ask(f"{label}?"):
+            step.apply()
+        else:
+            out(f"{label}: {paint('skipped', 'muted')}")
+
+
+def run(command: Sequence[object], cwd: Path | None = None) -> None:
+    parts = [str(part) for part in command]
+    prefix = f"cd {cwd} && " if cwd else ""
+    print(paint(f"$ {prefix}{' '.join(parts)}", "info"), flush=True)
+    subprocess.run(parts, cwd=cwd, check=True)
+
+
+def network_exists(name: str) -> bool:
+    result = subprocess.run(
+        ["docker", "network", "inspect", name],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+    return result.returncode == 0
+
+
+def build_steps(
+    root: Path = ROOT,
+    env: dict[str, str] | None = None,
+    assume_yes: bool = False,
+) -> list[Step]:
+    env = load_env(root) if env is None else env
+    network = env.get("SHARED_NETWORK_NAME") or "shared-network"
+    domains = discover_domains(scan_dirs(env, root), EXTRA_DOMAINS)
+    certs = root / "network" / "traefik" / "certs"
+
+    def compose_up(project: str) -> Callable[[], None]:
+        return lambda: run(["docker", "compose", "up", "-d"], cwd=root / project)
+
+    return [
+        Step(
+            "create AGENTS.md from AGENTS.example.md",
+            lambda: not (root / "AGENTS.md").exists(),
+            lambda: copy_file(
+                root / "AGENTS.example.md", root / "AGENTS.md", assume_yes=assume_yes
+            ),
+        ),
+        Step(
+            "install mkcert local CA",
+            lambda: True,
+            lambda: run(["mkcert", "-install"]),
+        ),
+        Step(
+            f"create Docker network {network}",
+            lambda: not network_exists(network),
+            lambda: run(["docker", "network", "create", network]),
+        ),
+        Step(
+            "start other/shared-home",
+            lambda: True,
+            compose_up("other/shared-home"),
+        ),
+        Step(
+            f"generate Traefik certificates for {len(domains)} domain(s)",
+            lambda: True,
+            lambda: generate_certs(domains, certs / "local-cert.pem", certs / "local-key.pem"),
+        ),
+        Step(
+            "start network/traefik",
+            lambda: True,
+            compose_up("network/traefik"),
+        ),
+    ]
+
+
+def main(argv: Sequence[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description="Prepare the local Docker stack.")
+    parser.add_argument(
+        "-y", "--yes", action="store_true", help="answer yes to every question"
+    )
+    args = parser.parse_args(argv)
+
+    missing = [tool for tool in ("docker", "mkcert") if shutil.which(tool) is None]
+    if missing:
+        print(
+            paint(f"error: missing required tool(s): {', '.join(missing)}", "error", sys.stderr),
+            file=sys.stderr,
+        )
+        return 1
+
+    print(paint(f"Preparing {ROOT}", "title"))
+    try:
+        run_steps(build_steps(assume_yes=args.yes), assume_yes=args.yes)
+    except subprocess.CalledProcessError as exc:
+        print(
+            paint(f"error: command failed with exit code {exc.returncode}", "error", sys.stderr),
+            file=sys.stderr,
+        )
+        return exc.returncode or 1
+    print(paint("Init complete.", "success"))
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
